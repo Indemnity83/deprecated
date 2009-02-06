@@ -1,0 +1,327 @@
+/*	
+	Author Name	: Indemnity83
+	Author Site	: http://www.indemnity83.com
+	Style Name	: Evincere
+	Style URI	: http://www.indemnity83.com/portfolio/evincere/
+	Version		: BETA
+	Comments	: Use thise style at your own risk, it is BETA level software!
+*/
+
+/* Global elements
+---------------------------------------------------------- */	
+body {
+	margin: 0;
+	padding: 0;
+	font-family: "Lucida Grande", Verdana, sans-serif;
+	text-align: center;
+	color: #383d44;
+	background: #ffffff url('images/bg-top.gif') repeat-x 0 0;
+	}
+a:link, a:visited {
+
+	}
+a:hover {
+
+	}
+
+/* Page Structure
+---------------------------------------------------------- */	
+#page {
+	padding: 0 0 10px 0;
+	border: none;
+	}
+.sidebar-single #page {
+	width: 830px;
+	}
+#header {
+	background-color: #31363e;
+	height: 130px;
+	}
+h1 { /* H1 is the title in the header */
+	font-family: 'Myriad Pro', 'Trebuchet MS', Verdana, Sans-Serif;
+	letter-spacing: -2px;
+	padding: 25px 40px 0;
+	}
+#content {
+
+	}
+#sidebar-main {
+	padding-left: 30px;
+	line-height: 1.5em;
+	width: 215px;
+}
+	
+/* Header Menu
+---------------------------------------------------------- */	
+#header .menu {
+	border-top: 1px solid #464a52;
+	background: #383d44;
+	}
+#header li {
+	font-family: Georgia, serif;
+	font-size: 110%;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	}
+#header li a{
+	padding: 6px 12px;
+	text-decoration: none;
+	color: #e7e3d9;	
+	}
+#header li a:hover {
+	color: #fff;
+	background: #464a52;
+	}
+#header li.current_page_item a, #header li.current_page_item a:hover {
+	font-weight: bold;
+	color: #383d44;
+	background-color: #fff;
+	}
+
+/* Posts
+---------------------------------------------------------- */	
+.entry-content {
+	text-align: left;
+	padding-bottom: 25px;
+	border-bottom: 1px solid #ddd;
+	}
+	
+/* Sidebar
+---------------------------------------------------------- */	
+#sidebar-main h2 {
+	font-family: Georgia, serif;
+	font-weight: bold !important;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	color: #666;
+	border-bottom: 1px solid #333;
+	}	
+#sidebar-main a {
+	text-decoration: none;
+	color: #383d44;
+	border-bottom: 1px dotted #383d44;
+	}
+#sidebar-main a:hover {
+	text-decoration: none;
+	border-bottom: 1px dotted #666;
+	color: #666;
+	}
+
+	
+/* Menu Styles */
+.sb-pagemenu ul, .sb-meta ul, .sb-comments ul {
+	margin-top: 10px;
+	margin-left: 3px;
+	list-style: none;
+	display: block;
+	}
+.sb-pagemenu ul .page_item, .sb-meta ul .meta_item, .sb-comments ul .metalink {
+	margin: 0;
+	padding-left: 18px;
+	background-position: 0 center;
+	background-repeat: no-repeat;
+	background-image: url('images/bullet_blue.png');
+	}	
+	
+/* Menu Item Icons */
+.sb-pagemenu ul .current_page_item {
+	background-image: url('images/bullet_go.png');
+	}
+.sb-meta ul .digg {
+	background-image: url('images/digg.png');
+	}	
+.sb-meta ul .author {
+	background-image: url('images/author.png');
+	}
+.sb-meta ul .date {
+	background-image: url('images/date.png');
+	}
+.sb-meta ul .views {
+	background-image: url('images/views.png');
+	}
+.sb-meta ul .words {
+	background-image: url('images/words.png');
+	}
+.sb-meta ul .category {
+	background-image: url('images/category.png');
+	}
+.sb-meta ul .tags {
+	background-image: url('images/tag.png');
+	}
+.sb-meta ul .feed {
+	background-image: url('images/feed.png');
+	}
+.sb-meta ul .trackback {
+	background-image: url('images/trackback.png');
+	}
+.sb-meta ul .technorati {
+	background-image: url('images/technorati.png');
+	}
+.sb-meta ul .share {
+	background-image: url('images/share.png');
+	}
+.sb-meta ul .digg {
+	background-image: url('images/digg.png');
+	}
+.sb-meta ul .theme {
+	background-image: url('images/theme.png');
+	}
+.sb-meta ul .plugin {
+	background-image: url('images/plugin.png');
+	}
+.sb-meta ul .widget {
+	background-image: url('images/widget.png');
+	}
+.sb-meta ul .no-icon {
+	background-image: none;
+	}
+.sb-meta ul .no-padding {
+	padding: 0;
+	}
+
+	
+/* Favicon lists
+   Based on http://www.askthecssguy.com/2006/12/hyperlink_cues_with_favicons.html
+   Requres the inclusion of favicon.js on the page
+---------------------------------------------------------- */   
+img.faviconimg {
+	border:0;
+	width:16px;
+	height:16px;
+	padding: 0 3px;	
+	vertical-align: middle;
+	}
+ul.favilist {
+	list-style:none;
+	margin: 0;
+	padding: 0;
+	}
+ul.favilist li {
+	margin: 0 5px;
+	padding: 0;
+	width: 235px;
+	float: left;
+}
+	
+/* Paragraph Formats
+   Based on Sawchuk 0.5 by Kirk Montgomery
+---------------------------------------------------------- */
+.download, .code, .note,
+.alert, .new, .construction,
+.information {
+	background-position: 15px 10px;
+	background-repeat: no-repeat;
+	line-height: 115%;
+	margin: 10px auto;
+	padding: 10px 10px 10px 50px;
+	text-align: left;
+	}
+ul.download, ul.code, ul.note,
+ul.alert, ul.new, ul.construction,
+ul.information {
+	line-height: 115%;
+	list-style-type: disc;
+	list-style-position: inside;
+	padding: 10px 10px 10px 50px;
+	}
+ol.download, ol.code, ol.note,
+ol.alert, ol.new, ol.construction,
+ol.information {
+	line-height: 115%;
+	list-style-type: decimal;
+	list-style-position: inside;
+	padding: 10px 10px 10px 65px;
+	}	
+dl.download, dl.code, dl.note,
+dl.alert, dl.new, dl.construction,
+dl.information {
+	line-height: 115%;
+	padding: 10px 10px 10px 50px;
+	}
+dl.download dt, dl.code dt, dl.note dt,
+dl.alert dt, dl.new dt, dl.construction dt,
+dl.information dt {
+	font-weight: bold;
+	line-height: 115%;
+	}
+dl.download dd, dl.code dd, dl.note dd,
+dl.alert dd, dl.new dd, dl.construction dd,
+dl.information dd {
+	line-height: 115%;
+	list-style-type: disc;
+	}
+.download {
+	background-image: url('images/download.png');
+	background-color: #D0F29D;
+	border-top: 2px solid #9CD941;
+	border-bottom: 2px solid #9CD941;
+	}
+.download a, .download a:visited {
+	color: #ed1c24;
+	text-decoration: none !important;
+	border-bottom: 2px dotted #ed1c24;
+	}
+.download a:hover {
+	color: #c90404;
+	text-decoration: none !important;
+	border-bottom: 2px dotted #c90404;
+	}
+.code { /* use p class=code when you want to fake it, sometimes handy */
+	background-image: url('images/code.png');
+	background-color: #f2f2f2;
+	border-top: 2px solid #CCC;
+	border-bottom: 2px solid #CCC;
+	font-family: 'Courier New', Courier, Fixed;
+	}
+.alert {
+	background-image: url('images/alert.png');
+	background-color: #ffcccc;
+	border-top: 2px solid #f1795e;
+	border-bottom: 2px solid #f1795e;
+	}
+.new {
+	background-color: #fbe9bd;
+	background-image: url('images/new.png');
+	border-bottom: 2px solid #febd72;
+	border-top: 2px solid #febd72;
+	}
+.construction {
+	background-image: url('images/construction.png');
+	background-color: #fbf2c2;
+	border-top: 2px solid #f4d64f;
+	border-bottom: 2px solid #f4d64f;
+	}
+.information {
+	background-image: url('images/information.png');
+	background-color: #9DD1F2;
+	border-top: 2px solid #419ED9;
+	border-bottom: 2px solid #419ED9;
+	}
+.note {
+	background-image: url('images/note.png');
+	background-color: #ededed;
+	border-top: 2px solid #ccc;
+	border-bottom: 2px solid #ccc;
+	}
+.callout {
+	border-bottom: 2px solid #CCC;
+	border-top: 2px solid #CCC;
+	color: #CCC;
+	margin: 10px auto;
+	padding: 10px;
+	text-align: justify;
+	}
+	
+/* Fixes
+---------------------------------------------------------- */
+
+/* some things don't play nicely with the 'max-width' code, and forced borders are silly */
+.entry-content img {
+	border: none;
+	max-width: none;
+	}
+/* The "share this" plugin seems to add 10px of padding, so this tweak 
+   should help make things look more even */
+.sb-meta ul .share {
+	padding-left: 8px;
+}
