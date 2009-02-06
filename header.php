@@ -22,7 +22,7 @@
   |__|\__||___  ||__||_____| |__|\__|__||___._|_____|_____|
           |_____|                    http://indemnity83.com                                         
 
-Runway Website Theme by Kyle Klaus is licensed under a 
+The Boutique Theme by Kyle Klaus is licensed under a 
 Creative Commons Attribution-Share Alike 3.0 United States License
 http://creativecommons.org/licenses/by-sa/3.0/us/
 

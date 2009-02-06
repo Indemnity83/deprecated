@@ -1,0 +1,7 @@
+Release 1.1.0 2009-02-05
+   * Enhanced page menu output. Including menu highlighting and use of the new WordPress 2.7 function
+   * Removed page.php (redundant to index.php)
+   * Added functions to allow override of the background image and color with custom fields
+   
+Release 1.0.0 2009-02-01
+   * Initial build

@@ -1,10 +1,10 @@
 /*   
 Theme Name: Boutique
 Theme URI: http://kklaus.homedns.org/wordpress/?wptheme=boutique
-Description: A small WordPress Theme, one that is intended for a page-only wordpress implementation.
+Description: A visually compelling, unique, page-only WordPress theme.
 Author: Kyle Klaus
 Author URI: http://indemnity83.com
-Version: 1.0.0
+Version: 1.1.0
 */
 
 @CHARSET "ISO-8859-1";
@@ -32,25 +32,24 @@ hr {
 }
 #home {
 	background: url(./rotate.php);
-	padding-bottom: 0;
 }
-#nav {
+.menu {
 	background: url(./light.png) repeat;
 	height: 50px;
-	list-style: none;
 	padding: 0;
 	margin: 0;
 	-moz-border-radius: 15px 15px 0 0;
 }
-#nav ul {
+.menu ul {
 	width: 800px;
+	list-style: none;
 }
-#nav li {
+.menu li {
 	float: left;
 	margin: 0;
 	padding: 0;
 }
-#nav a {
+.menu a {
 	display: block;
 	margin: 0;
 	padding: 15px 20px;
@@ -59,26 +58,26 @@ hr {
 	font-family: "Lucida Grande", sans-serif;
 	font-size: 18px;
 }
-#nav a.first {
+.menu a.first {
 	-moz-border-radius: 15px 0 0 0;
 }
-#nav li a.last {
+.menu li a.last {
 	-moz-border-radius: 0 15px 0 0;
 	float: right;
 }
-#nav a:hover, #nav a.active {
+.menu a:hover, .menu li.current_page_item {
 	background: url(./light.png) repeat;
 	border-bottom: 2px #FFF solid;
 	color: #FFF;
 }
 #body {
-	width: 400px;
+	width: 780px;
 	color: #727272;
 	font-size: 11px;
 	margin: 10px;
 }
-#page #body {
-	width: 780px;
+#body .narrow {
+	width: 400px;
 }
 #body h1, #body h2, #body h3 {
 	padding: 10px 20px;
