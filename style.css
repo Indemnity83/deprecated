@@ -1,0 +1,164 @@
+/*   
+Theme Name: Boutique
+Theme URI: http://kklaus.homedns.org/wordpress/?wptheme=boutique
+Description: A small WordPress Theme, one that is intended for a page-only wordpress implementation.
+Author: Kyle Klaus
+Author URI: http://indemnity83.com
+Version: 1.0.0
+*/
+
+@CHARSET "ISO-8859-1";
+
+body {
+	background: #000000;
+	color: #373737;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+a {
+	color: #727272;
+}
+hr {
+	display: none;
+}
+#wrap {
+	margin: auto;
+	width: 800px;
+	padding: 30px;
+}
+#page, #home {
+	background: #010101 url(./background.jpg) no-repeat top center;
+	min-height: 600px;
+	-moz-border-radius: 15px;
+}
+#home {
+	background: url(./rotate.php);
+	padding-bottom: 0;
+}
+#nav {
+	background: url(./light.png) repeat;
+	height: 50px;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	-moz-border-radius: 15px 15px 0 0;
+}
+#nav ul {
+	width: 800px;
+}
+#nav li {
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+#nav a {
+	display: block;
+	margin: 0;
+	padding: 15px 20px;
+	color: #d0d0d0;
+	text-decoration: none;
+	font-family: "Lucida Grande", sans-serif;
+	font-size: 18px;
+}
+#nav a.first {
+	-moz-border-radius: 15px 0 0 0;
+}
+#nav li a.last {
+	-moz-border-radius: 0 15px 0 0;
+	float: right;
+}
+#nav a:hover, #nav a.active {
+	background: url(./light.png) repeat;
+	border-bottom: 2px #FFF solid;
+	color: #FFF;
+}
+#body {
+	width: 400px;
+	color: #727272;
+	font-size: 11px;
+	margin: 10px;
+}
+#page #body {
+	width: 780px;
+}
+#body h1, #body h2, #body h3 {
+	padding: 10px 20px;
+}
+#body p {
+	padding: 0px 20px;
+}
+#body p.news, #body p.address {
+	font-size: 13px;
+	padding-bottom: 20px;
+}
+#news p.news span {
+	font-size: 11px;
+}
+#body h1, #body h1 a {
+	font-size: 27px;
+	font-family: "Century Gothic", Geneva, Arial, Helvetica, sans-serif;
+	font-weight: 100;
+	color: #ababab;
+	text-decoration: none;
+}
+#body img {
+	margin-right: 10px;
+	padding: 3px;
+}
+#body a:hover img {
+	border: 3px #800037 solid;
+	padding: 0;
+}
+#body strong {
+	color: #ababab;
+}
+#body .solid {
+	background-color: #1b1816;
+	color: #ababab;
+}
+#body .more {
+	text-align: right;
+	width: 100%;
+	display: block;
+}
+#body ul.twocolumn {
+	padding-top: 15px;
+	padding-bottom: 10px;
+}
+#body ul.twocolumn li {
+	float: left;
+	width: 180px;
+}
+#body .edit {
+	float: right;
+	text-align: right;	
+}
+#title {
+	background: #000;
+	height: 95px;
+}
+#title a {
+	color: #FFF;
+	text-decoration: none;
+	font-size: 30px;
+	font-family: "Century Gothic", Geneva, Arial, Helvetica, sans-serif;
+	font-weight: 100;
+	display: block;
+	padding: 25px;
+}
+#title img {
+	padding: 13px;
+	padding-left: 20px;
+}
+#footer {
+	padding: 10px;
+	font-size: 10px;
+}
+#footer .left {
+	float: left;
+	display: block;
+}
+#footer .right {
+	float: right;
+	display: block;
+	text-align: right;
+}
