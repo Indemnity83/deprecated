@@ -1,3 +1,6 @@
+Release 1.1.1 2009-02-06
+	* added missing wp_head() and wp_footer() to header.php and footer.php
+
 Release 1.1.0 2009-02-05
    * Enhanced page menu output. Including menu highlighting and use of the new WordPress 2.7 function
    * Removed page.php (redundant to index.php)

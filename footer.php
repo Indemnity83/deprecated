@@ -5,5 +5,7 @@
 	<div id="footer"><div class="left"><?php bloginfo('name'); ?> is proudly powered by <a href="http://wordpress.org/">WordPress</a></div><div class="right">Design By <a href="http://indemnity83.com">Kyle Klaus</a> | <a href="<?php bloginfo('rss2_url'); ?>">RSS</a> | <?php wp_loginout(); ?><?php wp_register(' | ',''); ?></div>
 </div>
 
+<?php wp_footer(); ?>
+
 </body>
 </html>
