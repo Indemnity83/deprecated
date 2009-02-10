@@ -4,17 +4,16 @@
 	    
 		<?php boutique_menu(); ?>
 	      
-		<div id="body">
+		<div id="content" class="body">
 			
 			<?php if (have_posts()) : ?>
 				<?php while (have_posts()) : the_post(); ?>
-					<?php edit_post_link('Edit', '<p class="edit">', '</p>'); ?>
-					<?php the_content('Read the rest of this entry &raquo;'); ?>
+					<?php the_content(''); ?>
 				<?php endwhile; ?>
 			
 			<?php else : ?>
 			
-				<h1>Not Found</h2>
+				<h1>Not Found</h1>
 				<p>An error occurred that prevented this page from being displayed. This could be due to one of the following reasons.</p>
 				<ul>
 					<li>An internal site error occured.</li>

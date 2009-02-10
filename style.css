@@ -4,7 +4,7 @@ Theme URI: http://kklaus.homedns.org/wordpress/?wptheme=boutique
 Description: A visually compelling, unique, page-only WordPress theme.
 Author: Kyle Klaus
 Author URI: http://indemnity83.com
-Version: 1.1.0
+Version: 1.2.0
 */
 
 @CHARSET "ISO-8859-1";
@@ -16,6 +16,9 @@ body {
 }
 a {
 	color: #727272;
+}
+a:hover {
+	color: #FFFFFF;
 }
 hr {
 	display: none;
@@ -29,9 +32,6 @@ hr {
 	background: #010101 url(./background.jpg) no-repeat top center;
 	min-height: 600px;
 	-moz-border-radius: 15px;
-}
-#home {
-	background: url(./rotate.php);
 }
 .menu {
 	background: url(./light.png) repeat;
@@ -65,69 +65,79 @@ hr {
 	-moz-border-radius: 0 15px 0 0;
 	float: right;
 }
-.menu a:hover, .menu li.current_page_item {
+.menu li.current_page_item {
 	background: url(./light.png) repeat;
 	border-bottom: 2px #FFF solid;
 	color: #FFF;
 }
-#body {
+.menu a:hover {
+	background: url(./light.png) repeat;
+	border-bottom: 2px #FFF solid;
+	color: #FFF;
+}
+.menu li.current_page_item a:hover {
+	border-bottom: none; /* Fix double border problem */	
+}
+.body {
 	width: 780px;
 	color: #727272;
 	font-size: 11px;
 	margin: 10px;
 }
-#body .narrow {
+.narrow {
 	width: 400px;
+	color: #727272;
+	font-size: 11px;
+	margin: 10px;
 }
-#body h1, #body h2, #body h3 {
+#content h1, #content h2, #content h3 {
 	padding: 10px 20px;
 }
-#body p {
+#content p {
 	padding: 0px 20px;
 }
-#body p.news, #body p.address {
+#content p.news, #content p.address {
 	font-size: 13px;
 	padding-bottom: 20px;
 }
-#news p.news span {
+#content p.news span {
 	font-size: 11px;
 }
-#body h1, #body h1 a {
+#content h1, #body h1 a {
 	font-size: 27px;
 	font-family: "Century Gothic", Geneva, Arial, Helvetica, sans-serif;
 	font-weight: 100;
 	color: #ababab;
 	text-decoration: none;
 }
-#body img {
+#content img {
 	margin-right: 10px;
 	padding: 3px;
 }
-#body a:hover img {
-	border: 3px #800037 solid;
-	padding: 0;
+#content a:hover img {
+	border-color: #FFFFFF;
 }
-#body strong {
+#content strong, #content em {
 	color: #ababab;
 }
-#body .solid {
+#content .solid {
 	background-color: #1b1816;
 	color: #ababab;
 }
-#body .more {
+#content .more {
 	text-align: right;
 	width: 100%;
 	display: block;
 }
-#body ul.twocolumn {
+#content ul.twocolumn {
 	padding-top: 15px;
 	padding-bottom: 10px;
 }
-#body ul.twocolumn li {
+#content ul.twocolumn li {
 	float: left;
 	width: 180px;
 }
-#body .edit {
+#content .edit {
 	float: right;
 	text-align: right;	
 }

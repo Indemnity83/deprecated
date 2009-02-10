@@ -1,10 +1,31 @@
+SUMMARY 
+
+This visually compelling, unique WordPress theme is ideal for users who want to quickly build a site that doesn't need to have a blog. Perfect for product sales sites or a personal portfolio.
+
+CHANGELOG
+
+Release 1.2.0 2009-02-09
+	* Fixed CSS for header links
+	* Added 'Narrow Page' template
+	* Fixed :hover for body images
+	* Added a:hover css
+	* Fixed menu function, no longer lists 
+	  subpages
+	* Removed RSS link in the footer, supufulous 
+	  for a post-less theme
+	* Added options page allowing the setting of 
+	  the home image and credit
+
 Release 1.1.1 2009-02-06
-	* added missing wp_head() and wp_footer() to header.php and footer.php
+	* added missing wp_head() and wp_footer() to 
+	  header.php and footer.php
 
 Release 1.1.0 2009-02-05
-   * Enhanced page menu output. Including menu highlighting and use of the new WordPress 2.7 function
+   * Enhanced page menu output. Including menu highlighting 
+     and use of the new WordPress 2.7 function
    * Removed page.php (redundant to index.php)
-   * Added functions to allow override of the background image and color with custom fields
+   * Added functions to allow override of the background 
+     image and color with custom fields
    
 Release 1.0.0 2009-02-01
    * Initial build
