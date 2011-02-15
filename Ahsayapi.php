@@ -20,7 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author		Kyle Klaus (kklaus@indemnity83.com)
- * @author      Richard Bishop (ahsayapi@uchange.co.uk)
+ * @author		Richard Bishop (ahsayapi@uchange.co.uk)
  * @copyright	Copyright (c) 2011, Kyle Klaus.
  * @license		GNU General Public License
  * @since		Version 1.0
