@@ -3,7 +3,7 @@
  * Ahsay API Wrapper for CodeIgniter
  *
  * An API Wrapper for the Ahsay Backup Server written for CodeIgniter
- * loosly based on the PHP Wrapper written by Richard Bishop available 
+ * loosely based on the PHP Wrapper written by Richard Bishop available 
  * here: http://forum.ahsay.com/viewtopic.php?t=3314
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
  * @author		Kyle Klaus (kklaus@indemnity83.com)
  * @author		Richard Bishop (ahsayapi@uchange.co.uk)
  * @copyright	Copyright (c) 2011, Kyle Klaus.
- * @license		GNU General Public License
+ * @license	GNU General Public License
  * @since		Version 1.0
  */
  
