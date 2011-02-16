@@ -34,8 +34,6 @@ class Ahsayapi {
 
 	/**
 	 * Connection defaults
-	 *
-	 * @var array
 	 */
 	var $__defaults = array(
 		'host' => 'localhost', 
@@ -49,8 +47,6 @@ class Ahsayapi {
 
 	/**
 	 * Constructor
-	 *
-	 * The constructor loads the server configuration.
 	 */
 	public function __construct($params = array()) {
 		$this->server = array_merge($this->__defaults, $params);                
@@ -59,8 +55,6 @@ class Ahsayapi {
 
 	/**
 	 * Authenticate User
-	 *
-	 * Authenticate a user against OBS 
 	 */
 	function authUser($username, $password) {
 		log_message('debug', "Authenticate user $username");        
@@ -68,31 +62,34 @@ class Ahsayapi {
 	}   
 
 	/**
-	 * Get Users
-	 *
-	 * Get an array of all users 
+	 * List Users
 	 */
-	function listUsers() {    
+	function listUsers($host = '') {    
 		log_message('debug', "Getting user list");
-		$result = $this->__query("ListUsers.do");
+		$result = $this->__query("ListUsers.do?Host=$host");		
 		return $this->__parse($result);
 	} 
 
 	/**
-	 * Get User Backup Sets
-	 *
-	 * Get all backup sets for a particular user
+	 * List User Backup Sets
 	 */
 	function listBackupSets($username) {    
 		log_message('debug', "Getting backup sets for user '$username'");        
 		$result =  $this->__query("ListBackupSets.do?LoginName=$username");   
 		return $this->__parse($result);
-	}     
+	}  
+
+	/**
+	 * Get User
+	 */
+	function getUser($username) {    
+		log_message('debug', "Getting information for user '$username'");        
+		$result =  $this->__query("GetUser.do?LoginName=$username");   
+		return $this->__parse($result);
+	} 	
 
 	/**
 	 * Get User Storage Stats
-	 *
-	 * Get storage statistics for a particular user
 	 */    
 	function getUserStorageStat($username, $date) {
 		log_message('debug', "Getting storage stats for user '$username'");
@@ -101,9 +98,7 @@ class Ahsayapi {
 	}    
 
 	/**
-	 * Get User Backup Jobs
-	 *
-	 * Get all backup jobs for a particular user
+	 * List Backup Jobs
 	 */
 	function listBackupJobs($username) {
 		log_message('debug', "Getting backup jobs for user '$username'");
@@ -113,14 +108,99 @@ class Ahsayapi {
 
 	/**
 	 * Get Backup Set
-	 *
-	 * Get details on a particular backup set
 	 */
 	function getBackupSet($username, $setid) {
 		log_message('debug', "Getting details for backup set with id '$setid' for user '$username'");
 		$result =  $this->__query("GetBackupSet.do?LoginName=$username&BackupSetID=$setid");
 		return $this->__parse($result);
-	}     
+	}    
+
+	/**
+	 * List Backup Job Status
+	 */
+	function listBackupJobStatus($date, $username = '') {
+		log_message('debug', "Listing backup job status");
+		$result =  $this->__query("ListBackupJobStatus.do?LoginName=$username&BackupDate=$date");
+		return $this->__parse($result);
+	} 
+
+	/**
+	 * Get Backup Job Report
+	 */
+	function getBackupJobReport($username, $setid, $jobid) {
+		log_message('debug', "Getting backup job report");
+		$result =  $this->__query("GetBackupJobReport.do?LoginName=$username&BackupSetID=$setid&BackupJobID=$jobid");
+		return $this->__parse($result);
+	} 	
+	
+	/**
+	 * Get Backup Job Report Summary
+	 */
+	function getBackupJobReportSummary($username, $setid, $jobid, $cdp = 'N') {
+		log_message('debug', "Getting backup job report summary");
+		$result =  $this->__query("GetBackupJobReportSummary.do?LoginName=$username&BackupSetID=$setid&BackupJobID=$jobid&Cdp=$cdp");
+		return $this->__parse($result);
+	} 	
+	
+	/**
+	 * List Backup Files
+	 */
+	function listBackupFiles($username, $setid, $jobid, $path) {
+		log_message('debug', "Listing Backup Files");
+		$result =  $this->__query("ListBackupFiles.do?LoginName=$username&BackupSetID=$setid&BackupJobID=$jobid&Path=$path");
+		return $this->__parse($result);
+	} 	
+
+	/**
+	 * List User Storage
+	 */
+	function listUserStorage() {
+		log_message('debug', "Listing User Storage");
+		$result =  $this->__query("ListUsersStorage.do");
+		return $this->__parse($result);
+	} 
+
+	/**
+	 * Get License
+	 */
+	function getLicense() {
+		log_message('debug', "Getting License");
+		$result =  $this->__query("GetLicense.do");
+		return $this->__parse($result);
+	} 
+
+	/**
+	 * Get Replication Mode
+	 */
+	function getReplicationMode($host = '') {
+		log_message('debug', "Getting Replication Mode");
+		$result =  $this->__query("GetReplicationMode.do?Host=$host");
+		return $this->__parse($result);
+	} 	
+	
+	/**
+	 * Send Forgot Password Email
+	 */
+	function sendForgotPwdEmail($username) {
+		log_message('debug', "Sending Forgot Password Email");
+		return $this->__query("SendForgotPwdEmail.do?LoginName=$username");
+	} 	
+	
+	/**
+	 * Delete User
+	 */
+	function deleteUser($username) {
+		log_message('debug', "Deleting User");
+		return $this->__query("RemoveUser.do?LoginName=$username");
+	} 
+
+	/**
+	 * Delete Backup Set
+	 */
+	function deleteBackupSet($username, $setid) {
+		log_message('debug', "Deleting User");
+		return $this->__query("DeleteBackupSet.do?LoginName=$username&BackupSetID=$setid");
+	}	
 
 	/**
 	 * API Query
@@ -187,12 +267,13 @@ class Ahsayapi {
 		if(substr($result,0,5)=="<err>") {
 			$debug = debug_backtrace();
 			$error = trim(strip_tags($result));
-			log_message('error', "AhsayAPI->" . $debug[1]['function'] . "() failed: $error");
+			log_message('error', "AhsayAPI->" . $debug[1]['function'] . "() error: $error");
 			$this->error=$error;
 			return false;
 		}
 
 		// Return whatever the server said
+		log_message('debug', 'AhsayAPI Success');
 		return $result;
 	}    
 
@@ -205,15 +286,52 @@ class Ahsayapi {
 	 */   
 	function __parse($xml) {
 		if( !function_exists('simplexml_load_string') ) {
-			show_error('AhsayAPI Requies PHP 5', 500);
+			// All for naught if you don't have simplexml, sorry
+			show_error('AhsayAPI Wrapper Requies PHP 5', 500);
 			exit;
 		}
 
-		if($parsed = simplexml_load_string($xml)) {
-			return $parsed;
+		// Load the XML using SimpleXML (PHP 5 only)
+		$xmlobj = simplexml_load_string($xml);
+		
+		// TODO: verify this is a sufficient check of single/multiple records
+		if( $xmlobj->attributes() ) {
+			// Looks like this dataset is a single record
+			$data = $this->__node($xmlobj);
 		} else {
-			return $xml;
+			// Multiple records, loop through all of 'em
+			foreach( $xmlobj as $node ) {
+				$data[] = $this->__node($node);
+			}		
 		}
+
+		// All done, move along		
+		return $data;
+	}
+	
+	/**
+	 * Format Node
+	 *
+	 * Takes a SimpleXMLElement Object and flattens it
+	 * into a usable array structure
+	 */	
+	function __node($node) {
+		$nodeData = $record = array(); 			
+		foreach($node->attributes() as $key => $value) {
+			$nodeData[strtolower($key)] = (string)$value;
+		}
+		$record[$node->getName()] = $nodeData;
+		
+		// Parse subnodes
+		foreach( $node as $subnode ) {
+			$nodeData = array(); 
+			foreach($subnode->attributes() as $key => $value) {
+				$nodeData[strtolower($key)] = (string)$value;
+			}
+			$record[$subnode->getName()][] = $nodeData;
+		}	
+
+		return $record;
 	}
 
 }
