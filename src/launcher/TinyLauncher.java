@@ -4,11 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.*;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 
 public class TinyLauncher
   {
   protected static String[] session = new String[4];
   protected static JFrame   frame;
+  protected static String OS = System.getProperty("os.name").toLowerCase();
 
   /*****************************************************************************
   * main */
@@ -42,7 +45,7 @@ public class TinyLauncher
     if (isSessionOK != null && isSessionOK)
       {
       JOptionPane.showMessageDialog(frame, "Login Successful!");
-      getJar();
+      getMinecraft();
       installJarMods();
       launchGame();
       }
@@ -65,17 +68,88 @@ public class TinyLauncher
     }
 
   /*****************************************************************************
-  * getJar */
+  * getMinecraft */
   /**
-  * Check for the latest jar. Ask user to update, or continue with current
-  * version.
+  * Get the required files to run Minecraft. Verify we're running the expected
+  * versions. 
+  * 
   *****************************************************************************/
-  public static void getJar()
-    {
-    // Get latest jar!
-    // https://s3.amazonaws.com/MinecraftDownload/minecraft.jar
-    // TODO: Is there a way to insure we have the right version?
-    }
+	public static void getMinecraft()
+	{
+	    // Get latest jars!
+		// https://s3.amazonaws.com/MinecraftDownload/minecraft.jar
+		// TODO: Is there a way to insure we have the right version?
+				
+		File dir = new File("bin");
+		dir.mkdir();	
+		
+		download("lwjgl.jar");
+		download("jinput.jar");
+		download("lwjgl_util.jar");
+		download("minecraft.jar");		
+		
+		if( isWindows() ) 
+		{
+			download("windows_natives.jar.lzma");
+		}
+		
+		if( isMac() )
+		{
+			download("macosx_natives.jar.lzma");
+		}
+		 
+		if( isUnix() ) 
+		{
+			download("linux_natives.jar.lzma");
+		}
+		
+		if( isSolaris() ) 
+		{
+			download("solaris_natives.jar.lzma");
+		}
+		
+	}
+	
+  /*****************************************************************************
+  * download */
+  /**
+  * Download file from MinecraftDownload site
+  * 
+  *****************************************************************************/	
+	public static boolean download(String filename)
+	{
+		FileOutputStream fos = null;
+		
+		File f = new File("bin/" + filename);
+		if(!f.exists()) 
+		{ 
+			try
+			{
+			    URL minecraftJar = new URL("https://s3.amazonaws.com/MinecraftDownload/" + filename);
+			    ReadableByteChannel rbc = Channels.newChannel(minecraftJar.openStream());
+			    fos = new FileOutputStream("bin/" + filename);
+			    fos.getChannel().transferFrom(rbc,  0,  1 << 24);
+			}
+			catch( MalformedURLException e ) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			finally {
+				try {
+					fos.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	
+			}
+		}
+		
+		return false;		
+	}
 
   /*****************************************************************************
   * installJarMods */
@@ -207,5 +281,25 @@ public class TinyLauncher
     // MultiMCLauncher launcher = new MultiMCLauncher();
     // launcher.main(session);
     }
+  
+  public static boolean isWindows() 
+    {	  
+	return (OS.indexOf("win") >= 0);
+	}
+
+  public static boolean isMac() 
+    {
+	return (OS.indexOf("mac") >= 0);
+    }
+
+  public static boolean isUnix() 
+	{
+    return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 );
+	}
+
+  public static boolean isSolaris() 
+    {
+    return (OS.indexOf("sunos") >= 0);
+	}
 
   }
