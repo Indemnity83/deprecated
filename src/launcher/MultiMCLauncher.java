@@ -14,6 +14,8 @@
 //    limitations under the License.
 //
 
+package src.launcher;
+
 import java.applet.Applet;
 import java.awt.Dimension;
 
