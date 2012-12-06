@@ -15,8 +15,7 @@ public class TinyLauncher
 		// Lets do it!
 		session[2] = "Oakhart";      // Window Name
 		session[3] = "max";          // Start maximized
-		MultiMCLauncher launcher = new MultiMCLauncher();
-		launcher.main(session);				
+		MultiMCLauncher.main(session);				
 	}
 	
 	public static void getUpdates() {
