@@ -14,9 +14,9 @@
 //    limitations under the License.
 //
 
-package src.launcher;
+package launcher;
 
-import src.net.minecraft.Launcher;
+import net.minecraft.Launcher;
 import java.applet.Applet;
 import java.awt.Dimension;
 import java.awt.Frame;

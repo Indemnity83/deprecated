@@ -14,7 +14,7 @@
 //    limitations under the License.
 //
 
-package src.net.minecraft;
+package net.minecraft;
 
 import java.util.TreeMap;
 import java.util.Map;
