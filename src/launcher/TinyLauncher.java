@@ -515,18 +515,17 @@ public class TinyLauncher {
 	    /*
 	     * No valid session, tell the user why
 	     */
-	    switch (loginReturn.toLowerCase()) {
-	    case "bad login":
+	    if( loginReturn.toLowerCase() == "bad login" ) {
 		console.append("Bad login \n");
 		JOptionPane.showMessageDialog(frame,
 			"Invalid username or password.");
 		return false;
-	    case "old version":
+	    } else if (loginReturn.toLowerCase() = "old version" ) {
 		console.append("Old version \n");
 		JOptionPane.showMessageDialog(frame,
 			"Launcher outdated, please update.");
 		return false;
-	    default:
+	    } else {
 		console.append("Unexpected error \n");
 		JOptionPane.showMessageDialog(frame, "Login failed!: "
 			+ loginReturn);
