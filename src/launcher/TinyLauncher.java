@@ -2,7 +2,6 @@ package launcher;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
-
 import java.awt.*;
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -17,62 +16,66 @@ import java.util.jar.Pack200;
 
 public class TinyLauncher {
     /***************************************************************************
-    * Constants - TODO: Temporary constants until loadConfig is complete.
-    ***************************************************************************/
-    public static String VERSION_FORGE     = "1.4.5-6.4.1.436";
-    public static String VERSION_MINECRAFT = "1.4.5";
-    
-    protected String[] session = new String[4];
-    protected JFrame frame;
-    protected String OS = System.getProperty("os.name").toLowerCase();
-    protected JTextArea console = new JTextArea();
+     * Constants - TODO: Temporary constants until loadConfig is complete.
+     ***************************************************************************/
+    public static String    VERSION_FORGE     = "1.4.5-6.4.1.436";
+    public static String    VERSION_MINECRAFT = "1.4.5";
+
+    protected String[]      session           = new String[4];
+    protected JFrame        frame;
+    protected String        OS                = System.getProperty("os.name").toLowerCase();
+    protected JTextArea     console           = new JTextArea();
 
     /** whether a fatal error occurred */
-    protected boolean fatalError;
+    protected boolean       fatalError;
 
     /** fatal error that occurred */
-    protected String fatalErrorDescription;
+    protected String        fatalErrorDescription;
 
     /** current size of download in bytes */
-    protected int currentSizeDownload;
+    protected int           currentSizeDownload;
 
     /** total size of download in bytes */
-    protected int totalSizeDownload;
+    protected int           totalSizeDownload;
 
     /** current size of extracted in bytes */
-    protected int currentSizeExtract;
+    protected int           currentSizeExtract;
 
     /** total size of extracted in bytes */
-    protected int totalSizeExtract;
+    protected int           totalSizeExtract;
 
     /** used to calculate length of progress bar */
-    protected int percentage;
+    protected int           percentage;
 
     /** String to display as a subtask */
-    protected String subtaskMessage = "";
+    protected static String subtaskMessage    = "";
 
-    private boolean debugMode;
-
-    private String state;
+    /** Paths for various Minecraft/Forge elements */
+    protected static File   minecraftBin;
+    protected static File   modsDir;
+    protected static File   texturesDir;
+    protected static File   coremodsDir;
+    protected static File   configsDir;
+    protected static File   savesDir;
 
     /***************************************************************************
      * Constructor
      * 
      * @param title
      */
-    protected TinyLauncher(String title)
-        {
+    protected TinyLauncher(String title) {
         frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 300);
         frame.setLocationRelativeTo(null);
-  
+
+        // console is used to display output on the main frame
         console.setLineWrap(true);
         console.setFont(new Font("Monospaced", Font.PLAIN, 12));
         console.setBackground(Color.black);
         console.setForeground(Color.green);
         console.setEditable(false);
-        }
+    }
 
     /**
      * Application main
@@ -81,31 +84,26 @@ public class TinyLauncher {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-    
-        TinyLauncher launcher      = new TinyLauncher("Tiny Launcher");
-        JScrollPane  scrollConsole = new JScrollPane(launcher.console);
-        DefaultCaret caret         = (DefaultCaret) launcher.console.getCaret();
-        String       path          = "bin/";
-        File         minecraftBin  = new File(path);
-        Boolean      isSessionOK   = null;
-        
+
+        TinyLauncher launcher = new TinyLauncher("Tiny Launcher");
+        JScrollPane scrollConsole = new JScrollPane(launcher.console);
+        DefaultCaret caret = (DefaultCaret) launcher.console.getCaret();
+        String path = "bin/";
+        File minecraftBin = new File(path);
+        Boolean isSessionOK = null;
+
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        
+
         launcher.frame.add(scrollConsole);
         launcher.frame.setVisible(true);
 
-        // TODO: This is lame, probably should have a directory setup method.
-        // Make sure the minecraft bin folder exists.
-        if (!minecraftBin.exists()) {
-            minecraftBin.mkdirs();
-        }
+        // Visible startup
+        launcher.frame.setVisible(true);
 
-        launcher.getUpdates();
+        launcher.setupPaths(".minecraft");
 
-        /*
-         * Ask the user for credentials until the session is validated or they
-         * click cancel.
-         */
+        // Ask the user for credentials until the session is validated or they
+        // click cancel
         do {
             isSessionOK = launcher.getUserSession();
         } while (isSessionOK != null && !isSessionOK);
@@ -118,12 +116,213 @@ public class TinyLauncher {
     }
 
     /**
-     * Check for any updates to mods. Ask user to update, or continue with
-     * current version.
+     * Setup folders used by the Minecraft and Forge systems
+     * 
+     * @param root
+     *            the root path to use
      */
-    public void getUpdates() {
-        // TODO: Implementation
+    public void setupPaths(String root) {
+        console.append("Setting up directories under " + root + " ... ");
+
+        minecraftBin = new File(root + File.separator + "bin" + File.separator);
+        modsDir = new File(root + File.separator + "mods" + File.separator);
+        texturesDir = new File(root + File.separator + "texturepacks" + File.separator);
+        coremodsDir = new File(root + File.separator + "coremods" + File.separator);
+        configsDir = new File(root + File.separator + "configs" + File.separator);
+        savesDir = new File(root + File.separator + "saves" + File.separator);
+
+        minecraftBin.mkdirs();
+        modsDir.mkdirs();
+        texturesDir.mkdirs();
+        coremodsDir.mkdirs();
+        configsDir.mkdirs();
+        savesDir.mkdirs();
+
+        console.append("Done \n");
     }
+    
+    /**
+     * Opens a dialog for the user to enter credentials. Validates with the
+     * server and checks versions.
+     * 
+     * @return Results. true=success, false=fail, null=cancel
+     * @throws IOException
+     */
+    public Boolean getUserSession() throws IOException {
+        console.append("Requesting users credentials ... ");
+
+        // Prompt user for credentials
+        JPanel panel = new JPanel();
+        String loginReturn = null;
+        panel.setLayout(new GridLayout(4, 1));
+
+        JLabel username = new JLabel("Username");
+        JLabel password = new JLabel("Password");
+        JTextField userField = new JTextField(12);
+        JPasswordField passField = new JPasswordField(12);
+
+        passField.setEchoChar('*');
+
+        panel.add(username);
+        panel.add(userField);
+        panel.add(password);
+        panel.add(passField);
+
+        int a = JOptionPane.showConfirmDialog(frame, panel, "Login to Minecraft", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        /*
+         * Validate credentials with login server
+         */
+        if (a == JOptionPane.OK_OPTION) {
+            // Get a session from Minecraft login servers
+            session[0] = userField.getText();
+            URL url = null;
+            InputStream is = null;
+
+            try {
+                url = new URL(String.format("https://login.minecraft.net/?user=%s&password=%s&version=14", userField.getText(),
+                        new String(passField.getPassword())));
+
+                // Read the result
+                is = url.openStream();
+                loginReturn = new BufferedReader(new InputStreamReader(is)).readLine();
+            } catch (MalformedURLException e) {
+                JOptionPane.showMessageDialog(frame, "URL Panic (Malformed URL)! " + e.getMessage());
+                return null;
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(frame, "URL Panic (IO Exception)! " + e.getMessage());
+                return null;
+            } finally {
+                // close the steam
+                if (is != null) {
+                    is.close();
+                }
+            }
+
+            /*
+             * Check if we got a session string back
+             */
+            if (loginReturn.split(":").length == 5) {
+                // Yay! valid session
+                console.append("Valid Session \n");
+                return true;
+            }
+
+            /*
+             * No valid session, tell the user why
+             */
+            if (loginReturn.toLowerCase() == "bad login") {
+                console.append("Bad login \n");
+                JOptionPane.showMessageDialog(frame, "Invalid username or password.");
+                return false;
+            } else if (loginReturn.toLowerCase() == "old version") {
+                console.append("Old version \n");
+                JOptionPane.showMessageDialog(frame, "Launcher outdated, please update.");
+                return false;
+            } else {
+                console.append("Unexpected error \n");
+                JOptionPane.showMessageDialog(frame, "Login failed!: " + loginReturn);
+                return false;
+            }
+        }
+
+        /*
+         * The user clicked cancel, or something funky happened
+         */
+        console.append("Canceled \n");
+        return null;
+
+    }    
+    
+    /**
+     * Get the required files to run Minecraft. TODO: Verify we're running the
+     * expected versions
+     */
+    public void loadMinecraft(String ver) {
+
+        // jars to load
+        String jarList = "lwjgl.jar, jinput.jar, lwjgl_util.jar, minecraft.jar";
+        StringTokenizer jar = new StringTokenizer(jarList, ", ");
+        int jarCount = jar.countTokens() + 1;
+        URL[] urlList = new URL[jarCount];
+
+        // native jar url
+        String osName = System.getProperty("os.name");
+        String nativeJar = null;
+
+        if (osName.startsWith("Win")) {
+            nativeJar = "windows_natives.jar.lzma";
+        } else if (osName.startsWith("Linux") || osName.startsWith("FreeBSD")) {
+            nativeJar = "linux_natives.jar.lzma";
+        } else if (osName.startsWith("Mac")) {
+            nativeJar = "macosx_natives.jar.lzma";
+        } else if (osName.startsWith("Solaris") || osName.startsWith("SunOS")) {
+            nativeJar = "solaris_natives.jar.lzma";
+        } else {
+            fatalErrorOccured("OS (" + osName + ") not supported");
+        }
+
+        URL urlBase;
+        try {
+            // set jars urls
+            urlBase = new URL("https://s3.amazonaws.com/MinecraftDownload/");
+
+            for (int i = 0; i < jarCount - 1; i++) {
+                urlList[i] = new URL(urlBase, jar.nextToken());
+            }
+
+            if (nativeJar == null) {
+                fatalErrorOccured("no lwjgl natives files found");
+            } else {
+                urlList[jarCount - 1] = new URL(urlBase, nativeJar);
+            }
+
+            downloadFiles(urlList, minecraftBin.getPath() + File.separator);
+            unpackFiles(urlList, minecraftBin.getPath() + File.separator);
+
+            // Extract the natives, it'll be the last file in the list
+            File natives = new File(minecraftBin.getPath() + File.separator + getJarName(urlList[jarCount - 1]));
+            File nativeDir = new File(minecraftBin.getPath() + File.separator + "natives" + File.separator);
+            extractJar(natives, nativeDir);
+            natives.delete();
+
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            fatalErrorOccured("URL error: " + e.getMessage());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            fatalErrorOccured("Fatal error: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
+
+    public void loadForge(String ver) {
+
+        URL[] urlList = new URL[1];
+        try {
+            urlList[0] = new URL("http://files.minecraftforge.net/minecraftforge/minecraftforge-universal-" + ver + ".zip");
+            downloadFiles(urlList, minecraftBin.getPath() + File.separator);
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Launch Minecraft
+     */
+    public void launchGame() {
+        // Lets do it!
+        console.append("Launching Minecraft ... \n");
+        session[2] = "Oakhart"; // Window Name
+        session[3] = "max"; // Start maximized
+        MultiMCLauncher.main(session);
+    }   
 
     /**
      * Will download the jars from the server using the list of urls in urlList,
@@ -134,8 +333,7 @@ public class TinyLauncher {
      * @throws Exception
      *             if download fails
      */
-    protected void downloadFiles(URL[] urlList, String path)
-            throws Exception {
+    protected void downloadFiles(URL[] urlList, String path) throws Exception {
 
         // state = STATE_DOWNLOADING;
 
@@ -153,13 +351,11 @@ public class TinyLauncher {
         // download each jar
         byte buffer[] = new byte[65536];
         for (int i = 0; i < urlList.length; i++) {
-            debug_sleep(2000);
 
             urlconnection = urlList[i].openConnection();
 
             String currentFile = getFileName(urlList[i]);
-            InputStream inputstream = getJarInputStream(currentFile,
-                    urlconnection);
+            InputStream inputstream = getJarInputStream(currentFile, urlconnection);
             FileOutputStream fos = new FileOutputStream(path + currentFile);
 
             int bufferSize;
@@ -169,14 +365,11 @@ public class TinyLauncher {
             int cpos = console.getCaretPosition();
             console.append("Retrieving: " + currentFile + " ");
             while ((bufferSize = inputstream.read(buffer, 0, buffer.length)) != -1) {
-                debug_sleep(10);
+
                 fos.write(buffer, 0, bufferSize);
                 currentSizeDownload += bufferSize;
-                percentage = initialPercentage
-                        + ((currentSizeDownload * 45) / totalSizeDownload);
-                subtaskMessage = "Retrieving: " + currentFile + " "
-                        + ((currentSizeDownload * 100) / totalSizeDownload)
-                        + "%";
+                percentage = initialPercentage + ((currentSizeDownload * 45) / totalSizeDownload);
+                subtaskMessage = "Retrieving: " + currentFile + " " + ((currentSizeDownload * 100) / totalSizeDownload) + "%";
 
                 long timeLapse = System.currentTimeMillis() - downloadStartTime;
                 // update only if a second or more has passed
@@ -213,8 +406,7 @@ public class TinyLauncher {
      * @throws exception
      *             if any errors occur
      */
-    protected void unpackFiles(URL[] fileList, String path)
-            throws Exception {
+    protected void unpackFiles(URL[] fileList, String path) throws Exception {
         // state = STATE_EXTRACTING_PACKAGES;
 
         float increment = (float) 10.0 / fileList.length;
@@ -225,34 +417,25 @@ public class TinyLauncher {
             String filename = getFileName(fileList[i]);
 
             if (filename.endsWith(".pack.lzma")) {
-                subtaskMessage = "Extracting: " + filename + " to "
-                        + filename.replaceAll(".lzma", "");
+                subtaskMessage = "Extracting: " + filename + " to " + filename.replaceAll(".lzma", "");
                 console.append(subtaskMessage + "\n");
-                debug_sleep(1000);
-                extractLZMA(path + filename,
-                        path + filename.replaceAll(".lzma", ""));
 
-                subtaskMessage = "Extracting: "
-                        + filename.replaceAll(".lzma", "") + " to "
-                        + filename.replaceAll(".pack.lzma", "");
+                extractLZMA(path + filename, path + filename.replaceAll(".lzma", ""));
+
+                subtaskMessage = "Extracting: " + filename.replaceAll(".lzma", "") + " to " + filename.replaceAll(".pack.lzma", "");
                 console.append(subtaskMessage + "\n");
-                debug_sleep(1000);
-                extractPack(path + filename.replaceAll(".lzma", ""), path
-                        + filename.replaceAll(".pack.lzma", ""));
+
+                extractPack(path + filename.replaceAll(".lzma", ""), path + filename.replaceAll(".pack.lzma", ""));
             } else if (filename.endsWith(".pack")) {
-                subtaskMessage = "Extracting: " + filename + " to "
-                        + filename.replace(".pack", "");
+                subtaskMessage = "Extracting: " + filename + " to " + filename.replace(".pack", "");
                 console.append(subtaskMessage + "\n");
-                debug_sleep(1000);
-                extractPack(path + filename,
-                        path + filename.replace(".pack", ""));
+
+                extractPack(path + filename, path + filename.replace(".pack", ""));
             } else if (filename.endsWith(".lzma")) {
-                subtaskMessage = "Extracting: " + filename + " to "
-                        + filename.replace(".lzma", "");
+                subtaskMessage = "Extracting: " + filename + " to " + filename.replace(".lzma", "");
                 console.append(subtaskMessage + "\n");
-                debug_sleep(1000);
-                extractLZMA(path + filename,
-                        path + filename.replace(".lzma", ""));
+
+                extractLZMA(path + filename, path + filename.replace(".lzma", ""));
             }
 
         }
@@ -322,26 +505,19 @@ public class TinyLauncher {
                 }
             }
 
-            debug_sleep(1000);
-
-            InputStream in = jarFile.getInputStream(jarFile.getEntry(entry
-                    .getName()));
-            OutputStream out = new FileOutputStream(path + File.separator
-                    + entry.getName());
+            InputStream in = jarFile.getInputStream(jarFile.getEntry(entry.getName()));
+            OutputStream out = new FileOutputStream(path + File.separator + entry.getName());
 
             int bufferSize;
             byte buffer[] = new byte[65536];
 
             while ((bufferSize = in.read(buffer, 0, buffer.length)) != -1) {
-                debug_sleep(10);
                 out.write(buffer, 0, bufferSize);
                 currentSizeExtract += bufferSize;
 
                 // update progress bar
-                percentage = initialPercentage
-                        + ((currentSizeExtract * 20) / totalSizeExtract);
-                subtaskMessage = "Extracting: " + entry.getName() + " "
-                        + ((currentSizeExtract * 100) / totalSizeExtract) + "%";
+                percentage = initialPercentage + ((currentSizeExtract * 20) / totalSizeExtract);
+                subtaskMessage = "Extracting: " + entry.getName() + " " + ((currentSizeExtract * 100) / totalSizeExtract) + "%";
             }
 
             in.close();
@@ -360,236 +536,14 @@ public class TinyLauncher {
      */
     protected void fatalErrorOccured(String error) {
         fatalError = true;
-        fatalErrorDescription = "Fatal error occured (" + state + "): " + error;
+        fatalErrorDescription = "Fatal error occured: " + error;
         console.append(fatalErrorDescription);
 
     }
 
-    /**
-     * Get the required files to run Minecraft. Verify we're running the
-     * expected versions
-     * 
-     * TODO: Is there a way to insure we have the right version?
-     * 
-     * @throws Exception
-     */
-    public void loadMinecraft(String ver) {
+ 
 
-        // ugly parameter
-        String path = "bin/";
-
-        // jars to load
-        String jarList = "lwjgl.jar, jinput.jar, lwjgl_util.jar, minecraft.jar";
-        StringTokenizer jar = new StringTokenizer(jarList, ", ");
-        int jarCount = jar.countTokens() + 1;
-        URL[] urlList = new URL[jarCount];
-
-        // native jar url
-        String osName = System.getProperty("os.name");
-        String nativeJar = null;
-
-        if (osName.startsWith("Win")) {
-            nativeJar = "windows_natives.jar.lzma";
-        } else if (osName.startsWith("Linux") || osName.startsWith("FreeBSD")) {
-            nativeJar = "linux_natives.jar.lzma";
-        } else if (osName.startsWith("Mac")) {
-            nativeJar = "macosx_natives.jar.lzma";
-        } else if (osName.startsWith("Solaris") || osName.startsWith("SunOS")) {
-            nativeJar = "solaris_natives.jar.lzma";
-        } else {
-            fatalErrorOccured("OS (" + osName + ") not supported");
-        }
-
-        URL urlBase;
-        try {
-            // set jars urls
-            urlBase = new URL("https://s3.amazonaws.com/MinecraftDownload/");
-
-            for (int i = 0; i < jarCount - 1; i++) {
-                urlList[i] = new URL(urlBase, jar.nextToken());
-            }
-
-            if (nativeJar == null) {
-                fatalErrorOccured("no lwjgl natives files found");
-            } else {
-                urlList[jarCount - 1] = new URL(urlBase, nativeJar);
-            }
-
-        } catch (MalformedURLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-
-        try {
-            downloadFiles(urlList, path);
-            unpackFiles(urlList, path);
-
-            // Extract the natives, it'll be the last file in the list
-            File natives = new File(path + getJarName(urlList[jarCount - 1]));
-            File nativeDir = new File(path + "natives/");
-            extractJar(natives, nativeDir);
-            natives.delete();
-
-        } catch (MalformedURLException e) {
-            fatalErrorOccured("URL error: " + e.getMessage());
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            fatalErrorOccured("Fatal error: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-    }
-
-    public void loadForge(String ver) {
-
-        // ugly parameter
-        String path = "bin/";
-
-        URL[] urlList = new URL[1];
-        try {
-            urlList[0] = new URL(
-                    "http://files.minecraftforge.net/minecraftforge/minecraftforge-universal-"
-                            + ver + ".zip");
-            downloadFiles(urlList, path);
-        } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        // Lets inject this into Minecraft eh?
-        // backup? we don't need no stinkin' backup
-
-    }
-
-    /**
-     * Create a backup of the main jar. Extract all files (in order) from the
-     * <i>instmods</i> file in the parent folder. Add everything that was
-     * extracted into the jar. Delete the META-INF from the jar and clean up any
-     * temp folders/files.
-     */
-    public void installJarMods() {
-        // TODO: Implementation
-    }
-
-    /**
-     * Opens a dialog for the user to enter credentials. Validates with the
-     * server and checks versions.
-     * 
-     * @return Results. true=success, false=fail, null=cancel
-     * @throws IOException
-     */
-    public Boolean getUserSession() throws IOException {
-        console.append("Requesting users credentials ... ");
-
-        // Prompt user for credentials
-        JPanel panel = new JPanel();
-        String loginReturn = null;
-        panel.setLayout(new GridLayout(4, 1));
-
-        JLabel username = new JLabel("Username");
-        JLabel password = new JLabel("Password");
-        JTextField userField = new JTextField(12);
-        JPasswordField passField = new JPasswordField(12);
-
-        passField.setEchoChar('*');
-
-        panel.add(username);
-        panel.add(userField);
-        panel.add(password);
-        panel.add(passField);
-
-        int a = JOptionPane.showConfirmDialog(frame, panel,
-                "Login to Minecraft", JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
-
-        /*
-         * Validate credentials with login server
-         */
-        if (a == JOptionPane.OK_OPTION) {
-            // Get a session from Minecraft login servers
-            session[0] = userField.getText();
-            URL url = null;
-            InputStream is = null;
-
-            try {
-                url = new URL(
-                        String.format(
-                                "https://login.minecraft.net/?user=%s&password=%s&version=14",
-                                userField.getText(),
-                                new String(passField.getPassword())));
-
-                // Read the result
-                is = url.openStream();
-                loginReturn = new BufferedReader(new InputStreamReader(is))
-                        .readLine();
-            } catch (MalformedURLException e) {
-                JOptionPane.showMessageDialog(frame,
-                        "URL Panic (Malformed URL)! " + e.getMessage());
-                return null;
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(frame,
-                        "URL Panic (IO Exception)! " + e.getMessage());
-                return null;
-            } finally {
-                // close the steam
-                if (is != null)
-                    is.close();
-            }
-
-            /*
-             * Check if we got a session string back
-             */
-            if (loginReturn.split(":").length == 5) {
-                // Yay! valid session
-                console.append("Valid Session \n");
-                return true;
-            }
-
-            /*
-             * No valid session, tell the user why
-             */
-            if (loginReturn.toLowerCase() == "bad login") {
-                console.append("Bad login \n");
-                JOptionPane.showMessageDialog(frame,
-                        "Invalid username or password.");
-                return false;
-            } else if (loginReturn.toLowerCase() == "old version") {
-                console.append("Old version \n");
-                JOptionPane.showMessageDialog(frame,
-                        "Launcher outdated, please update.");
-                return false;
-            } else {
-                console.append("Unexpected error \n");
-                JOptionPane.showMessageDialog(frame, "Login failed!: "
-                        + loginReturn);
-                return false;
-            }
-        }
-
-        /*
-         * The user clicked cancel, or something funky happened
-         */
-        console.append("Canceled \n");
-        return null;
-
-    }
-
-    /**
-     * Launch Minecraft
-     */
-    public void launchGame() {
-        // Lets do it!
-        console.append("Launching Minecraft ... \n");
-        session[2] = "Oakhart"; // Window Name
-        session[3] = "max"; // Start maximized
-        MultiMCLauncher.main(session);
-    }
-
-    public void copyFile(File sourceFile, File destFile)
-            throws IOException {
+    public void copyFile(File sourceFile, File destFile) throws IOException {
         if (!destFile.exists()) {
             destFile.createNewFile();
         }
@@ -629,10 +583,8 @@ public class TinyLauncher {
 
         // use reflection to avoid hard dependency
         Class clazz = Class.forName("LZMA.LzmaInputStream");
-        Constructor constructor = clazz
-                .getDeclaredConstructor(new Class[] { InputStream.class });
-        InputStream inputHandle = (InputStream) constructor
-                .newInstance(new Object[] { fileInputHandle });
+        Constructor constructor = clazz.getDeclaredConstructor(new Class[] { InputStream.class });
+        InputStream inputHandle = (InputStream) constructor.newInstance(new Object[] { fileInputHandle });
 
         OutputStream outputHandle;
         outputHandle = new FileOutputStream(out);
@@ -686,8 +638,7 @@ public class TinyLauncher {
      *            connection to get input stream from
      * @return InputStream or null if not possible
      */
-    protected InputStream getJarInputStream(final String currentFile,
-            final URLConnection urlconnection) throws Exception {
+    protected InputStream getJarInputStream(final String currentFile, final URLConnection urlconnection) throws Exception {
         final InputStream[] is = new InputStream[1];
 
         // try to get the input stream 3 times.
@@ -762,33 +713,6 @@ public class TinyLauncher {
         }
 
         return fileName.substring(fileName.lastIndexOf('/') + 1);
-    }
-
-    /**
-     * Utility method for sleeping Will only really sleep if debug has been
-     * enabled
-     * 
-     * @param ms
-     *            milliseconds to sleep
-     */
-    protected void debug_sleep(long ms) {
-        if (debugMode) {
-            sleep(ms);
-        }
-    }
-
-    /**
-     * Utility method for sleeping
-     * 
-     * @param ms
-     *            milliseconds to sleep
-     */
-    protected void sleep(long ms) {
-        try {
-            Thread.sleep(ms);
-        } catch (Exception e) {
-            /* ignored */
-        }
     }
 
 }
