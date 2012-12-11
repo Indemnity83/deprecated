@@ -16,38 +16,63 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Pack200;
 
 public class TinyLauncher {
-    protected static String[] session = new String[4];
-    protected static JFrame frame;
-    protected static String OS = System.getProperty("os.name").toLowerCase();
-    protected static JTextArea console = new JTextArea();
+    /***************************************************************************
+    * Constants - TODO: Temporary constants until loadConfig is complete.
+    ***************************************************************************/
+    public static String VERSION_FORGE     = "1.4.5-6.4.1.436";
+    public static String VERSION_MINECRAFT = "1.4.5";
+    
+    protected String[] session = new String[4];
+    protected JFrame frame;
+    protected String OS = System.getProperty("os.name").toLowerCase();
+    protected JTextArea console = new JTextArea();
 
     /** whether a fatal error occurred */
-    protected static boolean fatalError;
+    protected boolean fatalError;
 
     /** fatal error that occurred */
-    protected static String fatalErrorDescription;
+    protected String fatalErrorDescription;
 
     /** current size of download in bytes */
-    protected static int currentSizeDownload;
+    protected int currentSizeDownload;
 
     /** total size of download in bytes */
-    protected static int totalSizeDownload;
+    protected int totalSizeDownload;
 
     /** current size of extracted in bytes */
-    protected static int currentSizeExtract;
+    protected int currentSizeExtract;
 
     /** total size of extracted in bytes */
-    protected static int totalSizeExtract;
+    protected int totalSizeExtract;
 
     /** used to calculate length of progress bar */
-    protected static int percentage;
+    protected int percentage;
 
     /** String to display as a subtask */
-    protected static String subtaskMessage = "";
+    protected String subtaskMessage = "";
 
-    private static boolean debugMode;
+    private boolean debugMode;
 
-    private static String state;
+    private String state;
+
+    /***************************************************************************
+     * Constructor
+     * 
+     * @param title
+     */
+    protected TinyLauncher(String title)
+        {
+        frame = new JFrame(title);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 300);
+        frame.setLocationRelativeTo(null);
+  
+        console.setLineWrap(true);
+        console.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        console.setBackground(Color.black);
+        console.setForeground(Color.green);
+        console.setEditable(false);
+        }
 
     /**
      * Application main
@@ -56,50 +81,39 @@ public class TinyLauncher {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        frame = new JFrame("Tiny Launcher");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 300);
-        frame.setLocationRelativeTo(null);
-
-        console.setLineWrap(true);
-        console.setFont(new Font("Monospaced", Font.PLAIN, 12));
-        console.setBackground(Color.black);
-        console.setForeground(Color.green);
-        console.setEditable(false);
-        JScrollPane scrollConsole = new JScrollPane(console);
-        DefaultCaret caret = (DefaultCaret) console.getCaret();
+    
+        TinyLauncher launcher      = new TinyLauncher("Tiny Launcher");
+        JScrollPane  scrollConsole = new JScrollPane(launcher.console);
+        DefaultCaret caret         = (DefaultCaret) launcher.console.getCaret();
+        String       path          = "bin/";
+        File         minecraftBin  = new File(path);
+        Boolean      isSessionOK   = null;
+        
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        frame.add(scrollConsole);
+        
+        launcher.frame.add(scrollConsole);
+        launcher.frame.setVisible(true);
 
-        frame.setVisible(true);
-
-        // TODO: This is lame, probably should have a directory setup method
-        // Make sure the minecraft bin folder exists
-        String path = "bin/";
-        File minecraftBin = new File(path);
+        // TODO: This is lame, probably should have a directory setup method.
+        // Make sure the minecraft bin folder exists.
         if (!minecraftBin.exists()) {
             minecraftBin.mkdirs();
         }
 
-        // TODO: Make this load from external config
-        String forgeVer = "1.4.5-6.4.1.436";
-        String minecraftVer = "1.4.5";
-
-        getUpdates();
+        launcher.getUpdates();
 
         /*
          * Ask the user for credentials until the session is validated or they
-         * click cancel
+         * click cancel.
          */
-        Boolean isSessionOK;
         do {
-            isSessionOK = getUserSession();
+            isSessionOK = launcher.getUserSession();
         } while (isSessionOK != null && !isSessionOK);
 
         if (isSessionOK != null && isSessionOK) {
-            loadMinecraft(minecraftVer);
-            loadForge(forgeVer);
-            launchGame();
+            launcher.loadMinecraft(VERSION_MINECRAFT);
+            launcher.loadForge(VERSION_FORGE);
+            launcher.launchGame();
         }
     }
 
@@ -107,7 +121,7 @@ public class TinyLauncher {
      * Check for any updates to mods. Ask user to update, or continue with
      * current version.
      */
-    public static void getUpdates() {
+    public void getUpdates() {
         // TODO: Implementation
     }
 
@@ -120,7 +134,7 @@ public class TinyLauncher {
      * @throws Exception
      *             if download fails
      */
-    protected static void downloadFiles(URL[] urlList, String path)
+    protected void downloadFiles(URL[] urlList, String path)
             throws Exception {
 
         // state = STATE_DOWNLOADING;
@@ -199,7 +213,7 @@ public class TinyLauncher {
      * @throws exception
      *             if any errors occur
      */
-    protected static void unpackFiles(URL[] fileList, String path)
+    protected void unpackFiles(URL[] fileList, String path)
             throws Exception {
         // state = STATE_EXTRACTING_PACKAGES;
 
@@ -253,7 +267,7 @@ public class TinyLauncher {
      * @throws Exception
      *             if it fails to extract files
      */
-    protected static void extractJar(File jar, File path) throws Exception {
+    protected void extractJar(File jar, File path) throws Exception {
 
         int initialPercentage = percentage;
 
@@ -344,7 +358,7 @@ public class TinyLauncher {
      * @param error
      *            Error message to print
      */
-    protected static void fatalErrorOccured(String error) {
+    protected void fatalErrorOccured(String error) {
         fatalError = true;
         fatalErrorDescription = "Fatal error occured (" + state + "): " + error;
         console.append(fatalErrorDescription);
@@ -359,7 +373,7 @@ public class TinyLauncher {
      * 
      * @throws Exception
      */
-    public static void loadMinecraft(String ver) {
+    public void loadMinecraft(String ver) {
 
         // ugly parameter
         String path = "bin/";
@@ -426,7 +440,7 @@ public class TinyLauncher {
 
     }
 
-    public static void loadForge(String ver) {
+    public void loadForge(String ver) {
 
         // ugly parameter
         String path = "bin/";
@@ -456,7 +470,7 @@ public class TinyLauncher {
      * extracted into the jar. Delete the META-INF from the jar and clean up any
      * temp folders/files.
      */
-    public static void installJarMods() {
+    public void installJarMods() {
         // TODO: Implementation
     }
 
@@ -467,7 +481,7 @@ public class TinyLauncher {
      * @return Results. true=success, false=fail, null=cancel
      * @throws IOException
      */
-    public static Boolean getUserSession() throws IOException {
+    public Boolean getUserSession() throws IOException {
         console.append("Requesting users credentials ... ");
 
         // Prompt user for credentials
@@ -566,7 +580,7 @@ public class TinyLauncher {
     /**
      * Launch Minecraft
      */
-    public static void launchGame() {
+    public void launchGame() {
         // Lets do it!
         console.append("Launching Minecraft ... \n");
         session[2] = "Oakhart"; // Window Name
@@ -574,7 +588,7 @@ public class TinyLauncher {
         MultiMCLauncher.main(session);
     }
 
-    public static void copyFile(File sourceFile, File destFile)
+    public void copyFile(File sourceFile, File destFile)
             throws IOException {
         if (!destFile.exists()) {
             destFile.createNewFile();
@@ -608,7 +622,7 @@ public class TinyLauncher {
      *             if any errors occur
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected static void extractLZMA(String in, String out) throws Exception {
+    protected void extractLZMA(String in, String out) throws Exception {
 
         File f = new File(in);
         FileInputStream fileInputHandle = new FileInputStream(f);
@@ -651,7 +665,7 @@ public class TinyLauncher {
      * @throws exception
      *             if any errors occur
      */
-    protected static void extractPack(String in, String out) throws Exception {
+    protected void extractPack(String in, String out) throws Exception {
         File f = new File(in);
         FileOutputStream fostream = new FileOutputStream(out);
         JarOutputStream jostream = new JarOutputStream(fostream);
@@ -672,7 +686,7 @@ public class TinyLauncher {
      *            connection to get input stream from
      * @return InputStream or null if not possible
      */
-    protected static InputStream getJarInputStream(final String currentFile,
+    protected InputStream getJarInputStream(final String currentFile,
             final URLConnection urlconnection) throws Exception {
         final InputStream[] is = new InputStream[1];
 
@@ -724,7 +738,7 @@ public class TinyLauncher {
      *            Get file name from this url
      * @return file name as string
      */
-    protected static String getFileName(URL url) {
+    protected String getFileName(URL url) {
         String fileName = url.getFile();
         return fileName.substring(fileName.lastIndexOf('/') + 1);
     }
@@ -736,7 +750,7 @@ public class TinyLauncher {
      *            Get jar file name from this url
      * @return file name as string
      */
-    protected static String getJarName(URL url) {
+    protected String getJarName(URL url) {
         String fileName = url.getFile();
 
         if (fileName.endsWith(".pack.lzma")) {
@@ -757,7 +771,7 @@ public class TinyLauncher {
      * @param ms
      *            milliseconds to sleep
      */
-    protected static void debug_sleep(long ms) {
+    protected void debug_sleep(long ms) {
         if (debugMode) {
             sleep(ms);
         }
@@ -769,7 +783,7 @@ public class TinyLauncher {
      * @param ms
      *            milliseconds to sleep
      */
-    protected static void sleep(long ms) {
+    protected void sleep(long ms) {
         try {
             Thread.sleep(ms);
         } catch (Exception e) {
