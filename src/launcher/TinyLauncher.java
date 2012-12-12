@@ -2,61 +2,65 @@ package launcher;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
+
+import java.applet.Applet;
 import java.awt.*;
 import java.io.*;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.net.*;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Pack200;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
 
 public class TinyLauncher {
     /***************************************************************************
      * Constants - TODO: Temporary constants until loadConfig is complete.
-     ***************************************************************************/
-    public static String    VERSION_FORGE     = "1.4.5-6.4.1.436";
-    public static String    VERSION_MINECRAFT = "1.4.5";
+     **************************************************************************/
+    public static String VERSION_FORGE     = "1.4.5-6.4.1.436";
+    public static String VERSION_MINECRAFT = "1.4.5";
+    public static String WINDOW_NAME       = "MinecraftForge";
+    public static String WINDOW_SIZE       = "max";
+    
+    /***************************************************************************
+     * Properties
+     **************************************************************************/
+    protected static TinyLauncher launcher;
 
     protected String[]      session           = new String[4];
     protected JFrame        frame;
     protected String        OS                = System.getProperty("os.name").toLowerCase();
     protected JTextArea     console           = new JTextArea();
 
-    /** whether a fatal error occurred */
-    protected boolean       fatalError;
+    /** Whether a fatal error occurred */           protected boolean       fatalError;
+    /** Fatal error that occurred */                protected String        fatalErrorDescription;
+    /** Current size of download in bytes */        protected int           currentSizeDownload;
+    /** Total size of download in bytes */          protected int           totalSizeDownload;
+    /** Current size of extracted in bytes */       protected int           currentSizeExtract;
+    /** Total size of extracted in bytes */         protected int           totalSizeExtract;
+    /** Used to calculate length of progress bar */ protected int           percentage;
+    /** String to display as a subtask */           protected static String subtaskMessage = "";
 
-    /** fatal error that occurred */
-    protected String        fatalErrorDescription;
-
-    /** current size of download in bytes */
-    protected int           currentSizeDownload;
-
-    /** total size of download in bytes */
-    protected int           totalSizeDownload;
-
-    /** current size of extracted in bytes */
-    protected int           currentSizeExtract;
-
-    /** total size of extracted in bytes */
-    protected int           totalSizeExtract;
-
-    /** used to calculate length of progress bar */
-    protected int           percentage;
-
-    /** String to display as a subtask */
-    protected static String subtaskMessage    = "";
-
-    /** Paths for various Minecraft/Forge elements */
-    protected static File   minecraftBin;
-    protected static File   modsDir;
-    protected static File   texturesDir;
-    protected static File   coremodsDir;
-    protected static File   configsDir;
-    protected static File   savesDir;
+    /*--------------------------------------------*/
+    /* Paths for various Minecraft/Forge elements */
+    /*--------------------------------------------*/
+    protected static File minecraftBin;
+    protected static File modsDir;
+    protected static File texturesDir;
+    protected static File coremodsDir;
+    protected static File configsDir;
+    protected static File savesDir;
+    protected static File userDir;
 
     /***************************************************************************
      * Constructor
@@ -84,14 +88,13 @@ public class TinyLauncher {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
+        launcher                   = new TinyLauncher("Tiny Launcher");
+        JScrollPane  scrollConsole = new JScrollPane(launcher.console);
+        DefaultCaret caret         = (DefaultCaret) launcher.console.getCaret();
+        String       path          = System.getProperty("user.dir").toString().concat("/bin/");
+        Boolean      isSessionOK   = null;
 
-        TinyLauncher launcher = new TinyLauncher("Tiny Launcher");
-        JScrollPane scrollConsole = new JScrollPane(launcher.console);
-        DefaultCaret caret = (DefaultCaret) launcher.console.getCaret();
-        String path = "bin/";
-        File minecraftBin = new File(path);
-        Boolean isSessionOK = null;
-
+        minecraftBin  = new File(path);
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
         launcher.frame.add(scrollConsole);
@@ -114,7 +117,256 @@ public class TinyLauncher {
             launcher.launchGame();
         }
     }
+    
+    /**
+     * Launches the game!
+     * 
+     * @param session
+     */
+    protected void launch(String[] session) {
+        if (session.length < 3)
+        {
+          System.out.println("Not enough arguments.");
+          System.exit(-1);
+        }
+        String userName    = session[0];
+        String sessionId   = session[1];
+        String windowtitle = session[2];
+        userDir            = new File(System.getProperty("user.dir"));
+        String encoding    = System.getProperty("file.encoding");
+        System.out.println("File encoding: " + encoding);
+        
+        Dimension winSize = new Dimension(854, 480);
+        boolean maximize = false;
+        boolean compatMode = false;
+        
+        if (session.length >= 4)
+        {
+            String windowParams = session[3];
+            String[] dimStrings = windowParams.split("x");
+            
+            if (windowParams.equalsIgnoreCase("compatmode"))
+            {
+              compatMode = true;
+            }
+            else if (windowParams.equalsIgnoreCase("max"))
+            {
+              maximize = true;
+            }
+            else if (dimStrings.length == 2)
+            {
+              try
+              {
+                winSize = new Dimension(Integer.parseInt(dimStrings[0]),
+                    Integer.parseInt(dimStrings[1]));
+              }
+              catch (NumberFormatException e)
+              {
+                System.out.println("Invalid Window size argument, " +
+                    "using default.");
+              }
+            }
+            else
+            {
+              System.out.println("Invalid Window size argument, " +
+                  "using default.");
+            }
+        }
+        
+        try {
+            System.out.println("Loading jars...");
+            String[] jarFiles = new String[] {
+              "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar"
+              };
+            
+            URL[] urls = new URL[jarFiles.length];
+            
+            for (int i = 0; i < urls.length; i++) {
+                try {
+                    File f = new File(minecraftBin, jarFiles[i]);
+                    urls[i] = f.toURI().toURL();
+                    System.out.println("Loading URL: " + urls[i].toString());
+                } catch (MalformedURLException e) {
+          //          e.printStackTrace();
+                    System.err.println("MalformedURLException, " + e.toString());
+                    System.exit(5);
+                }
+            }
+            
+            System.out.println("Loading natives...");
+            String nativesDir = new File(minecraftBin, "natives").toString();
+            
+            System.setProperty("org.lwjgl.librarypath", nativesDir);
+            System.setProperty("net.java.games.input.librarypath", nativesDir);
+      
+            URLClassLoader cl = 
+                new URLClassLoader(urls, TinyLauncher.class.getClassLoader());
+            
+            // Get the Minecraft Class.
+            Class<?> mc = null;
+            try {
+                mc = cl.loadClass("net.minecraft.client.Minecraft");
+                
+                Field f = getMCPathField(mc);
+                
+                if (f == null) {
+                  System.err.println("Could not find Minecraft path field. Launch failed.");
+                  System.exit(-1);
+                }
+                
+                f.setAccessible(true);
+                f.set(null, userDir);
+                // And set it.
+                System.out.println("Fixed Minecraft Path: Field was " + f.toString());
+            }
+            catch (ClassNotFoundException e) {
+                System.err.println("Can't find main class. Searching...");
+                
+                // Look for any class that looks like the main class.
+                File mcJar = new File(minecraftBin, "minecraft.jar");
+                ZipFile zip = null;
+                try {
+                    zip = new ZipFile(mcJar);
+                } catch (ZipException e1) {
+                    e1.printStackTrace();
+                    System.err.println("Search failed.");
+                    System.exit(-1);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                    System.err.println("Search failed.");
+                    System.exit(-1);
+                }
+                
+                Enumeration<? extends ZipEntry> entries = zip.entries();
+                ArrayList<String> classes = new ArrayList<String>();
+                
+                while (entries.hasMoreElements()) {
+                    ZipEntry entry = entries.nextElement();
+                    if (entry.getName().endsWith(".class")) {
+                        String entryName = entry.getName().substring(0, entry.getName().lastIndexOf('.'));
+                        entryName = entryName.replace('/', '.');
+                        System.out.println("Found class: " + entryName);
+                        classes.add(entryName);
+                  }
+                }
+                
+                for (String clsName : classes) {
+                    try {
+                        Class<?> cls = cl.loadClass(clsName);
+                        if (!Runnable.class.isAssignableFrom(cls)) {
+                          continue;
+                        }
+                        else {
+                            System.out.println("Found class implementing runnable: " + 
+                                cls.getName());
+                        }
+                        
+                        if (getMCPathField(cls) == null) {
+                            continue;
+                        }
+                        else {
+                            System.out.println("Found class implementing runnable " +
+                                "with mcpath field: " + cls.getName());
+                        }
+                        
+                        mc = cls;
+                        cl.close();
+                        break;
+                    }
+                    catch (ClassNotFoundException e1) {
+                        // Ignore
+                        continue;
+                    }
+                    catch (IOException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                }
+                
+                if (mc == null) {
+                    System.err.println("Failed to find Minecraft main class.");
+                    System.exit(-1);
+                }
+                else {
+                    System.out.println("Found main class: " + mc.getName());
+                }
+            }
+            
+            System.setProperty("minecraft.applet.TargetDirectory", userDir.getAbsolutePath());
+            
+            String[] mcArgs = new String[2];
+            mcArgs[0] = userName;
+            mcArgs[1] = sessionId;
+      
+            // this is bogus, the method is never used for anything after we set the field
+            /*
+            String mcDir =  mc.getMethod("a", String.class).invoke(null, (Object) "minecraft").toString();
+      
+            System.out.println("MCDIR: " + mcDir);
+            */
+            
+            if (compatMode) {
+                System.out.println("Launching in compatibility mode...");
+                mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
+            }
+            else {
+                System.out.println("Launching with applet wrapper...");
+                try {
+                    Class<?> MCAppletClass = cl.loadClass(
+                        "net.minecraft.client.MinecraftApplet");
+                    Applet mcappl = (Applet) MCAppletClass.newInstance();
+                    MCFrame mcWindow = new MCFrame(windowtitle);
+                    mcWindow.start(mcappl, userName, sessionId, winSize, maximize);
+                } catch (InstantiationException e) {
+                    System.out.println("Applet wrapper failed! Falling back " +
+                        "to compatibility mode.");
+                    mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
+                }
+            }
+          } catch (ClassNotFoundException e) {
+              e.printStackTrace();
+              System.exit(1);
+          } catch (IllegalArgumentException e) {
+              e.printStackTrace();
+              System.exit(2);
+          } catch (IllegalAccessException e) {
+              e.printStackTrace();
+              System.exit(2);
+          } catch (InvocationTargetException e) {
+              e.printStackTrace();
+              System.exit(3);
+          } catch (NoSuchMethodException e) {
+              e.printStackTrace();
+              System.exit(3);
+          } catch (SecurityException e) {
+              e.printStackTrace();
+              System.exit(4);
+          }
+      }
 
+    /**
+     * 
+     * @param mc
+     * @return
+     */
+    public static Field getMCPathField(Class<?> mc) {
+        Field[] fields = mc.getDeclaredFields();
+        
+        for (int i = 0; i < fields.length; i++) {
+            Field f = fields[i];
+            if (f.getType() != File.class) {
+                // Has to be File
+                continue;
+            }
+            if (f.getModifiers() != (Modifier.PRIVATE + Modifier.STATIC)) {
+                // And Private Static.
+                continue;
+            }
+            return f;
+        }
+        return null;
+    }
+    
     /**
      * Setup folders used by the Minecraft and Forge systems
      * 
@@ -319,9 +571,9 @@ public class TinyLauncher {
     public void launchGame() {
         // Lets do it!
         console.append("Launching Minecraft ... \n");
-        session[2] = "Oakhart"; // Window Name
-        session[3] = "max"; // Start maximized
-        MultiMCLauncher.main(session);
+        session[2] = WINDOW_NAME;
+        session[3] = WINDOW_SIZE;
+        launch(session);
     }   
 
     /**
