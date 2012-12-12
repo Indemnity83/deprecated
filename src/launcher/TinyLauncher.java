@@ -79,6 +79,9 @@ public class TinyLauncher {
         console.setBackground(Color.black);
         console.setForeground(Color.green);
         console.setEditable(false);
+        
+        // Redirect system output to our console
+        redirectSystemStreams();
     }
 
     /**
@@ -965,6 +968,36 @@ public class TinyLauncher {
         }
 
         return fileName.substring(fileName.lastIndexOf('/') + 1);
+    }
+
+    protected void updateTextArea(final String text) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                console.append(text);
+            }
+        });
+    }
+
+    protected void redirectSystemStreams() {
+        OutputStream out = new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                updateTextArea(String.valueOf((char) b));
+            }
+
+            @Override
+            public void write(byte[] b, int off, int len) throws IOException {
+                updateTextArea(new String(b, off, len));
+            }
+
+            @Override
+            public void write(byte[] b) throws IOException {
+                write(b, 0, b.length);
+            }
+        };
+
+        System.setOut(new PrintStream(out, true));
+        System.setErr(new PrintStream(out, true));
     }
 
 }
