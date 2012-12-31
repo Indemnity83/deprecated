@@ -4,17 +4,25 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.GradientPaint;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Toolkit;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.text.DefaultCaret;
 
 import com.tinylauncher.gui.BackgroundPanel;
 import com.tinylauncher.tasks.ForgeInstall;
@@ -34,14 +42,16 @@ public class App extends JFrame {
 	private static JProgressBar progressBar;
 	private static JLabel lblAction;
 	private static JLabel lblProgress;
+	private static JTextArea txtConsole;
+	private static JScrollPane scrollConsole;
 
 	/** Application parameters */
 	/* TODO Load this from an XML file */
 	final static String VERSION_FORGE = "latest";
 	final static String VERSION_MINECRAFT = "1.4.6";
 	final static String WINDOW_NAME = "MinecraftForge";
-	final static Dimension WINDOW_SIZE = new Dimension(600, 300);
-	final static Boolean IS_MAXIMIZED = true;
+	final static Dimension WINDOW_SIZE = new Dimension(800, 600);
+	final static Boolean IS_MAXIMIZED = false;
 	final static Image WINDOW_ICON = Toolkit.getDefaultToolkit().getImage(App.class.getResource("/com/tinylauncher/gui/icon.png"));
 
 	/** Session variables */
@@ -56,6 +66,8 @@ public class App extends JFrame {
 	 */
 	public static void main(final String[] args) {
 
+		redirectSystemStreams();
+
 		/* Schedule GUI Creation on the EDT */
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -65,13 +77,16 @@ public class App extends JFrame {
 		});
 
 		App.resetProgress();
+		App.logLn("Running Game Update");
 		GameUpdate.taskStart();
+		App.logLn("Running Forge Install");
 		ForgeInstall.taskStart();
-
+		App.logLn("Launching Minecraft");
 		LaunchMinecraft.taskStart();
 
+		App.showConsole();
 		App.resetProgress();
-		App.setTask("Done");
+		App.setTask("");
 
 	}
 
@@ -83,6 +98,7 @@ public class App extends JFrame {
 		/* Setup the background image */
 		Image bkgd = Toolkit.getDefaultToolkit().getImage(App.class.getResource("/com/tinylauncher/gui/background.png"));
 		BackgroundPanel backgroundPane = new BackgroundPanel(bkgd, BackgroundPanel.TILED);
+		backgroundPane.setTransparentAdd(false);
 		setContentPane(backgroundPane);
 
 		/* Setup the application frame */
@@ -95,10 +111,9 @@ public class App extends JFrame {
 		getContentPane().setLayout(null);
 
 		/* Setup form fonts */
-		/* TODO Pick prettier fonts */
-		Font fontTask = new Font("Monospaced", Font.BOLD, 50);
-		Font fontBody = new Font("Monospaced", Font.PLAIN, 20);
-		Font fontVer = new Font("Monospaced", Font.PLAIN, 12);
+		Font fontTask = getFont(Font.BOLD, 50);
+		Font fontBody = getFont(Font.PLAIN, 22);
+		Font fontVer = getFont(Font.PLAIN, 12);
 
 		/* Add the main status label */
 		lblTask = new JLabel("Initializing...");
@@ -140,6 +155,47 @@ public class App extends JFrame {
 		lblTinylauncherdev.setForeground(Color.LIGHT_GRAY);
 		getContentPane().add(lblTinylauncherdev);
 
+		/* Create the console */
+		txtConsole = new JTextArea();
+		txtConsole.setBackground(Color.BLACK);
+		txtConsole.setForeground(Color.GREEN);
+		txtConsole.setFont(new Font("monospaced", Font.PLAIN, 12));
+		txtConsole.setLineWrap(true);
+		txtConsole.setEditable(false);
+		txtConsole.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
+		txtConsole.setMargin(new Insets(10, 10, 10, 10));
+		DefaultCaret caret = (DefaultCaret) txtConsole.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		scrollConsole = new JScrollPane(txtConsole);
+		scrollConsole.setBounds(0, 0, 864, 400);
+		scrollConsole.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
+		scrollConsole.setVisible(false);
+		getContentPane().add(scrollConsole);
+
+	}
+
+	private static void showConsole() {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				lblTask.setVisible(false);
+				lblAction.setVisible(false);
+				lblProgress.setVisible(false);
+				progressBar.setVisible(false);
+				scrollConsole.setVisible(true);
+			}
+		});
+	}
+
+	private static void hideConsole() {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				lblTask.setVisible(true);
+				lblAction.setVisible(true);
+				lblProgress.setVisible(true);
+				progressBar.setVisible(true);
+				scrollConsole.setVisible(false);
+			}
+		});
 	}
 
 	/**
@@ -291,6 +347,67 @@ public class App extends JFrame {
 	public static void fatalError(final String message) {
 		JOptionPane.showMessageDialog(null, "Fatal Error: " + message);
 		System.exit(0);
+	}
+
+	/**
+	 * Returns the custom Minecraft font, or reverts to a standard font if
+	 * there's an error
+	 * 
+	 * @param style
+	 *            Font.BOLD, Font.PLAIN
+	 * @param size
+	 *            text size
+	 * @return Font
+	 */
+	public static Font getFont(int style, int size) {
+		Font font = null;
+		String fName = "/com/tinylauncher/gui/minecraft.ttf";
+
+		try {
+			InputStream is = App.class.getResourceAsStream(fName);
+			Font fontBase = Font.createFont(Font.TRUETYPE_FONT, is);
+			font = fontBase.deriveFont(style, size);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			System.err.println(fName + " not loaded. Using monospaced font.");
+			font = new Font("monospaced", style, size);
+		}
+
+		return font;
+	}
+
+	public static void log(final String text) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				txtConsole.append(text);
+			}
+		});
+	}
+
+	public static void logLn(String text) {
+		log(text + "\n");
+	}
+
+	public static void redirectSystemStreams() {
+		OutputStream out = new OutputStream() {
+			@Override
+			public void write(int b) throws IOException {
+				log(String.valueOf((char) b));
+			}
+
+			@Override
+			public void write(byte[] b, int off, int len) throws IOException {
+				log(new String(b, off, len));
+			}
+
+			@Override
+			public void write(byte[] b) throws IOException {
+				write(b, 0, b.length);
+			}
+		};
+
+		System.setOut(new PrintStream(out, true));
+		System.setErr(new PrintStream(out, true));
 	}
 
 }
