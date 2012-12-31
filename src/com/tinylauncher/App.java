@@ -51,7 +51,7 @@ public class App extends JFrame {
 	final static String WINDOW_NAME = "MinecraftForge";
 	final static Dimension WINDOW_SIZE = new Dimension(800, 600);
 	final static Boolean IS_MAXIMIZED = false;
-	final static Image WINDOW_ICON = Toolkit.getDefaultToolkit().getImage(App.class.getResource("/com/tinylauncher/gui/icon.png"));
+	final static Image WINDOW_ICON = Toolkit.getDefaultToolkit().getImage(App.class.getResource("/com/tinylauncher/gfx/icon.png"));
 
 	/** Session variables */
 	private static String strUsername;
@@ -95,7 +95,7 @@ public class App extends JFrame {
 	public App() {
 
 		/* Setup the background image */
-		Image bkgd = Toolkit.getDefaultToolkit().getImage(App.class.getResource("/com/tinylauncher/gui/background.png"));
+		Image bkgd = Toolkit.getDefaultToolkit().getImage(App.class.getResource("/com/tinylauncher/gfx/background.png"));
 		BackgroundPanel backgroundPane = new BackgroundPanel(bkgd, BackgroundPanel.TILED);
 		backgroundPane.setTransparentAdd(false);
 		setContentPane(backgroundPane);
@@ -352,7 +352,8 @@ public class App extends JFrame {
 	/**
 	 * Simple handler for fatal application errors
 	 * 
-	 * @param message String message to show user
+	 * @param message
+	 *            String message to show user
 	 */
 	public static void fatalError(final String message) {
 		JOptionPane.showMessageDialog(null, "Fatal Error: " + message);
@@ -371,7 +372,7 @@ public class App extends JFrame {
 	 */
 	public static Font getFont(int style, int size) {
 		Font font = null;
-		String fName = "/com/tinylauncher/gui/minecraft.ttf";
+		String fName = "/com/tinylauncher/gfx/minecraft.ttf";
 
 		try {
 			InputStream is = App.class.getResourceAsStream(fName);
@@ -389,7 +390,8 @@ public class App extends JFrame {
 	/**
 	 * Outputs a string to the console log
 	 * 
-	 * @param text String to output
+	 * @param text
+	 *            String to output
 	 */
 	public static void log(final String text) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -402,7 +404,8 @@ public class App extends JFrame {
 	/**
 	 * Outputs a line to the console log
 	 * 
-	 * @param text String to output
+	 * @param text
+	 *            String to output
 	 */
 	public static void logLn(String text) {
 		log(text + "\n");
