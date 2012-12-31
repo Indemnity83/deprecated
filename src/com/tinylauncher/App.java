@@ -21,7 +21,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
 import javax.swing.text.DefaultCaret;
 
 import com.tinylauncher.gui.BackgroundPanel;
@@ -174,6 +173,9 @@ public class App extends JFrame {
 
 	}
 
+	/**
+	 * Shows the console and hides the Task/Action/Progress elements
+	 */
 	private static void showConsole() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -186,6 +188,9 @@ public class App extends JFrame {
 		});
 	}
 
+	/**
+	 * Shows the application Task/Action/Progress elements and hides the console
+	 */
 	private static void hideConsole() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -338,12 +343,17 @@ public class App extends JFrame {
 	}
 
 	/**
-	 * Resets progress indication to zero
+	 * Resets progress indication to zero and hides the progress bar
 	 */
 	public static void resetProgress() {
 		setProgress("", -1);
 	}
 
+	/**
+	 * Simple handler for fatal application errors
+	 * 
+	 * @param message String message to show user
+	 */
 	public static void fatalError(final String message) {
 		JOptionPane.showMessageDialog(null, "Fatal Error: " + message);
 		System.exit(0);
@@ -376,6 +386,11 @@ public class App extends JFrame {
 		return font;
 	}
 
+	/**
+	 * Outputs a string to the console log
+	 * 
+	 * @param text String to output
+	 */
 	public static void log(final String text) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -384,10 +399,18 @@ public class App extends JFrame {
 		});
 	}
 
+	/**
+	 * Outputs a line to the console log
+	 * 
+	 * @param text String to output
+	 */
 	public static void logLn(String text) {
 		log(text + "\n");
 	}
 
+	/**
+	 * Redirects system streams (Sysout and Syserr) to our custom console
+	 */
 	public static void redirectSystemStreams() {
 		OutputStream out = new OutputStream() {
 			@Override
