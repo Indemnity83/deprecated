@@ -111,8 +111,8 @@ public class App extends JFrame {
 		getContentPane().setLayout(null);
 
 		/* Setup form fonts */
-		Font fontTask = getFont(Font.BOLD, 50);
-		Font fontBody = getFont(Font.PLAIN, 22);
+		Font fontTask = getFont(Font.BOLD, 40);
+		Font fontBody = getFont(Font.PLAIN, 16);
 		Font fontVer = getFont(Font.PLAIN, 12);
 
 		/* Add the main status label */
@@ -127,7 +127,7 @@ public class App extends JFrame {
 		lblAction = new JLabel("");
 		lblAction.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAction.setFont(fontBody);
-		lblAction.setBounds(10, 244, 844, 37);
+		lblAction.setBounds(10, 260, 844, 37);
 		lblAction.setForeground(Color.LIGHT_GRAY);
 		getContentPane().add(lblAction);
 
