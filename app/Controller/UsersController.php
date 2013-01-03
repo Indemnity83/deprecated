@@ -13,13 +13,6 @@ class UsersController extends AppController {
 	    if ($user['role'] == 'admin') {
 	        return true;
 	    }
-
-		/* Only the profile owner can edit their profile */
-	    if (in_array($this->action, array('profile'))) {
-	        if ($user['id'] != $this->request->params['pass'][0]) {
-	            return false;
-	        }
-	    }
 		
 		/* Normal users can't access these */
 		if (in_array($this->action, array('edit','delete'))) {
