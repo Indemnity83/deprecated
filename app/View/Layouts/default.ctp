@@ -58,6 +58,8 @@
 		<li><?php echo $this->Html->link($this->Html->image("/img/nav/settings.png", array("alt"=>"Admin")) . ' Admin', '#', array('escape'=>false, 'class'=>'collapse')); ?>
 		    <ul>
 				<li><?php echo $this->Html->link('Users', array('controller'=>'users', 'action'=>'index')); ?></li>
+				<li><?php echo $this->Html->link('Weights', array('controller'=>'weights', 'action'=>'index')); ?></li>
+				<li><?php echo $this->Html->link('Foods', array('controller'=>'foods', 'action'=>'index')); ?></li>
 			</ul>
 		</li>
 	</ul>
