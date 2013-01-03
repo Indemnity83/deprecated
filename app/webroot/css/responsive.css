@@ -1,0 +1,208 @@
+/* Tablet, both */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+	
+	aside .status_box {
+		position: static;
+		}
+	
+	#content form input.text {
+		width: 75%;
+		}
+		
+	#content form textarea {
+		width: 95%;
+		}
+		
+	#content form input.date_picker {
+		width: 80px;
+		}
+		
+	.loginpage {
+		min-height: 768px;
+		}
+		
+	.loginpage #togglemenu {
+		display: none;
+		}
+		
+	#content.loginbox {
+		margin: 100px auto;
+		}
+}
+
+
+/* Tablet, portrait */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+
+	body {
+		background: 0;
+		min-width: 720px;
+		}
+		
+	header #togglemenu {
+		display: block;
+		}
+	
+	aside {
+		position: absolute;
+		z-index: 10;
+		background: url(../img/sb.gif) top left repeat-y;
+		display: none;
+		
+		-webkit-box-shadow: 0 1px 5px rgba(0,0,0,.6);
+		-moz-box-shadow: 0 1px 5px rgba(0,0,0,.6);
+		box-shadow: 0 1px 5px rgba(0,0,0,.6);
+		
+		-webkit-border-bottom-right-radius: 5px;
+		-moz-border-radius-bottomright: 5px;
+		border-bottom-right-radius: 5px;
+		}
+	
+	aside ul#nav li a strong {
+		background: none;
+		}
+		
+	#content .imglist li {
+		margin: 10px 17px 10px 0;
+		}
+}
+
+
+/* Tablet, landscape */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+
+	body {
+		min-width: 900px;
+		}
+		
+	aside {
+		display: block !important;
+		position: static;
+		}
+}
+
+
+
+
+
+
+/* Smartphone, both */
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+
+	body {
+		background: 0;
+		min-width: 680px;
+		-webkit-text-size-adjust: none;
+		}
+		
+	header #togglemenu {
+		display: block;
+		margin-left: 20px;
+		}
+		
+	header .searchform input.text {
+		width: 60px;
+		}
+		
+	aside {
+		display: none;
+		position: static;
+		float: none;
+		width: 100%;
+		background: #eceff1;
+		overflow: hidden;
+		border: 0;
+		border-bottom: 1px solid #becad1;
+		}
+				
+	aside ul#nav li a strong {
+		background: none;
+		}
+		
+	aside .status_box {
+		width: auto;
+		position: static;
+		}
+	
+	aside .status_box ul {
+		font-size: 12px;
+		overflow: hidden;
+		}
+		
+	aside .status_box ul li {
+		float: left;
+		margin-right: 10px;
+		}
+		
+	#content .chat_messages form input.text {
+		width: 250px;
+		}
+		
+	#content form input.text {
+		width: 75%;
+		}
+		
+	#content form textarea {
+		width: 95%;
+		}
+		
+	#content form input.date_picker {
+		width: 80px;
+		}
+		
+	.loginpage #togglemenu {
+		display: none;
+		}
+		
+	#content.loginbox {
+		margin: 20px auto 50px;
+		}
+}
+
+
+/* Smartphone, portrait */
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) {
+
+	body {
+		min-width: 480px;
+		}
+		
+	header .userprofile {
+		display: none;
+		}
+		
+	#content .visualize-labels-x {
+		display: none;
+		}
+		
+	#content .textbox.half {
+		width: auto;
+		float: none;
+		}
+	
+	#content .textbox.left,	
+	#content .textbox.right {
+		float: none;
+		}
+	
+	#content .imglist li {
+		margin: 15px 20px;
+		}
+	
+	#content .chat_users {
+		display: none;
+		}
+		
+	#content .chat_messages {
+		float: none;
+		width: 100%;
+		}
+		
+	.loginpage {
+		min-height: 480px;
+		}
+		
+	#content.loginbox {
+		margin: 50px auto;
+		}
+}
