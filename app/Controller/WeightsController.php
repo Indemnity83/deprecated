@@ -23,7 +23,7 @@ class WeightsController extends AppController {
 	    if ($this->request->is('post')) {
 	        
 	        $this->request->data['Weight']['user_id'] = $this->Auth->user('id');
-	        $this->request->data['Weight']['date'] = CakeTime::format('Y-m-d');
+	        $this->request->data['Weight']['date'] = CakeTime::format('Y-m-d', time());
 			
 	        
 	        if ($this->Weight->save($this->request->data)) {
