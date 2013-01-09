@@ -61,10 +61,12 @@ class Weight extends AppModel {
     }
 
     public function on($date, $user_id = null) {
-        if ($date = strtotime($date) === false) {
+        /*
+        if ($date = strtotime($date) === null) {
             throw new NotFoundException('Invalid date');
         }
         $date = date ('Y-m-d', $date);
+        */
         
         if ($user_id === null) {
             $user_id = $this->User->getID();
@@ -100,7 +102,7 @@ class Weight extends AppModel {
             $pct_loss = ($initial_weight - $final_weight) / $initial_weight * 100;
         }
         
-        return $pct_loss;
+        return number_format($pct_loss, 1);
     }
      
 }

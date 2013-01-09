@@ -3,8 +3,8 @@ class User extends AppModel {
 	public $name = 'User';
 	public $displayField = 'name';	
 	
-	public $hasMany = 'Weight';
-	public $hasAndBelongsToMany = array('Leagues');
+	public $hasMany   = 'Weight';
+	public $belongsTo = array('League');
 	
 	const ROLE_ADMIN = 'admin';
 	const ROLE_STANDARD = 'regular';

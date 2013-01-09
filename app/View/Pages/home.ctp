@@ -7,16 +7,15 @@
 	</div>
 </div>
 
-
-
-
-
-<h2>This weeks matchups</h2>
+<?php $weeks = $this->requestAction('leagues/matchups'); ?>
+<?php foreach ($weeks as $week): ?>
+<br /><br />			
+<h2>Week <?php echo $week['Week']['week']; ?> matchups</h2>
 <table width="100%" cellpadding="0" cellspacing="0" class="today_stats">
 	<tr>
-		<td><strong>Tom</strong> vs <strong>Nicole</strong></td>
-		<td><strong>Claudia</strong> vs <strong>Kyle</strong></td>
-		<td><strong>Keith</strong> vs <strong>Otto</strong></td>
-		<td><strong>Nick</strong> vs <strong>Stephanie</strong></td>
+        <?php foreach ($week['vs'] as $user): ?>
+		<td><strong><?php echo $this->Html->link($user[0]['User']['name'], array('controller'=>'users', 'action'=>'view', $user[0]['User']['id']), array('escape'=>false)); ?> (<?php echo $user[0]['Weight']['pct_loss']; ?>%)</strong> vs <strong><?php echo $this->Html->link($user[1]['User']['name'], array('controller'=>'users', 'action'=>'view', $user[1]['User']['id']), array('escape'=>false)); ?> (<?php echo $user[1]['Weight']['pct_loss']; ?>%)</strong></td>
+        <?php endforeach; ?>
 	</tr>
 </table>
+<?php endforeach; ?>

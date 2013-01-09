@@ -76,7 +76,6 @@ class WeightsController extends AppController {
 		}
 		$this->Session->setFlash('Weight was not deleted', 'message_error');
 		$this->redirect(array('action' => 'index'));
-	}
-	
+	}	
 	
 }
