@@ -2,7 +2,12 @@
 class User extends AppModel {
 	public $name = 'User';
 	public $displayField = 'name';	
+	
 	public $hasMany = 'Weight';
+	public $hasAndBelongsToMany = array('Leagues');
+	
+	const ROLE_ADMIN = 'admin';
+	const ROLE_STANDARD = 'regular';
 	
 	public $validate = array(
 		'name'=>array(
@@ -77,6 +82,7 @@ class User extends AppModel {
 	    }
 	    return true;
 	}
+		
 	
 }
 ?>

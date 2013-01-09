@@ -1,5 +1,5 @@
 <h2>Weigh-in</h2>
-
+<p>To help track your progress, you should record your weight periodically. Its easiest to remember to weigh-in if you do it daily. Try to always weigh yourself at the same time of day, like early in the morning before breakfast.</p>
 <?php echo $this->Form->create('Weight', array('inputDefaults'=>array('div' => false,'error'=>array('attributes'=>array('wrap'=>'span', 'class'=>'note error'))))); ?>
-<p><?php echo $this->Form->input('weight', array('class'=>'text', 'size'=>'30', 'between'=>'<br />')); ?><span class="note">You can type your wieght in directly</span></p>
+<p><?php echo $this->Form->input('weight', array('value'=>$recent_weight['Weight']['weight'], 'label'=>'Today\'s Weight', 'class'=>'text', 'size'=>'30', 'step'=>'0.1', 'between'=>'<br />')); ?><span class="note">Last recorded weight: <?php echo $recent_weight['Weight']['weight']; ?> lbs on <?php echo $recent_weight['Weight']['date']; ?></span></p>
 <p class="formend"><?php echo $this->Form->end(array('label'=>'Submit','div'=>false,'class'=>'submit')); ?></p>

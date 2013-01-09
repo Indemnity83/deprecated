@@ -23,6 +23,7 @@
 <?php echo $this->Html->css('jquery.wysiwyg'); ?>
 <?php echo $this->Html->css('jquery.fancybox'); ?>
 <?php echo $this->Html->css('tipsy'); ?>
+<link href='http://fonts.googleapis.com/css?family=Monda:400,700' rel='stylesheet' type='text/css'>
 
 <!--[if lt IE 9]>
 	<?php echo $this->Html->css('ie'); ?>
@@ -44,6 +45,7 @@
     			<ul>
     				<li><?php echo $this->Html->link('Profile', array('controller'=>'users', 'action'=>'profile')); ?></li>
     				<li><?php echo $this->Html->link('Logout', array('controller'=>'users', 'action'=>'logout')); ?></li>
+    				<li><?php echo $this->Html->link('Join a League', array('controller'=>'leagues', 'action'=>'join')); ?></li>
     			</ul>
     		</li>    
     	</ul>
@@ -60,6 +62,7 @@
 				<li><?php echo $this->Html->link('Users', array('controller'=>'users', 'action'=>'index')); ?></li>
 				<li><?php echo $this->Html->link('Weights', array('controller'=>'weights', 'action'=>'index')); ?></li>
 				<li><?php echo $this->Html->link('Foods', array('controller'=>'foods', 'action'=>'index')); ?></li>
+				<li><?php echo $this->Html->link('Leagues', array('controller'=>'leagues', 'action'=>'index')); ?></li>
 			</ul>
 		</li>
 	</ul>
@@ -83,15 +86,15 @@
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script type="text/javascript" src="http://code.jquery.com/ui/1.8.16/jquery-ui.min.js"></script>
 
-	<script type="text/javascript" src="js/excanvas.js"></script>
-	<script type="text/javascript" src="js/jquery.visualize.js"></script>
-	<script type="text/javascript" src="js/jquery.tablesorter.js"></script>
-	<script type="text/javascript" src="js/jquery.date_input.min.js"></script>
-	<script type="text/javascript" src="js/jquery.minicolors.min.js"></script>
-	<script type="text/javascript" src="js/jquery.wysiwyg.js"></script>
-	<script type="text/javascript" src="js/jquery.fancybox.js"></script>
-	<script type="text/javascript" src="js/jquery.tipsy.js"></script>
-	<script type="text/javascript" src="js/custom.js"></script>
+	<script type="text/javascript" src="/js/excanvas.js"></script>
+	<script type="text/javascript" src="/js/jquery.visualize.js"></script>
+	<script type="text/javascript" src="/js/jquery.tablesorter.js"></script>
+	<script type="text/javascript" src="/js/jquery.date_input.min.js"></script>
+	<script type="text/javascript" src="/js/jquery.minicolors.min.js"></script>
+	<script type="text/javascript" src="/js/jquery.wysiwyg.js"></script>
+	<script type="text/javascript" src="/js/jquery.fancybox.js"></script>
+	<script type="text/javascript" src="/js/jquery.tipsy.js"></script>
+	<script type="text/javascript" src="/js/custom.js"></script>
 
 </body>
 </html>

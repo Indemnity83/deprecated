@@ -12,7 +12,7 @@ URL: http://themeforest.net/user/enstyled
 	
 body {
 	background: #fff url(../img/sb.gif) top left repeat-y;
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: 'Monda', Arial, Helvetica, sans-serif;
 	font-size: 13px;
 	color: #454545;
 	line-height: 20px;
@@ -179,7 +179,6 @@ header form input.text {
 	width: 100px;
 	border: 0;
 	background: url(../img/srch.gif) 0 0 no-repeat;
-	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	color: #aaa;
 	padding: 8px 0 11px 11px;
@@ -257,6 +256,7 @@ aside {
 	}
 	
 aside ul#nav li {
+	font-family: arial, helvetica, sans-serif;
 	font-size: 14px;
 	}
 
@@ -515,7 +515,6 @@ aside .status_box ul li a.offline {
 	}
 	
 #content .tableactions input.submit {
-	font-family: Arial, Helvetica, sans-serif;
 	border: 1px solid #014076;
 	background: #085a9f url(../img/mbg.jpg) center repeat-x;
 	padding: 1px 6px;
@@ -808,7 +807,6 @@ aside .status_box ul li a.offline {
 	}
 
 #content form label {
-	font-family: Arial, Helvetica, sans-serif;
 	font-size: 13px;
 	font-weight: bold;
 	color: #333;
@@ -817,7 +815,6 @@ aside .status_box ul li a.offline {
 	}
 
 #content form input.text {
-	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	color: #333;
 	padding: 7px;
@@ -834,7 +831,6 @@ aside .status_box ul li a.offline {
 	}
 
 #content form textarea {
-	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	color: #333;
 	padding: 7px;
@@ -852,7 +848,6 @@ aside .status_box ul li a.offline {
 	}
 	
 #content form .custom_file input.button {
-	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	font-weight: bold;
 	color: #fff;
@@ -905,7 +900,6 @@ aside .status_box ul li a.offline {
 	}
 	
 #content form input.color_picker {
-	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	color: #333;
 	padding: 5px;
@@ -972,7 +966,6 @@ aside .status_box ul li a.offline {
 #content form .note.error { color: #e3302c; }
 			
 #content form input.submit {
-	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	font-weight: bold;
 	color: #fff;

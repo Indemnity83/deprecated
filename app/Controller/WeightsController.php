@@ -33,7 +33,8 @@ class WeightsController extends AppController {
 	            $this->Session->setFlash('Nope, that didn\'t work', 'message_warning');
 	        }
 	    }
-		
+	    
+	    $this->set('recent_weight', $this->Weight->recent($this->Auth->user('id')));		
 		
 	}
 	

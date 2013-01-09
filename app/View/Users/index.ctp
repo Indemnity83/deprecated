@@ -1,7 +1,5 @@
-<h2>Users</h2>
-			
+<h2>Users</h2>			
 <table cellpadding="0" cellspacing="0" width="100%" class="sortable">
-
 	<thead>
 		<tr>
 			<th>id</th>
@@ -31,5 +29,4 @@
 		</tr>
         <?php endforeach; ?>
 	</tbody>
-	
 </table>

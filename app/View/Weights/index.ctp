@@ -19,7 +19,7 @@
 		<tr>
 			<td><strong><?php echo $weight['Weight']['id']; ?>&nbsp;</strong></td>
 			<td><?php echo $this->Html->link($weight['User']['name'], array('controller'=>'users', 'action'=>'view', $weight['User']['id']), array('escape'=>false)); ?>&nbsp;</td>
-			<td><?php echo $weight['Weight']['date']; ?>&nbsp;</td>
+			<td><?php echo $this->Time->format('M j',$weight['Weight']['date']); ?>&nbsp;</td>
 			<td><?php echo $weight['Weight']['weight']; ?>&nbsp;</td>
 			<td><?php echo $this->Time->timeAgoInWords($weight['Weight']['created']); ?>&nbsp;</td>
 			<td><?php echo $this->Time->timeAgoInWords($weight['Weight']['modified']); ?>&nbsp;</td>

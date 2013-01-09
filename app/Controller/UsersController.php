@@ -56,6 +56,7 @@ class UsersController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('user', $this->User->read());
+		$this->set('recent_weight', $this->User->Weight->recent());
 	}
 	
 	public function register() {
