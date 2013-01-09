@@ -159,32 +159,7 @@ $(function () {
 	});
 	
 	$('table.sortable tr th.header').css('cursor', 'pointer');
-	
-	
-	
-	
-	
-	
-	
-	// Table delete row confirmation
-	$('table .delete a').click(function() {
-		if( confirm("Are you sure you want to delete this record?") ) {
 		
-			// Make AJAX call to delete
-						
-			$(this).parents('tr').fadeOut('slow', function() {
-				$(this).remove();
-				hudMsg('success', 'Record deleted successfully', 3000);
-			});
-		}
-		
-		return false;
-	});
-	
-	
-	
-	
-	
 	
 	// Messages
 	$('#content .message').hide().append('<span class="close" title="Dismiss"></span>').fadeIn('slow');
