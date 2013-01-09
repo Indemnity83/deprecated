@@ -814,7 +814,7 @@ aside .status_box ul li a.offline {
 	vertical-align: middle;
 	}
 
-#content form input.text {
+#content form input.text, #content form select.text {
 	font-size: 14px;
 	color: #333;
 	padding: 7px;
@@ -825,8 +825,13 @@ aside .status_box ul li a.offline {
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 	}
+
+#content form select.text {
+    width:  230px;
+}
+
 	
-#content form input.text.form-error {
+#content form input.text.form-error, #content form select.text.form-error {
 	border: 2px solid #e75c5c;
 	}
 
