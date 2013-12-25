@@ -17,15 +17,19 @@
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 
 // Define the meter parameters
-float R1 = 1000000;        // measured value of R1
-float R2 = 320000;         // measured value of R2
-int sensorPin = A1;        // analog pin for meter
-int refreshSpeed = 500;   // refresh rate of application
+float R1 = 10260;        // measured value of R1
+float R2 = 3340;         // measured value of R2
+int sensorPin1 = A1;     // analog pin for meter
+float R3 = 10260;        // measured value of R1
+float R4 = 3340;         // measured value of R2
+int sensorPin2 = A2;     // analog pin for meter
+int refreshSpeed = 1000; // refresh rate of application
 
 // ~~~ Shouldn't need to adjust anything below this line ~~~ //
 
 // Application variables
-int sensorValue;
+int sensorValue1;
+int sensorValue2;
 float vRead;
 float vAvg;
 float vMin;
@@ -60,10 +64,14 @@ int read_LCD_buttons() {
 void setup() {
   // Startup the LCD display
   lcd.begin(16, 2);
-  //Serial.begin(115200);
+  
+  // Startup the serial output (for debugging)
+  Serial.begin(9600);
+  
+  //digitalWrite(sensorPin1, LOW);  // set pullup on analog pin 0 
   
   // Setup applicaiton variables
-  sensorValue = 0;
+  sensorValue1 = 0;
   vRead = 0.00;
   vAvg = 0.00;
   vMin = 0.00;
@@ -74,10 +82,11 @@ void setup() {
 
 void loop() { 
    // read the value on analog input
-  sensorValue = analogRead(sensorPin);
+  sensorValue1 = analogRead(sensorPin1);
+  sensorValue2 = analogRead(sensorPin2);
 
   // Throw an error if we're above max
-  if (sensorValue >= 1023) {
+  if (sensorValue1 >= 1023) {
     lcd.clear();
     lcd.println("     MAX");
     delay(refreshSpeed);
@@ -85,7 +94,7 @@ void loop() {
   }
   
   // Throw an error if we're below min
-  else if (sensorValue < 0) {
+  else if (sensorValue1 < 0) {
     lcd.clear();
     lcd.println("     MIN");
     delay(refreshSpeed);
@@ -96,10 +105,16 @@ void loop() {
   cSamples = cSamples + 1;  
   
   // Do all the required calculations
-  float vRead = sensorValue * (20.625 / 1023.0);
+  float vRead = ((sensorValue1 * 5.0) / 1024.0) / (R2/(R1+R2));
   if (vMax < vRead) {vMax = vRead;}
   if (vMin > vRead) {vMin = vRead;}
   vAvg = (vAvg * (cSamples - 1) + vRead) / cSamples;
+  
+  // Do all the required calculations
+  float vRead2 = ((sensorValue2 * 5.0) / 1024.0) / (R4/(R3+R4));
+  if (vMax2 < vRead2) {vMax2 = vRead2;}
+  if (vMin2 > vRead2) {vMin2 = vRead2;}
+  vAvg2 = (vAvg2 * (cSamples - 1) + vRead2) / cSamples;
   
   // Display!
   lcd.clear();
@@ -108,6 +123,11 @@ void loop() {
   // Show the current reading
   lcd.print(vRead);
   lcd.print(" Volts");
+  Serial.print (" V1: ");
+  Serial.print (vRead);
+  Serial.print (" | V2: ");
+  Serial.println (vRead2);
+  
   
   // Check the buttons
   lcd_key = read_LCD_buttons();  // read the buttons
@@ -128,24 +148,30 @@ void loop() {
   if (show == 0) {
     lcd.setCursor(0, 1);
     lcd.print("Average: ");
+    lcd.print("V1: ");
     lcd.print(vAvg);
-    lcd.print("V");
+    lcd.print(" | V2: ");
+    lcd.print(vAvg2);
   }
   
   // Show the Avg
   if (show == 1) {
     lcd.setCursor(0, 1);
     lcd.print("Min: ");
+    lcd.print("V1: ");
     lcd.print(vMin);
-    lcd.print("V");
+    lcd.print(" | V2: ");
+    lcd.print(vMin2);
   }
   
   // Show the Avg
   if (show == 2) {
     lcd.setCursor(0, 1);
     lcd.print("Max: ");
+    lcd.print("V1: ");
     lcd.print(vMax);
-    lcd.print("V");
+    lcd.print(" | V2: ");
+    lcd.print(vMax2);
   }
   
   // Show the Avg
