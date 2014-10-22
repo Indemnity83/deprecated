@@ -1,0 +1,14 @@
+# Directories (auto populated)
+/.vagrant/
+/Plugin/
+/vendor/
+/tmp/*
+/webroot/assets/*
+
+# Files
+app/Config/config.php
+app/Config/database.php
+app/Config/email.php
+
+# Exceptions
+!empty
