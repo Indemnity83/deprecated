@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dfa5af958f460adc3eebdbb0114ec2ac",
+    "hash": "c84ca07c346f4cef8f33cfc36a51302e",
     "packages": [
         {
             "name": "cakephp/cakephp",
@@ -138,199 +138,6 @@
                 "zikula"
             ],
             "time": "2014-08-18 20:00:12"
-        },
-        {
-            "name": "cwbit/cakephp-aggregate-cache",
-            "version": "dev-patch-foreignid-changes",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Indemnity83/cakephp-aggregate-cache.git",
-                "reference": "bdd836bb52cc612dc4c79d3e0f0ee5f8fa75a93c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Indemnity83/cakephp-aggregate-cache/zipball/bdd836bb52cc612dc4c79d3e0f0ee5f8fa75a93c",
-                "reference": "bdd836bb52cc612dc4c79d3e0f0ee5f8fa75a93c",
-                "shasum": ""
-            },
-            "type": "cakephp-plugin",
-            "extra": {
-                "installer-name": "AggregateCache"
-            },
-            "license": [
-                "WTFPL"
-            ],
-            "authors": [
-                {
-                    "name": "CWBIT",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Vincent Lizzi",
-                    "role": "Original Author"
-                }
-            ],
-            "description": "A Behavior plugin for CakePHP that extends the idea of counterCache and counterScope to more fields",
-            "support": {
-                "source": "https://github.com/Indemnity83/cakephp-aggregate-cache/tree/patch-foreignid-changes"
-            },
-            "time": "2014-10-01 02:47:08"
-        },
-        {
-            "name": "markstory/acl_extras",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/markstory/acl_extras.git",
-                "reference": "f136d970e347c8dda77e2fc278727beafec7aaf9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/markstory/acl_extras/zipball/f136d970e347c8dda77e2fc278727beafec7aaf9",
-                "reference": "f136d970e347c8dda77e2fc278727beafec7aaf9",
-                "shasum": ""
-            },
-            "require": {
-                "composer/installers": "*",
-                "php": ">=5.2.17"
-            },
-            "type": "cakephp-plugin",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mark Story",
-                    "homepage": "http://mark-story.com",
-                    "role": "Author"
-                }
-            ],
-            "description": "Additional tools for managing DB ACL in CakePHP applications.",
-            "homepage": "https://github.com/markstory/acl_extras",
-            "keywords": [
-                "acl",
-                "cakephp"
-            ],
-            "support": {
-                "issues": "https://github.com/markstory/acl_extras/issues",
-                "source": "https://github.com/markstory/acl_extras"
-            },
-            "time": "2013-10-26 00:34:46"
-        },
-        {
-            "name": "mjohnson/admin",
-            "version": "1.3.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/milesj/admin.git",
-                "reference": "63c1e0431062fe599fc956e5afb1bbee8f13a841"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/milesj/admin/zipball/63c1e0431062fe599fc956e5afb1bbee8f13a841",
-                "reference": "63c1e0431062fe599fc956e5afb1bbee8f13a841",
-                "shasum": ""
-            },
-            "require": {
-                "composer/installers": "*",
-                "ext-mbstring": "*",
-                "mjohnson/utility": "~1.5",
-                "php": ">=5.3.0"
-            },
-            "suggest": {
-                "mjohnson/uploader": "~4.3"
-            },
-            "type": "cakephp-plugin",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Miles Johnson",
-                    "homepage": "http://milesj.me"
-                }
-            ],
-            "description": "A CakePHP admin plugin.",
-            "homepage": "http://milesj.me/code/cakephp/admin",
-            "keywords": [
-                "admin",
-                "cakephp",
-                "create",
-                "crud",
-                "delete",
-                "plugin",
-                "read",
-                "update"
-            ],
-            "time": "2014-07-14 01:14:22"
-        },
-        {
-            "name": "mjohnson/utility",
-            "version": "1.6.10",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/milesj/utility.git",
-                "reference": "ad285481b7380c2116b05dda3e1a5b9e421e29e9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/milesj/utility/zipball/ad285481b7380c2116b05dda3e1a5b9e421e29e9",
-                "reference": "ad285481b7380c2116b05dda3e1a5b9e421e29e9",
-                "shasum": ""
-            },
-            "require": {
-                "composer/installers": "*",
-                "ext-mbstring": "*",
-                "php": ">=5.3.0"
-            },
-            "suggest": {
-                "mjohnson/decoda": "Enable Decoda for BBCode parsing in the DecodaHelper",
-                "titon/utility": "Enable Titon to parse feeds in FeedSource and process AJAX in the AjaxHandlerComponent"
-            },
-            "type": "cakephp-plugin",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Miles Johnson",
-                    "homepage": "http://milesj.me"
-                }
-            ],
-            "description": "A collection of CakePHP utility libraries.",
-            "homepage": "http://milesj.me/code/cakephp/utility",
-            "keywords": [
-                "Behavior",
-                "Sitemap",
-                "aggregator",
-                "ajax-handler",
-                "auto-login",
-                "bbcode",
-                "cache-kill",
-                "cacheable",
-                "cakephp",
-                "component",
-                "controller",
-                "convertable",
-                "datasource",
-                "decoda",
-                "enumerable",
-                "feed",
-                "filterable",
-                "helper",
-                "markup",
-                "model",
-                "open-graph",
-                "plugin",
-                "shell",
-                "sluggable",
-                "spam-blocker",
-                "utility",
-                "validateable"
-            ],
-            "time": "2014-06-12 03:23:36"
         },
         {
             "name": "slywalker/boost_cake",
@@ -841,10 +648,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "cwbit/cakephp-aggregate-cache": 20,
-        "markstory/acl_extras": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "platform": {
         "php": ">=5.4"
