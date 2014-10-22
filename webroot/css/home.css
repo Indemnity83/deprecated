@@ -1,0 +1,20 @@
+body {
+	background: url(/img/bgs/rotator.php) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.jumbotron {
+	background-color: rgba(255,255,255,0.75);
+	-webkit-box-shadow: 0px 4px 20px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 4px 20px 0px rgba(0,0,0,0.75);
+	box-shadow: 0px 4px 20px 0px rgba(0,0,0,0.75);
+}
+
+.navbar {
+	-webkit-box-shadow: 0px 4px 20px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 4px 20px 0px rgba(0,0,0,0.75);
+	box-shadow: 0px 4px 20px 0px rgba(0,0,0,0.75);
+}
