@@ -1,0 +1,31 @@
+{
+  "name": "indemnity83/tesla",
+  "description": "A tool for RagingWire Critical Facilities Engineering",
+  "type": "project",
+  "license": "proprietary",
+  "require" : {
+    "php" : ">=5.4",
+    "composer/installers" : "~1.0",
+    "cakephp/cakephp" : "2.5.*",
+    "slywalker/boost_cake": "1.0.*",
+    "cwbit/cakephp-aggregate-cache": "dev-patch-foreignid-changes",
+    "markstory/acl_extras": "dev-master",
+    "mjohnson/admin": "1.*"
+  },
+  "require-dev": {
+    "cakephp/debug_kit" : "2.2.*",
+    "phpunit/phpunit": "3.7.*",
+    "ext-xdebug": ">=2.0.5"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/indemnity83/cakephp-aggregate-cache"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/markstory/acl_extras"
+    }
+  ],
+  "minimum-stability": "stable"
+}
