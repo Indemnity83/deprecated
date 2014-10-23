@@ -48,6 +48,12 @@ class Good extends AppModel {
 			'className' => 'Consumption',
 			'foreignKey' => 'good_id',
 			'order' => 'Consumption.when ASC'
+		),
+		'Log' => array(
+			'className' => 'Log',
+			'foreignKey' => 'model_id',
+			'conditions' => 'Log.model = "Good"',
+			'order' => 'Log.created DESC'
 		)
 	);	
 

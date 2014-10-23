@@ -42,3 +42,21 @@
 	<?php endif; ?>
 	</div><!-- end col md 12 -->
 </div>
+
+<div class="related row">
+	<div class="col-md-12">
+		<h3><?php echo __('History'); ?></h3>
+		<?php if (!empty($role['Log'])): ?>
+			<table cellpadding = "0" cellspacing = "0" class="table table-striped">
+			<tbody>
+			<?php foreach ($role['Log'] as $log): ?>
+				<tr>			
+					<th><?php echo $this->Time->timeAgoInWords($log['created']); ?></th>
+					<td><?php echo $this->Log->describe($log); ?></td>					
+				</tr>
+			<?php endforeach; ?>
+			</tbody>
+			</table>
+		<?php endif; ?>
+	</div><!-- end col md 12 -->
+</div>

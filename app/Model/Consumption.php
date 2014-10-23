@@ -59,6 +59,20 @@ class Consumption extends AppModel {
 		)
 	);
 
+/**
+ * hasMany associations
+ *
+ * @var array
+ */
+	public $hasMany = array(
+		'Log' => array(
+			'className' => 'Log',
+			'foreignKey' => 'model_id',
+			'conditions' => 'Log.model = "Consumption"',
+			'order' => 'Log.created DESC'
+		)
+	);		
+
 /*
  * BeforeSave Function
  *
