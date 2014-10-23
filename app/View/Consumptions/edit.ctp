@@ -18,6 +18,7 @@
 			</div>
 			<?php echo $this->Form->input('user_id', array('placeholder' => 'User Id'));?>
 			<?php echo $this->Form->input('good_id', array('placeholder' => 'Good Id'));?>
+			<?php echo $this->Form->input('quantity', array('beforeInput' => '<div class="input-group">', 'afterInput' => '<span class="input-group-addon">fl. oz</span></div>'));?>
 			<?php echo $this->Form->input('notes', array('placeholder' => 'Notes'));?>
 			<?php echo $this->Form->submit(__('Submit')); ?>
 			<?php echo $this->Form->end() ?>
