@@ -26,7 +26,7 @@ class Good extends AppModel {
 				'message' => 'Caffeine level must be numeric',
 				'allowEmpty' => false,
 				'required' => true
-			),
+			)
 		),
 		'fluid_ounces' => array(
 			'numeric' => array(
@@ -35,6 +35,10 @@ class Good extends AppModel {
 				'allowEmpty' => false,
 				'required' => true
 			),
+			'non-zero' => array(
+				'rule' => array('range', 0, 1000),
+				'message' => 'Fl. oz must greater than zero and less than 1000'
+			)
 		),
 	);
 
