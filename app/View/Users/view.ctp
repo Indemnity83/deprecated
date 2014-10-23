@@ -25,6 +25,14 @@
 		<h3><?php echo __('Consumption'); ?></h3>
 		<?php if (!empty($user['Consumption'])): ?>
 			<table cellpadding = "0" cellspacing = "0" class="table table-striped">
+			<thead>
+				<tr>
+					<th>When</th>
+					<th>What</td>
+					<th class="text-right">Quantity</td>
+					<th class="text-right">Caffeine</td>
+				</tr>
+			</thead>				
 			<tbody>
 			<?php foreach ($user['Consumption'] as $consumption): ?>
 				<tr>			
