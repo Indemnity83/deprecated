@@ -23,7 +23,7 @@
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $user['username']; ?> <span class="caret"></span></a>
 					<ul class="dropdown-menu" role="menu">
-						<li><?php echo $this->Html->link('Profile', array('controller'=>'users', 'action'=>'view', $user['id'])); ?></li>
+						<li><?php echo $this->Html->link('Profile', array('controller'=>'users', 'action'=>'profile')); ?></li>
 						<li><?php echo $this->Html->link('Logout', array('controller'=>'users', 'action'=>'logout')); ?></li>
 					</ul>
 				</li>
