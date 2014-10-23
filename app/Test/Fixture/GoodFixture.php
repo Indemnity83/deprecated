@@ -14,7 +14,8 @@ class GoodFixture extends CakeTestFixture {
 		'id' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 36, 'key' => 'primary', 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'name' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'caffeine_level' => array('type' => 'float', 'null' => false, 'default' => null, 'length' => '5,2', 'unsigned' => false),
-		'fluid_ounces' => array('type' => 'float', 'null' => false, 'default' => null, 'length' => '5,2', 'unsigned' => false),
+		'per' => array('type' => 'float', 'null' => false, 'default' => null, 'length' => '5,2', 'unsigned' => false),
+		'unit' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
 		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'indexes' => array(
@@ -33,7 +34,8 @@ class GoodFixture extends CakeTestFixture {
 			'id' => '5447f5ee-4be4-4ad8-b6d3-3320b4188753',
 			'name' => 'Test good',
 			'caffeine_level' => 350,
-			'fluid_ounces' => 12.0,
+			'per' => 12.0,
+			'unit' => 0,
 			'created' => '2014-10-22 18:22:38',
 			'modified' => '2014-10-22 18:22:38'
 		),

@@ -25,13 +25,13 @@
 				<tbody>
 				<?php foreach ($goods as $good): ?>
 					<tr>
-						<td><?php echo $this->Html->link(h($good['Good']['name']), array('action' => 'view', $good['Good']['id']), array('escape' => false)); ?>&nbsp;</td>
-						<td><?php echo h($good['Good']['caffeine_level']) . 'mg per ' . h($good['Good']['fluid_ounces']) . ' fl. oz'; ?>&nbsp;</td>
+						<td><?php echo $this->Html->link(h($good['Good']['name']), array('action' => 'view', $good['Good']['slug']), array('escape' => false)); ?>&nbsp;</td>
+						<td><?php echo h($good['Good']['caffeine_level']) . 'mg per ' . h($good['Good']['per']) . ' '  . h($good['Good']['unit_enum']); ?>&nbsp;</td>
 						<td><?php echo h($good['Good']['created']); ?>&nbsp;</td>
 						<td class="actions text-right">
-							<?php echo $this->Html->link('<span class="glyphicon glyphicon-search"></span>', array('action' => 'view', $good['Good']['id']), array('escape' => false)); ?>
-							<?php echo $this->Html->link('<span class="glyphicon glyphicon-edit"></span>', array('action' => 'edit', $good['Good']['id']), array('escape' => false)); ?>
-							<?php echo $this->Form->postLink('<span class="glyphicon glyphicon-remove"></span>', array('action' => 'delete', $good['Good']['id']), array('escape' => false), __('Are you sure you want to delete # %s?', $good['Good']['id'])); ?>
+							<?php echo $this->Html->link('<span class="glyphicon glyphicon-search"></span>', array('action' => 'view', $good['Good']['slug']), array('escape' => false)); ?>
+							<?php echo $this->Html->link('<span class="glyphicon glyphicon-edit"></span>', array('action' => 'edit', $good['Good']['slug']), array('escape' => false)); ?>
+							<?php echo $this->Form->postLink('<span class="glyphicon glyphicon-remove"></span>', array('action' => 'delete', $good['Good']['id']), array('escape' => false), __('Are you sure you want to delete # %s?', $good['Good']['name'])); ?>
 						</td>
 					</tr>
 				<?php endforeach; ?>

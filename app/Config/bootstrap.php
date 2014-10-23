@@ -68,8 +68,6 @@ App::build(
  */
 CakePlugin::load('DebugKit');
 CakePlugin::load('BoostCake');
-CakePlugin::load('AggregateCache');
-CakePlugin::load('AclExtras');
 
 /**
  * You can attach event listeners to the request lifecycle as Dispatcher Filter . By default CakePHP bundles two filters:

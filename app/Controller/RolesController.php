@@ -33,11 +33,12 @@ class RolesController extends AppController {
  * @return void
  */
 	public function view($id = null) {
-		if (!$this->Role->exists($id)) {
+		$this->Role->recursive = 2;
+		$options = array('conditions' => array('OR' => array('Role.' . $this->Role->primaryKey => $id, 'Role.slug' => $id)));
+		if (!$role = $this->Role->find('first', $options)) {
 			throw new NotFoundException(__('Invalid role'));
 		}
-		$options = array('conditions' => array('Role.' . $this->Role->primaryKey => $id));
-		$this->set('role', $this->Role->find('first', $options));
+		$this->set(compact('role'));
 	}
 
 /**
@@ -65,7 +66,8 @@ class RolesController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
-		if (!$this->Role->exists($id)) {
+		$options = array('conditions' => array('OR' => array('Role.' . $this->Role->primaryKey => $id, 'Role.slug' => $id)));
+		if (!$role = $this->Role->find('first', $options)) {
 			throw new NotFoundException(__('Invalid role'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
@@ -76,8 +78,7 @@ class RolesController extends AppController {
 				$this->Session->setFlash(__('The role could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
 			}
 		} else {
-			$options = array('conditions' => array('Role.' . $this->Role->primaryKey => $id));
-			$this->request->data = $this->Role->find('first', $options);
+			$this->request->data = $role;
 		}
 	}
 

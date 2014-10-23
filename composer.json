@@ -7,10 +7,7 @@
     "php" : ">=5.4",
     "composer/installers" : "~1.0",
     "cakephp/cakephp" : "2.5.*",
-    "slywalker/boost_cake": "1.0.*",
-    "cwbit/cakephp-aggregate-cache": "dev-patch-foreignid-changes",
-    "markstory/acl_extras": "dev-master",
-    "mjohnson/admin": "1.*"
+    "slywalker/boost_cake": "1.0.*"
   },
   "require-dev": {
     "cakephp/debug_kit" : "2.2.*",

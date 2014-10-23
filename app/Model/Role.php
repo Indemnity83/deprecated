@@ -34,6 +34,9 @@ class Role extends AppModel {
 		),
 		'Acl' => array(
 			'type' => 'requester'
+		),
+		'Sluggable' => array(
+			'field' => 'title'
 		)
 	);
 

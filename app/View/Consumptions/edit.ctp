@@ -18,7 +18,7 @@
 			</div>
 			<?php echo $this->Form->input('user_id', array('placeholder' => 'User Id'));?>
 			<?php echo $this->Form->input('good_id', array('placeholder' => 'Good Id'));?>
-			<?php echo $this->Form->input('quantity', array('beforeInput' => '<div class="input-group">', 'afterInput' => '<span class="input-group-addon">fl. oz</span></div>'));?>
+			<?php echo $this->Form->input('quantity', array('beforeInput' => '<div class="input-group">', 'afterInput' => '<span id="ConsumptionUnit" class="input-group-addon">??</span></div>'));?>
 			<?php echo $this->Form->input('notes', array('placeholder' => 'Notes'));?>
 			<?php echo $this->Form->submit(__('Submit')); ?>
 			<?php echo $this->Form->end() ?>
@@ -28,6 +28,22 @@
 
 <?php
 
-	$this->Js->get('document')->event('ready', "$('#ConsumptionWhen').datetimepicker({pickTime: false});")
+	$loadUnit = $this->Js->get('#ConsumptionGoodId')->request(array(
+		'controller'=>'goods',
+		'action'=>'getunit'
+	), array(
+		'update'=>'#ConsumptionUnit',
+		'async' => true,
+		'method' => 'post',
+		'dataExpression' => true,
+		'data'=> $this->Js->serializeForm(array(
+			'isForm' => true,
+			'inline' => true
+		))
+	));
+
+	$this->Js->get('#ConsumptionGoodId')->event('change', $loadUnit);
+	$this->Js->get('document')->event('ready', $loadUnit);
 
 ?>
+

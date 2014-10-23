@@ -34,11 +34,11 @@ class GoodsController extends AppController {
  */
 	public function view($id = null) {
 		$this->Good->recursive = 2;
-		if (!$this->Good->exists($id)) {
+		$options = array('conditions' => array('OR' => array('Good.' . $this->Good->primaryKey => $id, 'Good.slug' => $id)));
+		if (!$good = $this->Good->find('first', $options)) {
 			throw new NotFoundException(__('Invalid good'));
 		}
-		$options = array('conditions' => array('Good.' . $this->Good->primaryKey => $id));
-		$this->set('good', $this->Good->find('first', $options));
+		$this->set(compact('good'));
 	}
 
 /**
@@ -56,6 +56,7 @@ class GoodsController extends AppController {
 				$this->Session->setFlash(__('The good could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
 			}
 		}
+		$this->set('units', $this->Good->enum('unit'));
 	}
 
 /**
@@ -66,7 +67,8 @@ class GoodsController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
-		if (!$this->Good->exists($id)) {
+		$options = array('conditions' => array('OR' => array('Good.' . $this->Good->primaryKey => $id, 'Good.slug' => $id)));
+		if (!$good = $this->Good->find('first', $options)) {
 			throw new NotFoundException(__('Invalid good'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
@@ -77,9 +79,9 @@ class GoodsController extends AppController {
 				$this->Session->setFlash(__('The good could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
 			}
 		} else {
-			$options = array('conditions' => array('Good.' . $this->Good->primaryKey => $id));
-			$this->request->data = $this->Good->find('first', $options);
+			$this->request->data = $good;
 		}
+		$this->set('units', $this->Good->enum('unit'));
 	}
 
 /**
@@ -102,4 +104,21 @@ class GoodsController extends AppController {
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
+
+/**
+ * AJAX: get units for a good
+ *
+ * @return void
+ */
+	public function getUnit() {
+		if ($this->request->is('post')) {
+			$data = $this->request->data;
+			$good = $this->Good->findById($data['Consumption']['good_id']);
+			echo $good['Good']['unit_enum'];
+			die();
+		}
+
+		throw new NotFoundException(__('Invalid good'));
+	}
+
 }

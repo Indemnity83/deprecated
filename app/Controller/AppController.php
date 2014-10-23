@@ -64,7 +64,7 @@ class AppController extends Controller {
 		}
 
 		# configure AuthComponent
-		$this->Auth->loginRedirect = array('controller' => 'projects', 'action' => 'index');
+		$this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'profile');
 		$this->Auth->logoutRedirect = array('controller' => 'pages', 'action' => 'display', 'home');
 		$this->Auth->authenticate = array('Form' => array('passwordHasher' => 'Blowfish'));
 		$this->Auth->flash = array('element' => 'default', 'key' => 'auth', 'params' => array('class' => 'alert alert-info'));

@@ -46,12 +46,27 @@ class UsersController extends AppController {
  */
 	public function view($id = null) {
 		$this->User->recursive = 2;
-		if (!$this->User->exists($id)) {
+		$options = array('conditions' => array('OR' => array('User.' . $this->User->primaryKey => $id, 'User.username' => $id)));
+		if (!$user = $this->User->find('first', $options)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
-		$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
-		$this->set('user', $this->User->find('first', $options));
+		$this->set(compact('user'));
 	}
+
+/**
+ * profile method
+ *
+ * @throws NotFoundException
+ * @return void
+ */
+	public function profile() {
+		$this->User->recursive = 2;
+		$options = array('conditions' => array('User.' . $this->User->primaryKey => $this->Auth->user('id')));
+		if (!$user = $this->User->find('first', $options)) {
+			throw new NotFoundException(__('Invalid user'));
+		}
+		$this->set(compact('user'));
+	}	
 
 /**
  * add method
@@ -80,7 +95,8 @@ class UsersController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
-		if (!$this->User->exists($id)) {
+		$options = array('conditions' => array('OR' => array('User.' . $this->User->primaryKey => $id, 'User.username' => $id)));
+		if (!$user = $this->User->find('first', $options)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
@@ -91,8 +107,7 @@ class UsersController extends AppController {
 				$this->Session->setFlash(__('The user could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
 			}
 		} else {
-			$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
-			$this->request->data = $this->User->find('first', $options);
+			$this->request->data = $user;
 		}
 		$roles = $this->User->Role->find('list');
 		$this->set(compact('roles'));

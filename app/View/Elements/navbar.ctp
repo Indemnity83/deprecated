@@ -7,7 +7,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<?php echo $this->Html->link('<img src="/img/logo-white.png" style="vertical-align:baseline;" height="19px" alt=""> Caffeinated', '/', array('escape' => false, 'class'=>'navbar-brand')); ?>
+			<?php echo $this->Html->link('<img src="/img/logo.png" style="vertical-align:baseline;" height="19px" alt="">&nbsp;Caffeinated', '/', array('escape' => false, 'class'=>'navbar-brand')); ?>
 		</div>
 
 		<div class="collapse navbar-collapse navbar-ex1-collapse">
@@ -23,7 +23,7 @@
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $user['username']; ?> <span class="caret"></span></a>
 					<ul class="dropdown-menu" role="menu">
-						<li><?php echo $this->Html->link('Profile', array('controller'=>'users', 'action'=>'view', $user['id'])); ?></li>
+						<li><?php echo $this->Html->link('Profile', array('controller'=>'users', 'action'=>'profile')); ?></li>
 						<li><?php echo $this->Html->link('Logout', array('controller'=>'users', 'action'=>'logout')); ?></li>
 					</ul>
 				</li>
