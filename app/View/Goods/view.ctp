@@ -3,7 +3,7 @@
 		<div class="col-md-12">
 			<div class="page-header">
 				<ul class="nav nav-pills pull-right">
-					<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-edit"></span>&nbsp;Edit'), array('action' => 'edit', $good['Good']['id']), array('escape' => false)); ?></li>
+					<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-edit"></span>&nbsp;Edit'), array('action' => 'edit', $good['Good']['slug']), array('escape' => false)); ?></li>
 					<li><?php echo $this->Form->postLink('<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete', array('action' => 'delete', $good['Good']['id']), array('escape' => false), __('Are you sure you want to delete # %s?', $good['Good']['id'])); ?></li>
 				</ul>
 				<h1><?php echo h($good['Good']['name']); ?>&nbsp;<small><?php echo h($good['Good']['caffeine_level']) . 'mg per ' . h($good['Good']['fluid_ounces']) . ' fl. oz'; ?></small></h1>
@@ -29,7 +29,7 @@
 			<?php foreach ($good['Consumption'] as $consumption): ?>
 				<tr>			
 					<th><?php echo $consumption['when']; ?></th>
-					<td><?php echo $this->Html->link($consumption['User']['username'], array('controller' => 'users', 'action' => 'view', $consumption['User']['id'])); ?></td>
+					<td><?php echo $this->Html->link($consumption['User']['username'], array('controller' => 'users', 'action' => 'view', $consumption['User']['username'])); ?></td>
 					<td class="text-right"><?php echo $consumption['quantity']; ?> fl. oz</td>
 					<td class="text-right"><?php echo $consumption['quantity'] * $good['Good']['caffeine_level'] / $good['Good']['fluid_ounces']; ?> mg</td>
 				</tr>

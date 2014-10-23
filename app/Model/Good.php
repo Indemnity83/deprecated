@@ -65,6 +65,9 @@ class Good extends AppModel {
 	public $actsAs = array(
 		'Logable' => array(
 			'change' => 'full',
+		),
+		'Sluggable' => array(
+			'field' => 'name'
 		)
 	);
 

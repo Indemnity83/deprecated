@@ -22,6 +22,24 @@
  */
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 
+	Router::connect('/goods', array('controller' => 'goods', 'action' => 'index'));
+	Router::connect('/goods/add/*', array('controller' => 'goods', 'action' => 'add'));
+	Router::connect('/goods/edit/*', array('controller' => 'goods', 'action' => 'edit'));
+	Router::connect('/goods/delete/*', array('controller' => 'goods', 'action' => 'delete'));
+	Router::connect('/goods/*', array('controller' => 'goods', 'action' => 'view'));
+
+	Router::connect('/users', array('controller' => 'users', 'action' => 'index'));
+	Router::connect('/users/add/*', array('controller' => 'users', 'action' => 'add'));
+	Router::connect('/users/edit/*', array('controller' => 'users', 'action' => 'edit'));
+	Router::connect('/users/delete/*', array('controller' => 'users', 'action' => 'delete'));
+	Router::connect('/users/*', array('controller' => 'users', 'action' => 'view'));
+
+	Router::connect('/roles', array('controller' => 'roles', 'action' => 'index'));
+	Router::connect('/roles/add/*', array('controller' => 'roles', 'action' => 'add'));
+	Router::connect('/roles/edit/*', array('controller' => 'roles', 'action' => 'edit'));
+	Router::connect('/roles/delete/*', array('controller' => 'roles', 'action' => 'delete'));
+	Router::connect('/roles/*', array('controller' => 'roles', 'action' => 'view'));		
+
 /**
  * Load all plugin routes. See the CakePlugin documentation on
  * how to customize the loading of plugin routes.

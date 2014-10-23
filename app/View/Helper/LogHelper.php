@@ -31,9 +31,9 @@ class logHelper extends Helper {
 
 		// Object
 		if( $log['action'] == 'edit' ) {
-			$strOutput .= $log['model'] . ' ' . $this->Html->link($log['title'], array('controller'=>Inflector::pluralize($log['model']), 'action'=>'view', $log['model_id']));
+			$strOutput .= $log['model'] . ' ' . $this->Html->link($log['title'], array('controller'=>strtolower(Inflector::pluralize($log['model'])), 'action'=>'view', $log['model_id']));
 		} else {
-			$strOutput .= 'a ' . $log['model'] . ': ' . $this->Html->link($log['title'], array('controller'=>Inflector::pluralize($log['model']), 'action'=>'view', $log['model_id']));
+			$strOutput .= 'a ' . $log['model'] . ': ' . $this->Html->link($log['title'], array('controller'=>strtolower(Inflector::pluralize($log['model'])), 'action'=>'view', $log['model_id']));
 		}
 
 		// Change
