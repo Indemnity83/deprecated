@@ -1,3 +1,11 @@
+<?php
+	# ugly but callbacks don't work on associated models
+	# so the enumerable behavior doesn't append the string
+	# see issue 1730 for more information
+	App::import('Model', 'Good');
+	$this->Good = new Good();
+?>
+
 <div class="users view">
 	<div class="row">
 		<div class="col-md-12">
@@ -22,8 +30,8 @@
 				<tr>			
 					<th><?php echo $consumption['when']; ?></th>
 					<td><?php echo $consumption['Good']['name']; ?></td>
-					<td class="text-right"><?php echo $consumption['quantity']; ?> fl. oz</td>
-					<td class="text-right"><?php echo $consumption['quantity'] * $consumption['Good']['caffeine_level'] / $consumption['Good']['fluid_ounces']; ?> mg</td>
+					<td class="text-right"><?php echo $consumption['quantity'] . ' ' . $this->Good->enum('unit')[$consumption['Good']['unit']]; ?></td>
+					<td class="text-right"><?php echo $consumption['quantity'] * $consumption['Good']['caffeine_level'] / $consumption['Good']['per']; ?> mg</td>
 				</tr>
 			<?php endforeach; ?>
 			</tbody>
