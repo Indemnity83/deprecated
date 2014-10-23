@@ -21,6 +21,14 @@ class Consumption extends AppModel {
 				'allowEmpty' => false,
 				'required' => true
 			),
+		),
+		'quantity' => array(
+			'non-zero' => array(
+				'rule' => array('range', 0, 1000),
+				'message' => 'Quantity must greater than zero and less than 1000',
+				'allowEmpty' => false,
+				'required' => true
+			)
 		)
 	);
 
