@@ -32,6 +32,9 @@
 	Router::connect('/users/add/*', array('controller' => 'users', 'action' => 'add'));
 	Router::connect('/users/edit/*', array('controller' => 'users', 'action' => 'edit'));
 	Router::connect('/users/delete/*', array('controller' => 'users', 'action' => 'delete'));
+	Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
+	Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'));
+	Router::connect('/register', array('controller' => 'users', 'action' => 'register'));
 	Router::connect('/users/*', array('controller' => 'users', 'action' => 'view'));
 
 	Router::connect('/roles', array('controller' => 'roles', 'action' => 'index'));
