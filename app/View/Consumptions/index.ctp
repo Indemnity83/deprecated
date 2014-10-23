@@ -1,3 +1,11 @@
+<?php
+	# ugly but callbacks don't work on associated models
+	# so the enumerable behavior doesn't append the string
+	# see issue 1730 for more information
+	App::import('Model', 'Good');
+	$this->Good = new Good();
+?>
+
 <div class="consumptions index">
 
 	<div class="row">
@@ -28,8 +36,8 @@
 						<td><?php echo h($consumption['Consumption']['when']); ?>&nbsp;</td>
 						<td><?php echo $this->Html->link($consumption['User']['username'], array('controller' => 'users', 'action' => 'view', $consumption['User']['id'])); ?></td>
 						<td><?php echo $this->Html->link($consumption['Good']['name'], array('controller' => 'goods', 'action' => 'view', $consumption['Good']['id'])); ?></td>
-						<td class="text-right"><?php echo $consumption['Consumption']['quantity']; ?> fl. oz</td>
-						<td class="text-right"><?php echo $consumption['Consumption']['quantity'] * $consumption['Good']['caffeine_level'] / $consumption['Good']['fluid_ounces']; ?> mg</td>
+						<td class="text-right"><?php echo $consumption['Consumption']['quantity'] . ' ' . $this->Good->enum('unit')[$consumption['Good']['unit']]; ?></td>
+						<td class="text-right"><?php echo $consumption['Consumption']['quantity'] * $consumption['Good']['caffeine_level'] / $consumption['Good']['per']; ?> mg</td>
 						<td class="actions text-right">
 							<?php echo $this->Html->link('<span class="glyphicon glyphicon-edit"></span>', array('action' => 'edit', $consumption['Consumption']['id']), array('escape' => false)); ?>
 							<?php echo $this->Form->postLink('<span class="glyphicon glyphicon-remove"></span>', array('action' => 'delete', $consumption['Consumption']['id']), array('escape' => false), __('Are you sure you want to delete # %s?', $consumption['Consumption']['id'])); ?>

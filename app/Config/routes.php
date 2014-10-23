@@ -26,6 +26,7 @@
 	Router::connect('/goods/add/*', array('controller' => 'goods', 'action' => 'add'));
 	Router::connect('/goods/edit/*', array('controller' => 'goods', 'action' => 'edit'));
 	Router::connect('/goods/delete/*', array('controller' => 'goods', 'action' => 'delete'));
+	Router::connect('/goods/getunit/*', array('controller' => 'goods', 'action' => 'getunit'));
 	Router::connect('/goods/*', array('controller' => 'goods', 'action' => 'view'));
 
 	Router::connect('/users', array('controller' => 'users', 'action' => 'index'));

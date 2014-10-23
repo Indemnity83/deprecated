@@ -56,6 +56,7 @@ class GoodsController extends AppController {
 				$this->Session->setFlash(__('The good could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
 			}
 		}
+		$this->set('units', $this->Good->enum('unit'));
 	}
 
 /**
@@ -80,6 +81,7 @@ class GoodsController extends AppController {
 		} else {
 			$this->request->data = $good;
 		}
+		$this->set('units', $this->Good->enum('unit'));
 	}
 
 /**
@@ -102,4 +104,21 @@ class GoodsController extends AppController {
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
+
+/**
+ * AJAX: get units for a good
+ *
+ * @return void
+ */
+	public function getUnit() {
+		if ($this->request->is('post')) {
+			$data = $this->request->data;
+			$good = $this->Good->findById($data['Consumption']['good_id']);
+			echo $good['Good']['unit_enum'];
+			die();
+		}
+
+		throw new NotFoundException(__('Invalid good'));
+	}
+
 }
