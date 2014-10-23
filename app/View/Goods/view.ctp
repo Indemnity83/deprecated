@@ -18,10 +18,10 @@
 		<?php if (!empty($good['Consumption'])): ?>
 			<table cellpadding = "0" cellspacing = "0" class="table table-striped">
 			<thead>
-				<tr>			
+				<tr>
 					<th>When</th>
 					<th>Who</td>
-					<th class="text-right">Consumed</td>
+					<th class="text-right">Quantity</td>
 					<th class="text-right">Caffeine</td>
 				</tr>
 			</thead>
@@ -30,8 +30,8 @@
 				<tr>			
 					<th><?php echo $consumption['when']; ?></th>
 					<td><?php echo $this->Html->link($consumption['User']['username'], array('controller' => 'users', 'action' => 'view', $consumption['User']['username'])); ?></td>
-					<td class="text-right"><?php echo $consumption['quantity']; ?> fl. oz</td>
-					<td class="text-right"><?php echo $consumption['quantity'] * $good['Good']['caffeine_level'] / $good['Good']['fluid_ounces']; ?> mg</td>
+					<td class="text-right"><?php echo $consumption['quantity'] . ' ' . $good['Good']['unit_enum']; ?></td>
+					<td class="text-right"><?php echo $consumption['quantity'] * $consumption['Good']['caffeine_level'] / $consumption['Good']['per']; ?> mg</td>
 				</tr>
 			<?php endforeach; ?>
 			</tbody>

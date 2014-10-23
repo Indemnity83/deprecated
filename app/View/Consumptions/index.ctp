@@ -24,9 +24,11 @@
 			<table cellpadding="0" cellspacing="0" class="table table-striped">
 				<thead>
 					<tr>
-						<th><?php echo $this->Paginator->sort('when'); ?></th>
-						<th><?php echo $this->Paginator->sort('user_id'); ?></th>
-						<th><?php echo $this->Paginator->sort('good_id'); ?></th>						
+						<th>When</th>
+						<th>Who</td>
+						<th>What</td>
+						<th class="text-right">Quantity</td>
+						<th class="text-right">Caffeine</td>
 						<th class="actions text-right"></th>
 					</tr>
 				</thead>
