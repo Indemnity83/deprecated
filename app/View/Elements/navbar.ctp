@@ -7,7 +7,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<?php echo $this->Html->link('<img src="/img/logo.png" style="vertical-align:baseline;" height="19px" alt="">&nbsp;Caffeinated', '/', array('escape' => false, 'class'=>'navbar-brand')); ?>
+			<?php echo $this->Html->link('<img src="/img/logo-sm.png" style="vertical-align:baseline;" height="19px" alt="">&nbsp;Caffeinated', '/', array('escape' => false, 'class'=>'navbar-brand')); ?>
 		</div>
 
 		<div class="collapse navbar-collapse navbar-ex1-collapse">
