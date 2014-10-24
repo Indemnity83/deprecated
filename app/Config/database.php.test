@@ -1,0 +1,50 @@
+<?php
+class DATABASE_CONFIG {
+
+	public $identities = array(
+		'mysql' => array(
+			'datasource' => 'Database/Mysql',
+			'host' => 'localhost',
+			'login' => 'travis',
+			'database' => 'caffeinated_test',
+		),
+		'pgsql' => array(
+			'datasource' => 'Database/Postgres',
+			'host' => '127.0.0.1',
+			'login' => 'postgres',
+			'database' => 'caffeinated_test',
+			'schema' => 'public'
+		),
+		'sqlite-mem' => array(
+			'datasource' => 'Database/Sqlite',
+			'database' => ':memory:'
+		),
+		'sqlite-file' => array(
+			'datasource' => 'Database/Sqlite',
+			'database' => 'caffeinated_test'
+		)
+	);
+
+	public $test = array(
+		'persistent' => false,
+		'host' => '',
+		'login' => '',
+		'password' => '',
+		'database' => '',
+	);
+
+/**
+ * constructor, build the database connection based
+ * on environmental variables
+ *
+ * @return void
+ */
+	public function __construct() {
+		$db = 'sqlite-file';
+		if (!empty($_SERVER['DB'])) {
+			$db = $_SERVER['DB'];
+		}
+		$this->test = array_merge($this->test, $this->identities[$db]);
+		Debugger::log($this->test);
+	}
+}

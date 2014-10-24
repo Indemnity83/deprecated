@@ -5,8 +5,23 @@ php:
   - 5.5
   - 5.6
 
+env:
+  - DB=mysql
+
 notifications:
   email: false
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 5.4
+      env: DB=pgsql
+
+    - php: 5.4
+      env: DB=sqlite-mem
+
+    - php: 5.4
+      env: DB=sqlite-file
 
 install:
    - composer install
@@ -17,17 +32,7 @@ script:
    - cd ./app && ../vendor/cakephp/cakephp/lib/Cake/Console/cake test app AllTests --stderr
 
 before_script:
-   - pwd
+   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE caffeinated_test;'; fi"
+   - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'CREATE DATABASE caffeinated_test;' -U postgres; fi"
    - chmod -R 777 ./tmp
-   - mysql -e 'create database caffeinated_test;'
-   - echo "<?php 
-     class DATABASE_CONFIG {
-     public \$test = array(
-       'datasource' => 'Database/Mysql',
-       'database' => 'caffeinated_test',
-       'host' => 'localhost',
-       'login' => 'travis',
-       'password' => '',
-       'persistent' => false,
-     );
-     }" > ./app/Config/database.php
+   - mv ./app/Config/database.php.test ./app/Config/database.php
