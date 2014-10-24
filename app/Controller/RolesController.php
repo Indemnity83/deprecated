@@ -28,9 +28,9 @@ class RolesController extends AppController {
 /**
  * view method
  *
- * @throws NotFoundException
- * @param string $id
+ * @param string $id record id or slug
  * @return void
+ * @throws NotFoundException
  */
 	public function view($id = null) {
 		$this->Role->recursive = 2;
@@ -61,9 +61,9 @@ class RolesController extends AppController {
 /**
  * edit method
  *
- * @throws NotFoundException
- * @param string $id
+ * @param string $id record id or slug
  * @return void
+ * @throws NotFoundException
  */
 	public function edit($id = null) {
 		$options = array('conditions' => array('OR' => array('Role.' . $this->Role->primaryKey => $id, 'Role.slug' => $id)));
@@ -85,9 +85,9 @@ class RolesController extends AppController {
 /**
  * delete method
  *
- * @throws NotFoundException
- * @param string $id
+ * @param string $id record id
  * @return void
+ * @throws NotFoundException
  */
 	public function delete($id = null) {
 		$this->Role->id = $id;
