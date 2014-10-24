@@ -16,7 +16,6 @@
 				<?php echo $this->Form->label('when'); ?>
 				<?php echo $this->Form->text('when', array('type' => 'date', 'div' => 'form-group', 'wrapInput' => false, 'class' => 'form-control'));?>
 			</div>
-			<?php echo $this->Form->input('user_id', array('placeholder' => 'User Id'));?>
 			<?php echo $this->Form->input('good_id', array('placeholder' => 'Good Id'));?>
 			<?php echo $this->Form->input('quantity', array('beforeInput' => '<div class="input-group">', 'afterInput' => '<span id="ConsumptionUnit" class="input-group-addon">??</span></div>'));?>
 			<?php echo $this->Form->input('notes', array('placeholder' => 'Notes'));?>

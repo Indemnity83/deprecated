@@ -41,8 +41,8 @@
 						<td class="text-right"><?php echo $consumption['Consumption']['quantity'] . ' ' . $this->Good->enum('unit')[$consumption['Good']['unit']]; ?></td>
 						<td class="text-right"><?php echo $consumption['Consumption']['quantity'] * $consumption['Good']['caffeine_level'] / $consumption['Good']['per']; ?> mg</td>
 						<td class="actions text-right">
-							<?php echo $this->Html->link('<span class="glyphicon glyphicon-edit"></span>', array('action' => 'edit', $consumption['Consumption']['id']), array('escape' => false)); ?>
-							<?php echo $this->Form->postLink('<span class="glyphicon glyphicon-remove"></span>', array('action' => 'delete', $consumption['Consumption']['id']), array('escape' => false), __('Are you sure you want to delete # %s?', $consumption['Consumption']['id'])); ?>
+							<?php echo $this->Html->link('<span class="glyphicon glyphicon-edit"></span>', array('controller' => 'consumptions', 'action' => 'edit', $consumption['Consumption']['id']), array('escape' => false)); ?>
+							<?php echo $this->Form->postLink('<span class="glyphicon glyphicon-remove"></span>', array('controller' => 'consumptions', 'action' => 'delete', $consumption['Consumption']['id']), array('escape' => false), __('Are you sure you want to delete # %s?', $consumption['Consumption']['id'])); ?>
 						</td>
 					</tr>
 				<?php endforeach; ?>

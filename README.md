@@ -17,11 +17,13 @@ A tool for tracking your daily intake of caffeine
 1. Change the values of Security.salt and Security.cipherSeed in /Config/core.php
 1. From the installation root, install the dependancies using composer and bower, and setup the application using the cake shell
 
+		cd /your/web/root
+		git clone https://github.com/Indemnity83/caffeinated.git ./
 		composer install
 		bower install
-		cake setup install
+		app/Console/cake schema create
 
-1. Browse to your web server, you should have an up and running Tesla installation
+1. Browse to your web server, you should have an up and running Tesla installation. The default user is admin:admin
 
 ### Updating
 
@@ -31,9 +33,11 @@ A tool for tracking your daily intake of caffeine
 1. Change the values of Security.salt and Security.cipherSeed in /Config/core.php to match your old values
 1. From the installation root, update all depenancies and schemas
 
+		cd /your/web/root
+		git pull
 		composer install
 		bower install
-		cake setup update
+		app/Console/cake schema update
 
 ## Development Setup
 
@@ -57,13 +61,9 @@ Vagrant will download an Ubuntu box, launch it in Virtualbox and run the bootstr
 	cd /vagrant
 	composer install --dev
 	bower install
+	app/Console/cake schema create
 
-Finally, run through the cake console setup to get the database and an admin user setup.
-
-	cd /vagrant/app
-	cake setup install
-
-Once it is done, browse to `http://192.168.33.10/` in your browser, and you should have a running instance of Tesla for development
+Once it is done, browse to `http://192.168.33.10/` in your browser, and you should have a running instance of Tesla for development. The default user is admin:admin
 
 ### Database Access
 

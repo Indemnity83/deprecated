@@ -82,6 +82,17 @@ class Consumption extends AppModel {
 	);
 
 /**
+ * checks if a consumption record is owned by the given user
+ * 
+ * @param string $consumption the consumption id to check
+ * @param string $user the user id to check
+ * @return bool
+ */
+	public function isOwnedBy($consumption, $user) {
+		return $this->field('id', array('id' => $consumption, 'user_id' => $user)) !== false;
+	}
+
+/**
  * Called before each save operation, after validation. Return a non-true result
  * to halt the save.
  *

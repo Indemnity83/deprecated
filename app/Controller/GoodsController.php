@@ -16,6 +16,28 @@ class GoodsController extends AppController {
 	public $components = array('Paginator');
 
 /**
+ * Checks if the current user is authorized for controller actions
+ * 
+ * @param Model $user the user to check
+ * @return bool
+ */
+	public function isAuthorized($user) {
+		// Allow limited access to some methods
+		if (in_array($this->action, array('index', 'view', 'getunit'))) {
+			return true;
+		}
+
+		// Allow trusted users to add, edit & delete
+		Debugger::log($this->action);
+		if (in_array($this->action, array('add', 'edit', 'delete')) && $user['role'] == User::ROLE_TRUSTED) {
+			return true;
+		}
+
+		// Check with parent
+		return parent::isAuthorized($user);
+	}
+
+/**
  * index method
  *
  * @return void
@@ -111,7 +133,7 @@ class GoodsController extends AppController {
  * @return void
  * @throws NotFoundException
  */
-	public function getUnit() {
+	public function getunit() {
 		if ($this->request->is('post')) {
 			$data = $this->request->data;
 			$good = $this->Good->findById($data['Consumption']['good_id']);

@@ -11,10 +11,10 @@
 		<div class="col-md-12">
 			<div class="page-header">
 				<ul class="nav nav-pills pull-right">
-					<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-edit"></span>&nbsp&nbsp;Edit User'), array('action' => 'edit', $user['User']['username']), array('escape' => false)); ?> </li>
-					<li><?php echo $this->Form->postLink(__('<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;Delete User'), array('action' => 'delete', $user['User']['id']), array('escape' => false), __('Are you sure you want to delete # %s?', $user['User']['id'])); ?> </li>
+					<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-edit"></span>&nbsp&nbsp;Edit Profile'), array('action' => 'settings'), array('escape' => false)); ?> </li>
+					<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-lock"></span>&nbsp&nbsp;Change Password'), array('action' => 'change_password'), array('escape' => false)); ?> </li>
 				</ul>
-				<h1><?php echo h($user['User']['username']); ?>&nbsp;<small><?php echo h($user['Role']['title']); ?></small></h1>
+				<h1><?php echo h($user['User']['username']); ?>&nbsp;</h1>
 			</div>
 		</div>
 	</div>
@@ -22,6 +22,9 @@
 
 <div class="related row">
 	<div class="col-md-12">
+		<ul class="nav nav-pills pull-right">
+			<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-plus"></span>&nbsp&nbsp;Add Consumption'), array('controller' => 'consumptions', 'action' => 'add'), array('escape' => false)); ?> </li>
+		</ul>
 		<h3><?php echo __('Consumption'); ?></h3>
 		<?php if (!empty($user['Consumption'])): ?>
 			<table cellpadding = "0" cellspacing = "0" class="table table-striped">
@@ -31,6 +34,7 @@
 					<th>What</td>
 					<th class="text-right">Quantity</td>
 					<th class="text-right">Caffeine</td>
+					<th class="actions text-right"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -40,42 +44,10 @@
 					<td><?php echo $consumption['Good']['name']; ?></td>
 					<td class="text-right"><?php echo $consumption['quantity'] . ' ' . $this->Good->enum('unit')[$consumption['Good']['unit']]; ?></td>
 					<td class="text-right"><?php echo $consumption['quantity'] * $consumption['Good']['caffeine_level'] / $consumption['Good']['per']; ?> mg</td>
-				</tr>
-			<?php endforeach; ?>
-			</tbody>
-			</table>
-		<?php endif; ?>
-	</div><!-- end col md 12 -->
-</div>
-
-<div class="related row">
-	<div class="col-md-12">
-		<h3><?php echo __('Activity'); ?></h3>
-		<?php if (!empty($user['Action'])): ?>
-			<table cellpadding = "0" cellspacing = "0" class="table table-striped">
-			<tbody>
-			<?php foreach ($user['Action'] as $log): ?>
-				<tr>			
-					<th><?php echo $this->Time->timeAgoInWords($log['created']); ?></th>
-					<td><?php echo $this->Log->describe($log); ?></td>
-				</tr>
-			<?php endforeach; ?>
-			</tbody>
-			</table>
-		<?php endif; ?>
-	</div><!-- end col md 12 -->
-</div>
-
-<div class="related row">
-	<div class="col-md-12">
-		<h3><?php echo __('History'); ?></h3>
-		<?php if (!empty($user['Log'])): ?>
-			<table cellpadding = "0" cellspacing = "0" class="table table-striped">
-			<tbody>
-			<?php foreach ($user['Log'] as $log): ?>
-				<tr>			
-					<th><?php echo $this->Time->timeAgoInWords($log['created']); ?></th>
-					<td><?php echo $this->Log->describe($log); ?></td>					
+					<td class="actions text-right">
+						<?php echo $this->Html->link('<span class="glyphicon glyphicon-edit"></span>', array('controller' => 'consumptions', 'action' => 'edit', $consumption['id']), array('escape' => false)); ?>
+						<?php echo $this->Form->postLink('<span class="glyphicon glyphicon-remove"></span>', array('controller' => 'consumptions', 'action' => 'delete', $consumption['id']), array('escape' => false), __('Are you sure you want to delete # %s?', $consumption['id'])); ?>
+					</td>
 				</tr>
 			<?php endforeach; ?>
 			</tbody>

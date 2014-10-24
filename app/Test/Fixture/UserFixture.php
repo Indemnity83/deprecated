@@ -15,8 +15,7 @@ class UserFixture extends CakeTestFixture {
 		'username' => array('type' => 'string', 'null' => false, 'default' => null, 'key' => 'index', 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'password' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 128, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'email' => array('type' => 'string', 'null' => true, 'default' => null, 'key' => 'index', 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'active' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
-		'role_id' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 36, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'role' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array(
@@ -38,8 +37,7 @@ class UserFixture extends CakeTestFixture {
 			'username' => 'admin',
 			'password' => '$2a$10$nQq4aByms1lRB3.TTTVdpeMuhJbniOKFAGavQegqWzj',
 			'email' => 'admin@localhost.loc',
-			'active' => 1,
-			'role_id' => '5445a0e8-8a68-4adf-bf57-371eb4188753',
+			'role' => 1,
 			'created' => '2014-10-03 05:51:30',
 			'modified' => '2014-10-03 05:51:30'
 		),

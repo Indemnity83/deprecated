@@ -48,8 +48,21 @@ class User extends AppModel {
 			)
 		),
 		'password' => array(
+			'too_short' => array(
+				'rule' => array('minLength', '6'),
+				'message' => 'The password must have at least 6 characters.',
+				'allowEmpty' => false,
+				'required' => true,
+				'on' => 'create'
+			),
+			'required' => array(
+				'rule' => 'notEmpty',
+				'message' => 'Please enter a password.'
+			)
+		),
+		'temppassword' => array(
 			'passwordsMatch' => array(
-				'rule' => array('equaltofield', 'password_match'),
+				'rule' => 'confirmPassword',
 				'message' => 'Passwords do not match',
 				'allowEmpty' => false,
 				'required' => true,
@@ -67,8 +80,28 @@ class User extends AppModel {
 		'Logable' => array(
 			'change' => 'full',
 		),
-		'Acl' => array(
-			'type' => 'requester'
+		'Enumerable'
+	);
+
+/**
+ * Constants
+ *
+ * @var string
+ */
+	const ROLE_USER = 0;
+	const ROLE_ADMIN = 1;
+	const ROLE_TRUSTED = 2;
+
+/**
+ * enums
+ *
+ * @var array
+ */
+	public $enum = array(
+		'role' => array(
+			self::ROLE_USER => 'user',
+			self::ROLE_ADMIN => 'admin',
+			self::ROLE_TRUSTED => 'trusted'
 		)
 	);
 
@@ -97,19 +130,16 @@ class User extends AppModel {
 	);
 
 /**
- * belongsTo associations
+ * Constructor
  *
- * @var array
+ * @param bool|string $id ID
+ * @param string $table Table
+ * @param string $ds Datasource
  */
-	public $belongsTo = array(
-		'Role' => array(
-			'className' => 'Role',
-			'foreignKey' => 'role_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
-	);
+	public function __construct($id = false, $table = null, $ds = null) {
+		$this->_setupValidation();
+		parent::__construct($id, $table, $ds);
+	}
 
 /**
  * beforeSave method
@@ -120,53 +150,102 @@ class User extends AppModel {
 	public function beforeSave($options = array()) {
 		if (isset($this->data[$this->alias]['password'])) {
 			$passwordHasher = new BlowfishPasswordHasher();
-			$this->data[$this->alias]['password'] = $passwordHasher->hash(
-				$this->data[$this->alias]['password']
-			);
+			$this->data[$this->alias]['password'] = $passwordHasher->hash($this->data[$this->alias]['password']);
 		}
-		if (!isset($this->data[$this->alias]['role_id'])) {
-			$role = $this->Role->findByTitle('User');
-			$this->data[$this->alias]['role_id'] = $role['Role']['id'];
+		if (!isset($this->data[$this->alias]['role'])) {
+			$this->data[$this->alias]['role'] = self::ROLE_USER;
 		}
 		return true;
 	}
 
 /**
- * equaltofield method
+ * Custom validation method to ensure that the two entered passwords match
  *
- * @param string $check first field to check
- * @param string $otherfield second field to check
- * @return bolean
+ * @param string $password Password
+ * @return bool Success
  */
-	public function equaltofield($check, $otherfield) {
-		//get name of field
-		$fname = '';
-		foreach ($check as $key => $value) {
-			$fname = $key;
-			break;
+	public function confirmPassword($password = null) {
+		if ((isset($this->data[$this->alias]['password']) && isset($password['temppassword']))
+			&& !empty($password['temppassword'])
+			&& ($this->data[$this->alias]['password'] === $password['temppassword'])) {
+			return true;
 		}
-		return $this->data[$this->name][$otherfield] === $this->data[$this->name][$fname];
+		return false;
 	}
 
 /**
- * parentNode method
+ * Setup validation rules
  *
- * @return array
+ * @return void
  */
-	public function parentNode() {
-		if (!$this->id && empty($this->data)) {
-			return null;
+	protected function _setupValidation() {
+		$this->validatePasswordChange = array(
+			'new_password' => $this->validate['password'],
+			'confirm_password' => array(
+				'required' => array('rule' => array('compareFields', 'new_password', 'confirm_password'), 'required' => true, 'message' => __d('users', 'The passwords are not equal.'))),
+			'old_password' => array(
+				'to_short' => array('rule' => 'validateOldPassword', 'required' => true, 'message' => __d('users', 'Invalid password.'))
+			)
+		);
+	}
+
+/**
+ * Validation method to check the old password
+ *
+ * @param array $password to validate
+ * @throws OutOfBoundsException
+ * @return bool True on success
+ */
+	public function validateOldPassword($password) {
+		if (!isset($this->data[$this->alias]['id']) || empty($this->data[$this->alias]['id'])) {
+			if (Configure::read('debug') > 0) {
+				throw new OutOfBoundsException(__d('users', '$this->data[\'' . $this->alias . '\'][\'id\'] has to be set and not empty'));
+			}
 		}
-		if (isset($this->data['User']['role_id'])) {
-			$roleId = $this->data['User']['role_id'];
-		} else {
-			$roleId = $this->field('role_id');
+
+		$passwordHasher = new BlowfishPasswordHasher();
+		$currentPassword = $this->field('password', array($this->alias . '.id' => $this->data[$this->alias]['id']));
+		return $currentPassword === $passwordHasher->hash($password['old_password']);
+	}
+
+/**
+ * Changes the password for a user
+ *
+ * @param array $postData Post data from controller
+ * @return bool True on success
+ */
+	public function changePassword($postData = array()) {
+		$this->validate = $this->validatePasswordChange;
+
+		$this->set($postData);
+		if ($this->validates()) {
+			$passwordHasher = new BlowfishPasswordHasher();
+			$this->data[$this->alias]['password'] = $passwordHasher->hash($this->data[$this->alias]['new_password']);
+			$this->save($postData, array(
+				'validate' => false,
+				'callbacks' => false));
+			return true;
 		}
-		if (!$roleId) {
-			return null;
-		} else {
-			return array('Role' => array('id' => $roleId));
+		return false;
+	}
+
+/**
+ * Validation method to compare two fields
+ *
+ * @param mixed $field1 Array or string, if array the first key is used as fieldname
+ * @param string $field2 Second fieldname
+ * @return bool True on success
+ */
+	public function compareFields($field1, $field2) {
+		if (is_array($field1)) {
+			$field1 = key($field1);
 		}
+
+		if (isset($this->data[$this->alias][$field1]) && isset($this->data[$this->alias][$field2]) &&
+			$this->data[$this->alias][$field1] == $this->data[$this->alias][$field2]) {
+			return true;
+		}
+		return false;
 	}
 
 }
