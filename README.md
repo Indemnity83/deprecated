@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Indemnity83/caffeinated.svg?branch=develop)](https://travis-ci.org/Indemnity83/caffeinated)
+
 # Caffeinated
 
 A tool for tracking your daily intake of caffeine
