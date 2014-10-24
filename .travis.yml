@@ -33,6 +33,7 @@ before_script:
    - mysql -e 'create database caffeinated_test;'
    - echo "<?php 
      class DATABASE_CONFIG {
+
      public \$test = array(
        'datasource' => 'Database/Mysql',
        'database' => 'caffeinated_test',
