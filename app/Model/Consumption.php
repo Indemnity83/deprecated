@@ -32,7 +32,7 @@ class Consumption extends AppModel {
 		)
 	);
 
-/*
+/**
  * Behaviors
  *
  * @var array
@@ -41,7 +41,7 @@ class Consumption extends AppModel {
 		'Logable' => array(
 			'change' => 'full',
 		)
-	);	
+	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -79,11 +79,25 @@ class Consumption extends AppModel {
 			'conditions' => 'Log.model = "Consumption"',
 			'order' => 'Log.created DESC'
 		)
-	);		
+	);
 
-/*
- * BeforeSave Function
+/**
+ * checks if a consumption record is owned by the given user
+ * 
+ * @param string $consumption the consumption id to check
+ * @param string $user the user id to check
+ * @return bool
+ */
+	public function isOwnedBy($consumption, $user) {
+		return $this->field('id', array('id' => $consumption, 'user_id' => $user)) !== false;
+	}
+
+/**
+ * Called before each save operation, after validation. Return a non-true result
+ * to halt the save.
  *
+ * @param array $options Options passed from Model::save().
+ * @return bool True if the operation should continue, false if it should abort
  */
 	public function beforeSave($options = array()) {
 		if (!empty($this->data['Consumption']['when']) ) {
@@ -92,17 +106,23 @@ class Consumption extends AppModel {
 		return true;
 	}
 
-/*
- * dateFormatBeforeSave Function
- *
+/**
+ * format date before saving
+ * 
+ * @param string $dateString unformatted date string
+ * @return string
  */
 	public function dateFormatBeforeSave($dateString) {
 		return date('Y-m-d', strtotime($dateString));
 	}
 
-/*
- * BeforeSave Function
+/**
+ * Called after each find operation. Can be used to modify any results returned by find().
+ * Return value should be the (modified) results.
  *
+ * @param mixed $results The results of the find operation
+ * @param bool $primary Whether this model is being queried directly (vs. being queried as an association)
+ * @return mixed Result of the find operation
  */
 	public function afterFind($results, $primary = false) {
 		foreach ($results as $key => $val) {
@@ -113,11 +133,13 @@ class Consumption extends AppModel {
 		return $results;
 	}
 
-/*
- * dateFormatBeforeSave Function
- *
+/**
+ * format date after finding
+ * 
+ * @param string $dateString unformatted date string
+ * @return string
  */
 	public function dateFormatAfterFind($dateString) {
-		return date('Y-m-d', strtotime($dateString));
-	}	
+			return date('Y-m-d', strtotime($dateString));
+	}
 }

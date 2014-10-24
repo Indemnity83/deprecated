@@ -17,14 +17,30 @@ class UsersController extends AppController {
 	public $components = array('Paginator', 'Session');
 
 /**
+ * Checks if the current user is authorized for controller actions
+ * 
+ * @param Model $user the user to check
+ * @return bool
+ */
+	public function isAuthorized($user) {
+		// Allow limited access to some methods
+		if (in_array($this->action, array('profile', 'settings'))) {
+			return true;
+		}
+
+		// Check with parent
+		return parent::isAuthorized($user);
+	}
+
+/**
  * beforeFilter method
  *
  * @return void
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		// Allow users to register and logout.
-		$this->Auth->allow('add', 'logout');
+		// Allow full access to register, logout and login
+		$this->Auth->allow('add', 'logout', 'login');
 	}
 
 /**
@@ -40,9 +56,9 @@ class UsersController extends AppController {
 /**
  * view method
  *
- * @throws NotFoundException
- * @param string $id
+ * @param string $id record id or slug
  * @return void
+ * @throws NotFoundException
  */
 	public function view($id = null) {
 		$this->User->recursive = 2;
@@ -56,8 +72,8 @@ class UsersController extends AppController {
 /**
  * profile method
  *
- * @throws NotFoundException
  * @return void
+ * @throws NotFoundException
  */
 	public function profile() {
 		$this->User->recursive = 2;
@@ -66,7 +82,7 @@ class UsersController extends AppController {
 			throw new NotFoundException(__('Invalid user'));
 		}
 		$this->set(compact('user'));
-	}	
+	}
 
 /**
  * add method
@@ -83,16 +99,14 @@ class UsersController extends AppController {
 				$this->Session->setFlash(__('The user could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
 			}
 		}
-		$roles = $this->User->Role->find('list');
-		$this->set(compact('roles'));
 	}
 
 /**
  * edit method
  *
- * @throws NotFoundException
- * @param string $id
+ * @param string $id record id or slug
  * @return void
+ * @throws NotFoundException
  */
 	public function edit($id = null) {
 		$options = array('conditions' => array('OR' => array('User.' . $this->User->primaryKey => $id, 'User.username' => $id)));
@@ -109,16 +123,38 @@ class UsersController extends AppController {
 		} else {
 			$this->request->data = $user;
 		}
-		$roles = $this->User->Role->find('list');
-		$this->set(compact('roles'));
+		$this->set('roles', $this->User->enum('role'));
+	}
+
+/**
+ * settings method
+ *
+ * @return void
+ * @throws NotFoundException
+ */
+	public function settings() {
+		$options = array('conditions' => array('User.' . $this->User->primaryKey => $this->Auth->user('id')));
+		if (!$user = $this->User->find('first', $options)) {
+			throw new NotFoundException(__('Invalid user'));
+		}
+		if ($this->request->is(array('post', 'put'))) {
+			if ($this->User->save($this->request->data)) {
+				$this->Session->setFlash(__('User profile has been updated.'), 'default', array('class' => 'alert alert-success'));
+				return $this->redirect(array('action' => 'profile'));
+			} else {
+				$this->Session->setFlash(__('The profile could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
+			}
+		} else {
+			$this->request->data = $user;
+		}
 	}
 
 /**
  * delete method
  *
- * @throws NotFoundException
- * @param string $id
+ * @param string $id record id
  * @return void
+ * @throws NotFoundException
  */
 	public function delete($id = null) {
 		$this->User->id = $id;

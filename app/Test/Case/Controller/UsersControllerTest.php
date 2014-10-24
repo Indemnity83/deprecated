@@ -14,7 +14,6 @@ class UsersControllerTest extends ControllerTestCase {
  */
 	public $fixtures = array(
 		'app.user',
-		'app.role',
 		'app.log'
 	);
 

@@ -16,7 +16,7 @@
 			<?php echo $this->Form->create('User', $this->App->defaultForm); ?>
 			<?php echo $this->Form->input('username', array('placeholder' => 'Username'));?>
 			<?php echo $this->Form->input('password', array('placeholder' => 'Password'));?>
-			<?php echo $this->Form->input('password_match', array('placeholder' => 'Password (confirm)', 'label' => 'Password (confirm)', 'type' => 'password'));?>
+			<?php echo $this->Form->input('temppassword', array('placeholder' => 'Password (confirm)', 'label' => 'Password (confirm)', 'type' => 'password'));?>
 			<?php echo $this->Form->input('email', array('placeholder' => 'Email'));?>
 			<?php echo $this->Form->submit(__('Submit')); ?>
 			<?php echo $this->Form->end() ?>

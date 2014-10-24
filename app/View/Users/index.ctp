@@ -13,9 +13,8 @@
 			<table cellpadding="0" cellspacing="0" class="table table-striped">
 				<thead>
 					<tr>
-						<th><?php echo $this->Paginator->sort('username'); ?></th>
-						<th><?php echo $this->Paginator->sort('email'); ?></th>
-						<th><?php echo $this->Paginator->sort('role_id'); ?></th>
+						<th>Username</th>
+						<th>Email Address</th>
 						<th class="actions text-right"></th>
 					</tr>
 				</thead>
@@ -24,7 +23,6 @@
 					<tr>
 						<td><?php echo $this->Html->link($user['User']['username'], array('controller' => 'users', 'action' => 'view', $user['User']['username'])); ?></td>
 						<td><?php echo $this->Html->link($user['User']['email'], 'mailto:' . $user['User']['email']); ?></td>
-						<td><?php echo $this->Html->link($user['Role']['title'], array('controller' => 'roles', 'action' => 'view', $user['Role']['id'])); ?></td>
 						<td class="actions text-right">
 							<?php echo $this->Html->link('<span class="glyphicon glyphicon-search"></span>', array('action' => 'view', $user['User']['username']), array('escape' => false)); ?>
 							<?php echo $this->Html->link('<span class="glyphicon glyphicon-edit"></span>', array('action' => 'edit', $user['User']['id']), array('escape' => false)); ?>

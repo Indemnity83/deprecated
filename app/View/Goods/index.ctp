@@ -16,10 +16,8 @@
 			<table cellpadding="0" cellspacing="0" class="table table-striped">
 				<thead>
 					<tr>						
-						<th><?php echo $this->Paginator->sort('name'); ?></th>
-						<th><?php echo $this->Paginator->sort('caffeine_level'); ?></th>
-						<th><?php echo $this->Paginator->sort('created'); ?></th>
-						<th class="actions text-right"></th>
+						<th>Name</th>
+						<th>Caffeine Level</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -27,12 +25,6 @@
 					<tr>
 						<td><?php echo $this->Html->link(h($good['Good']['name']), array('action' => 'view', $good['Good']['slug']), array('escape' => false)); ?>&nbsp;</td>
 						<td><?php echo h($good['Good']['caffeine_level']) . 'mg per ' . h($good['Good']['per']) . ' '  . h($good['Good']['unit_enum']); ?>&nbsp;</td>
-						<td><?php echo h($good['Good']['created']); ?>&nbsp;</td>
-						<td class="actions text-right">
-							<?php echo $this->Html->link('<span class="glyphicon glyphicon-search"></span>', array('action' => 'view', $good['Good']['slug']), array('escape' => false)); ?>
-							<?php echo $this->Html->link('<span class="glyphicon glyphicon-edit"></span>', array('action' => 'edit', $good['Good']['slug']), array('escape' => false)); ?>
-							<?php echo $this->Form->postLink('<span class="glyphicon glyphicon-remove"></span>', array('action' => 'delete', $good['Good']['id']), array('escape' => false), __('Are you sure you want to delete # %s?', $good['Good']['name'])); ?>
-						</td>
 					</tr>
 				<?php endforeach; ?>
 				</tbody>

@@ -15,7 +15,6 @@ class ConsumptionTest extends CakeTestCase {
 	public $fixtures = array(
 		'app.consumption',
 		'app.user',
-		'app.role',
 		'app.log',
 		'app.good'
 	);
@@ -55,6 +54,6 @@ class ConsumptionTest extends CakeTestCase {
 
 	public function testDateFormatAfterFind() {
 		$this->markTestIncomplete('testDateFormatAfterFind not implemented.');
-	}	
+	}
 
 }

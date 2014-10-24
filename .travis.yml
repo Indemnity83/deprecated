@@ -1,0 +1,43 @@
+language: php
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+
+env:
+  - DB=mysql
+
+notifications:
+  email: false
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 5.4
+      env: DB=pgsql
+
+    - php: 5.4
+      env: DB=sqlite-mem
+
+    - php: 5.4
+      env: DB=sqlite-file
+
+    - php: 5.4
+      env: PHPCS=1
+
+install:
+   - composer install
+   - npm install -g bower
+   - bower install
+
+script: 
+   - sh -c "if [ '$PHPCS' != '1' ]; then cd ./app && ../vendor/cakephp/cakephp/lib/Cake/Console/cake test app AllTests --stderr; fi"
+   - sh -c "if [ '$PHPCS' = '1' ]; then ./vendor/bin/phpcs -p --extensions=php --standard=CakePHP ./app; fi;"
+
+before_script:
+   - sh -c "if [ '$PHPCS' = '1' ]; then ./vendor/bin/phpcs --config-set installed_paths vendor/cakephp/cakephp-codesniffer/; fi"
+   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE caffeinated_test;'; fi"
+   - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'CREATE DATABASE caffeinated_test;' -U postgres; fi"
+   - chmod -R 777 ./tmp
+   - mv ./app/Config/database.php.test ./app/Config/database.php

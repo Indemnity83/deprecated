@@ -1,8 +1,6 @@
-# Caffeinated
+# Caffeinated [![Build Status](https://travis-ci.org/Indemnity83/caffeinated.svg?branch=develop)](https://travis-ci.org/Indemnity83/caffeinated)
 
 A tool for tracking your daily intake of caffeine
-
-## Production Setup
 
 ### Requirements
 - PHP 5.2.8+
@@ -13,68 +11,22 @@ A tool for tracking your daily intake of caffeine
 
 ### Installation
 
-1. Download the repository and extract to your web root
-1. Change the values of Security.salt and Security.cipherSeed in /Config/core.php
-1. From the installation root, install the dependancies using composer and bower, and setup the application using the cake shell
+If your handy with a shell, this should be enough to get things going for you:
 
+		git clone https://github.com/Indemnity83/caffeinated.git ./
 		composer install
 		bower install
-		cake setup install
+		app/Console/cake schema create
 
-1. Browse to your web server, you should have an up and running Tesla installation
+Don't forget to change the security.salt and security.cipherseed in ./app/Config/core.php to something for your own deployment. 
+
+The default user is `admin:admin`
 
 ### Updating
 
-1. Make a backup of the files, and database before you start!
-1. Record the values of Security.salt and Security.cipherSeed in /Config/core.php
-1. Download the repository and extract to your web root, replacing any duplicate files
-1. Change the values of Security.salt and Security.cipherSeed in /Config/core.php to match your old values
-1. From the installation root, update all depenancies and schemas
+Similar to installation, use command line tools to update your local copy. You may have to merge changes to ./app/Config/core.php (sorry, its just the way that CakePHP works)
 
+		git pull
 		composer install
 		bower install
-		cake setup update
-
-## Development Setup
-
-### Requirements
-
-- [VirtualBox](https://www.virtualbox.org/wiki/Downloads). Tested on 4.3.x.
-- [Vagrant](http://www.vagrantup.com/downloads.html). Tested on 1.6+
-
-### Environment Setup
-
-Download and install both VirtualBox and Vagrant for your particular operating system. Should only take a few minutes on a DSL connection.
-
-Once those are downloaded, open up a terminal. We'll need to clone this repository and startup vagrant:
-
-	git clone https://bitbucket.org/Indemnity83/tesla
-	cd tesla
-	vagrant up
-
-Vagrant will download an Ubuntu box, launch it in Virtualbox and run the bootstrap.sh script to get your development environment up and running. Once thats done you'll want to log into the virtual machine via SSH and deploy the
-
-	cd /vagrant
-	composer install --dev
-	bower install
-
-Finally, run through the cake console setup to get the database and an admin user setup.
-
-	cd /vagrant/app
-	cake setup install
-
-Once it is done, browse to `http://192.168.33.10/` in your browser, and you should have a running instance of Tesla for development
-
-### Database Access
-
-phpMyAdmin is available at `http://192.168.33.10/phpmyadmin` with the following credentials:
-
-- `root:root`
-
-## Bugs?
-
-File an issue.
-
-## Branching strategy
-
-See [A successful Git branching model](http://nvie.com/posts/a-successful-git-branching-model/) by Vincent Driessen for information on the branching strategy implemented
+		app/Console/cake schema update

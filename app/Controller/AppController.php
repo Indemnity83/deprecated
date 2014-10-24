@@ -43,7 +43,6 @@ class AppController extends Controller {
  * @var array
  */
 	public $components = array(
-		'Acl',
 		'Auth',
 		'Session',
 		'DebugKit.Toolbar'
@@ -55,11 +54,10 @@ class AppController extends Controller {
  * @return void
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 
 		# configure the logable behavior
-		if (sizeof($this->uses) && $this->{$this->modelClass}->Behaviors->attached('Logable')) {
+		if (count($this->uses) && $this->{$this->modelClass}->Behaviors->attached('Logable')) {
 			$this->{$this->modelClass}->setUserData($this->activeUser);
 		}
 
@@ -67,16 +65,26 @@ class AppController extends Controller {
 		$this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'profile');
 		$this->Auth->logoutRedirect = array('controller' => 'pages', 'action' => 'display', 'home');
 		$this->Auth->authenticate = array('Form' => array('passwordHasher' => 'Blowfish'));
-		$this->Auth->flash = array('element' => 'default', 'key' => 'auth', 'params' => array('class' => 'alert alert-info'));
-		$this->Auth->authorize = array('Actions' => array('actionPath' => 'controllers'));
-		$this->Auth->authError = 'Please login first';
+		$this->Auth->flash = array('element' => 'default', 'key' => 'auth', 'params' => array('class' => 'alert alert-danger'));
+		$this->Auth->authorize = array('Controller');
+		$this->Auth->authError = 'Not Authorized';
 		$this->Auth->allow('display');
+	}
 
-		#TODO: Setup real permissions, for now just open it all up if user is logged in
-		if ($this->Auth->loggedIn()) {
-			$this->Auth->allow();
+/**
+ * Checks if the current user is authorized for controller actions
+ * 
+ * @param Model $user the user to check
+ * @return bool
+ */
+	public function isAuthorized($user) {
+		// Admin can access every action
+		if (isset($user['role']) && $user['role'] == User::ROLE_ADMIN) {
+			return true;
 		}
 
+		// Default deny
+		return false;
 	}
 
 }

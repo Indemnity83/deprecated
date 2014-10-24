@@ -16,6 +16,27 @@ class GoodsController extends AppController {
 	public $components = array('Paginator');
 
 /**
+ * Checks if the current user is authorized for controller actions
+ * 
+ * @param Model $user the user to check
+ * @return bool
+ */
+	public function isAuthorized($user) {
+		// Allow limited access to some methods
+		if (in_array($this->action, array('index', 'view', 'getunit'))) {
+			return true;
+		}
+
+		// Allow trusted users to add, edit & delete
+		if (in_array($this->action, array('add', 'edit', 'delete')) && $user['role'] == User::ROLE_TRUSTED) {
+			return true;
+		}
+
+		// Check with parent
+		return parent::isAuthorized($user);
+	}
+
+/**
  * index method
  *
  * @return void
@@ -28,9 +49,9 @@ class GoodsController extends AppController {
 /**
  * view method
  *
- * @throws NotFoundException
- * @param string $id
+ * @param string $id record id or slug
  * @return void
+ * @throws NotFoundException
  */
 	public function view($id = null) {
 		$this->Good->recursive = 2;
@@ -62,9 +83,9 @@ class GoodsController extends AppController {
 /**
  * edit method
  *
- * @throws NotFoundException
- * @param string $id
+ * @param string $id record id or slug
  * @return void
+ * @throws NotFoundException
  */
 	public function edit($id = null) {
 		$options = array('conditions' => array('OR' => array('Good.' . $this->Good->primaryKey => $id, 'Good.slug' => $id)));
@@ -87,9 +108,9 @@ class GoodsController extends AppController {
 /**
  * delete method
  *
- * @throws NotFoundException
- * @param string $id
+ * @param string $id record id
  * @return void
+ * @throws NotFoundException
  */
 	public function delete($id = null) {
 		$this->Good->id = $id;
@@ -109,8 +130,9 @@ class GoodsController extends AppController {
  * AJAX: get units for a good
  *
  * @return void
+ * @throws NotFoundException
  */
-	public function getUnit() {
+	public function getunit() {
 		if ($this->request->is('post')) {
 			$data = $this->request->data;
 			$good = $this->Good->findById($data['Consumption']['good_id']);
