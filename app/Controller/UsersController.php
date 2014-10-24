@@ -24,7 +24,7 @@ class UsersController extends AppController {
  */
 	public function isAuthorized($user) {
 		// Allow limited access to some methods
-		if (in_array($this->action, array('profile', 'settings', 'change_password'))) {
+		if (in_array($this->action, array('profile', 'settings'))) {
 			return true;
 		}
 
@@ -142,27 +142,10 @@ class UsersController extends AppController {
 				$this->Session->setFlash(__('User profile has been updated.'), 'default', array('class' => 'alert alert-success'));
 				return $this->redirect(array('action' => 'profile'));
 			} else {
-				$this->Session->setFlash(__('The profile saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
+				$this->Session->setFlash(__('The profile could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
 			}
 		} else {
 			$this->request->data = $user;
-		}
-	}
-
-/**
- * Allows the user to enter a new password, it needs to be confirmed by entering the old password
- *
- * @return void
- */
-	public function change_password() {
-		if ($this->request->is('post')) {
-			$this->request->data[$this->modelClass]['id'] = $this->Auth->user('id');
-			if ($this->{$this->modelClass}->changePassword($this->request->data)) {
-				$this->Session->setFlash(__d('users', 'Password changed.'));
-				// we don't want to keep the cookie with the old password around
-				$this->RememberMe->destroyCookie();
-				return $this->redirect(array('action' => 'profile'));
-			}
 		}
 	}
 

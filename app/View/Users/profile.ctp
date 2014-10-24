@@ -12,7 +12,6 @@
 			<div class="page-header">
 				<ul class="nav nav-pills pull-right">
 					<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-edit"></span>&nbsp&nbsp;Edit Profile'), array('action' => 'settings'), array('escape' => false)); ?> </li>
-					<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-lock"></span>&nbsp&nbsp;Change Password'), array('action' => 'change_password'), array('escape' => false)); ?> </li>
 				</ul>
 				<h1><?php echo h($user['User']['username']); ?>&nbsp;</h1>
 			</div>

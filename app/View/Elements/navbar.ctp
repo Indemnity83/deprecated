@@ -22,7 +22,6 @@
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $user['username']; ?> <span class="caret"></span></a>
 					<ul class="dropdown-menu" role="menu">
 						<li><?php echo $this->Html->link('Settings', array('controller'=>'users', 'action'=>'settings')); ?></li>
-						<li><?php echo $this->Html->link('Password', array('controller'=>'users', 'action'=>'change_password')); ?></li>
 						<li><?php echo $this->Html->link('Logout', array('controller'=>'users', 'action'=>'logout')); ?></li>
 					</ul>
 				</li>

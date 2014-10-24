@@ -28,7 +28,6 @@ class GoodsController extends AppController {
 		}
 
 		// Allow trusted users to add, edit & delete
-		Debugger::log($this->action);
 		if (in_array($this->action, array('add', 'edit', 'delete')) && $user['role'] == User::ROLE_TRUSTED) {
 			return true;
 		}
