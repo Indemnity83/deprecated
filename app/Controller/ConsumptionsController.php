@@ -16,6 +16,30 @@ class ConsumptionsController extends AppController {
 	public $components = array('Paginator');
 
 /**
+ * Checks if the current user is authorized for controller actions
+ * 
+ * @param Model $user the user to check
+ * @return bool
+ */
+	public function isAuthorized($user) {
+		// Allow limited access to some methods
+		if (in_array($this->action, array('add'))) {
+			return true;
+		}
+
+		// The owner of a record can edit and delete it
+		if (in_array($this->action, array('edit', 'delete'))) {
+			$consumptionId = $this->request->params['pass'][0];
+			if ($this->Consumption->isOwnedBy($consumptionId, $user['id'])) {
+				return true;
+			}
+		}
+
+		// Check with parent
+		return parent::isAuthorized($user);
+	}
+
+/**
  * index method
  *
  * @return void
@@ -35,8 +59,8 @@ class ConsumptionsController extends AppController {
 			$this->Consumption->create();
 			$this->request->data['Consumption']['user_id'] = $this->Auth->user('id');
 			if ($this->Consumption->save($this->request->data)) {
-				$this->Session->setFlash(__('The consumption has been saved.'), 'default', array('class' => 'alert alert-success'));
-				return $this->redirect(array('action' => 'index'));
+				$this->Session->setFlash(__('The consumption has been recorded.'), 'default', array('class' => 'alert alert-success'));
+				return $this->redirect(array('controller' => 'users', 'action' => 'profile'));
 			} else {
 				$this->Session->setFlash(__('The consumption could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
 			}
@@ -60,7 +84,7 @@ class ConsumptionsController extends AppController {
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->Consumption->save($this->request->data)) {
 				$this->Session->setFlash(__('The consumption has been saved.'), 'default', array('class' => 'alert alert-success'));
-				return $this->redirect(array('action' => 'index'));
+				return $this->redirect(array('controller' => 'users', 'action' => 'profile'));
 			} else {
 				$this->Session->setFlash(__('The consumption could not be saved. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
 			}
@@ -91,6 +115,6 @@ class ConsumptionsController extends AppController {
 		} else {
 			$this->Session->setFlash(__('The consumption could not be deleted. Please, try again.'), 'default', array('class' => 'alert alert-danger'));
 		}
-		return $this->redirect(array('action' => 'index'));
+		return $this->redirect(array('controller' => 'users', 'action' => 'profile'));
 	}
 }

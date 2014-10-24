@@ -14,7 +14,7 @@
 			<?php echo $this->Form->input('name', array('placeholder' => 'Coca-Cola Classic'));?>
 			<div class="form-group row">
 				<div class="col-xs-4">
-					<?php echo $this->Form->input('caffeine_level', array('label' => false, 'placeholder' => 'Coca-Cola', 'beforeInput' => '<div class="input-group">', 'afterInput' => '<span class="input-group-addon">mg</span></div>', 'div' => false));?>
+					<?php echo $this->Form->input('caffeine_level', array('label' => false, 'placeholder' => '43', 'beforeInput' => '<div class="input-group">', 'afterInput' => '<span class="input-group-addon">mg</span></div>', 'div' => false));?>
 				</div>
 				<div class="col-xs-4">
 					<?php echo $this->Form->input('per', array('label' => false, 'placeholder' => '12', 'beforeInput' => '<div class="input-group"><span class="input-group-addon">per</span>', 'afterInput' => '</div>', 'div' => false));?>

@@ -24,15 +24,22 @@ class User extends AppModel {
  */
 	public $validate = array(
 		'username' => array(
-			'notEmpty' => array(
+			'required' => array(
 				'rule' => array('notEmpty'),
-				'message' => 'Username is required',
-				'allowEmpty' => false,
-				'required' => true
+				'required' => false, 'allowEmpty' => false,
+				'message' => 'Please enter a username.'
 			),
-			'unique' => array(
-				'rule' => array('isUnique'),
-				'message' => 'Username is already taken'
+			'alpha' => array(
+				'rule' => array('alphaNumeric'),
+				'message' => 'The username must be alphanumeric.'
+			),
+			'unique_username' => array(
+				'rule' => array('isUnique', 'username'),
+				'message' => 'This username is already in use.'
+			),
+			'username_min' => array(
+				'rule' => array('minLength', '3'),
+				'message' => 'The username must have at least 3 characters.'
 			)
 		),
 		'email' => array(
@@ -48,10 +55,23 @@ class User extends AppModel {
 			)
 		),
 		'password' => array(
-			'passwordsMatch' => array(
-				'rule' => array('equaltofield', 'password_match'),
-				'message' => 'Passwords do not match',
+			'too_short' => array(
+				'rule' => array('minLength', '6'),
+				'message' => 'The password must have at least 6 characters.',
 				'allowEmpty' => false,
+				'required' => true,
+				'on' => 'create'
+			),
+			'required' => array(
+				'rule' => 'notEmpty',
+				'message' => 'Please enter a password.'
+			)
+		),
+		'temppassword' => array(
+			'passwordsMatch' => array(
+				'rule' => 'confirmPassword',
+				'message' => 'Passwords do not match',
+				'allowEmpty' => true,
 				'required' => true,
 				'on' => 'create'
 			)
@@ -67,8 +87,28 @@ class User extends AppModel {
 		'Logable' => array(
 			'change' => 'full',
 		),
-		'Acl' => array(
-			'type' => 'requester'
+		'Enumerable'
+	);
+
+/**
+ * Constants
+ *
+ * @var string
+ */
+	const ROLE_USER = 0;
+	const ROLE_ADMIN = 1;
+	const ROLE_TRUSTED = 2;
+
+/**
+ * enums
+ *
+ * @var array
+ */
+	public $enum = array(
+		'role' => array(
+			self::ROLE_USER => 'user',
+			self::ROLE_ADMIN => 'admin',
+			self::ROLE_TRUSTED => 'trusted'
 		)
 	);
 
@@ -97,21 +137,6 @@ class User extends AppModel {
 	);
 
 /**
- * belongsTo associations
- *
- * @var array
- */
-	public $belongsTo = array(
-		'Role' => array(
-			'className' => 'Role',
-			'foreignKey' => 'role_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
-	);
-
-/**
  * beforeSave method
  *
  * @param array $options Options passed from Model::save().
@@ -120,53 +145,27 @@ class User extends AppModel {
 	public function beforeSave($options = array()) {
 		if (isset($this->data[$this->alias]['password'])) {
 			$passwordHasher = new BlowfishPasswordHasher();
-			$this->data[$this->alias]['password'] = $passwordHasher->hash(
-				$this->data[$this->alias]['password']
-			);
+			$this->data[$this->alias]['password'] = $passwordHasher->hash($this->data[$this->alias]['password']);
 		}
-		if (!isset($this->data[$this->alias]['role_id'])) {
-			$role = $this->Role->findByTitle('User');
-			$this->data[$this->alias]['role_id'] = $role['Role']['id'];
+		if (!isset($this->data[$this->alias]['role'])) {
+			$this->data[$this->alias]['role'] = self::ROLE_USER;
 		}
 		return true;
 	}
 
 /**
- * equaltofield method
+ * Custom validation method to ensure that the two entered passwords match
  *
- * @param string $check first field to check
- * @param string $otherfield second field to check
- * @return bolean
+ * @param string $password Password
+ * @return bool Success
  */
-	public function equaltofield($check, $otherfield) {
-		//get name of field
-		$fname = '';
-		foreach ($check as $key => $value) {
-			$fname = $key;
-			break;
+	public function confirmPassword($password = null) {
+		if ((isset($this->data[$this->alias]['password']) && isset($password['temppassword']))
+			&& !empty($password['temppassword'])
+			&& ($this->data[$this->alias]['password'] === $password['temppassword'])) {
+			return true;
 		}
-		return $this->data[$this->name][$otherfield] === $this->data[$this->name][$fname];
-	}
-
-/**
- * parentNode method
- *
- * @return array
- */
-	public function parentNode() {
-		if (!$this->id && empty($this->data)) {
-			return null;
-		}
-		if (isset($this->data['User']['role_id'])) {
-			$roleId = $this->data['User']['role_id'];
-		} else {
-			$roleId = $this->field('role_id');
-		}
-		if (!$roleId) {
-			return null;
-		} else {
-			return array('Role' => array('id' => $roleId));
-		}
+		return false;
 	}
 
 }

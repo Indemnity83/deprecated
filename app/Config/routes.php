@@ -33,17 +33,13 @@
 	Router::connect('/users/add/*', array('controller' => 'users', 'action' => 'add'));
 	Router::connect('/users/edit/*', array('controller' => 'users', 'action' => 'edit'));
 	Router::connect('/users/delete/*', array('controller' => 'users', 'action' => 'delete'));
+	Router::connect('/settings/profile', array('controller' => 'users', 'action' => 'settings'));
+	Router::connect('/settings/password', array('controller' => 'users', 'action' => 'change_password'));
 	Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
 	Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'));
-	Router::connect('/register', array('controller' => 'users', 'action' => 'register'));
+	Router::connect('/register', array('controller' => 'users', 'action' => 'add'));
 	Router::connect('/profile', array('controller' => 'users', 'action' => 'profile'));
 	Router::connect('/users/*', array('controller' => 'users', 'action' => 'view'));
-
-	Router::connect('/roles', array('controller' => 'roles', 'action' => 'index'));
-	Router::connect('/roles/add/*', array('controller' => 'roles', 'action' => 'add'));
-	Router::connect('/roles/edit/*', array('controller' => 'roles', 'action' => 'edit'));
-	Router::connect('/roles/delete/*', array('controller' => 'roles', 'action' => 'delete'));
-	Router::connect('/roles/*', array('controller' => 'roles', 'action' => 'view'));
 
 /**
  * Load all plugin routes. See the CakePlugin documentation on

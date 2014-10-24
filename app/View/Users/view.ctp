@@ -14,7 +14,7 @@
 					<li><?php echo $this->Html->link(__('<span class="glyphicon glyphicon-edit"></span>&nbsp&nbsp;Edit User'), array('action' => 'edit', $user['User']['username']), array('escape' => false)); ?> </li>
 					<li><?php echo $this->Form->postLink(__('<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;Delete User'), array('action' => 'delete', $user['User']['id']), array('escape' => false), __('Are you sure you want to delete # %s?', $user['User']['id'])); ?> </li>
 				</ul>
-				<h1><?php echo h($user['User']['username']); ?>&nbsp;<small><?php echo h($user['Role']['title']); ?></small></h1>
+				<h1><?php echo h($user['User']['username']); ?>&nbsp;<small><?php echo h($user['User']['role_enum']); ?></small></h1>
 			</div>
 		</div>
 	</div>

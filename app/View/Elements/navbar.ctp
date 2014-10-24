@@ -11,11 +11,9 @@
 		</div>
 
 		<div class="collapse navbar-collapse navbar-ex1-collapse">
-			<ul class="nav navbar-nav">
-				<li><?php echo $this->Html->link('Roles', array('controller' => 'roles', 'action'=>'index')); ?></li>
-				<li><?php echo $this->Html->link('Users', array('controller' => 'users', 'action'=>'index')); ?></li>
-				<li><?php echo $this->Html->link('Goods', array('controller' => 'goods', 'action'=>'index')); ?></li>
-				<li><?php echo $this->Html->link('Consumption', array('controller' => 'consumptions', 'action'=>'index')); ?></li>
+			<ul class="nav navbar-nav">				
+				<li><?php echo $this->Html->link('Profile', array('controller' => 'users', 'action' => 'profile')); ?></li>
+				<li><?php echo $this->Html->link('Goods', array('controller' => 'goods', 'action' => 'index')); ?></li>				
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">
@@ -23,10 +21,19 @@
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $user['username']; ?> <span class="caret"></span></a>
 					<ul class="dropdown-menu" role="menu">
-						<li><?php echo $this->Html->link('Profile', array('controller'=>'users', 'action'=>'profile')); ?></li>
+						<li><?php echo $this->Html->link('Settings', array('controller'=>'users', 'action'=>'settings')); ?></li>
 						<li><?php echo $this->Html->link('Logout', array('controller'=>'users', 'action'=>'logout')); ?></li>
 					</ul>
 				</li>
+				<?php if($user['role_enum'] == 'admin') { ?>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <span class="caret"></span></a>
+					<ul class="dropdown-menu" role="menu">
+						<li><?php echo $this->Html->link('Users', array('controller' => 'users', 'action' => 'index')); ?></li>
+						<li><?php echo $this->Html->link('Consumption', array('controller' => 'consumptions', 'action' => 'index')); ?></li>
+					</ul>
+				</li>
+				<?php } ?>
 				<?php else: ?>
 				<li><?php echo $this->Html->link('Login', array('controller'=>'users', 'action'=>'login')); ?></li>
 				<li><?php echo $this->Html->link('Register', array('controller'=>'users', 'action' => 'add')); ?></li>
