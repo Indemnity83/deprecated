@@ -55,6 +55,6 @@ class ConsumptionTest extends CakeTestCase {
 
 	public function testDateFormatAfterFind() {
 		$this->markTestIncomplete('testDateFormatAfterFind not implemented.');
-	}	
+	}
 
 }

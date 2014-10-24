@@ -23,153 +23,154 @@ App::uses('ModelBehavior', 'Model');
  */
 class SluggableBehavior extends ModelBehavior {
 
-    /**
-     * Default settings.
-     *
-     * @type array {
-     *      @type string $field     The column to base the slug on
-     *      @type string $slug      The column to write the slug to
-     *      @type array $scope      Additional query conditions when finding duplicates
-     *      @type string $separator The separating character between words
-     *      @type int $length       The max length of a slug
-     *      @type bool $onUpdate    Will update the slug when a record is updated
-     *      @type bool $unique      Whether to make the slug unique or not
-     * }
-     */
-    protected $_defaults = array(
-        'field' => 'title',
-        'slug' => 'slug',
-        'scope' => array(),
-        'separator' => '-',
-        'length' => 255,
-        'onUpdate' => true,
-        'unique' => true
-    );
+	/*
+	 Default settings.
 
-    /**
-     * Merge settings.
-     *
-     * @param Model $model
-     * @param array $settings
-     */
-    public function setup(Model $model, $settings = array()) {
-        $this->settings[$model->alias] = array_merge($this->_defaults, $settings);
-    }
+	@type array {
+		@type string $field     The column to base the slug on
+		@type string $slug      The column to write the slug to
+		@type array $scope      Additional query conditions when finding duplicates
+		@type string $separator The separating character between words
+		@type int $length       The max length of a slug
+		@type bool $onUpdate    Will update the slug when a record is updated
+		@type bool $unique      Whether to make the slug unique or not
+	}
+	*/
+	protected $_defaults = array(
+		'field' => 'title',
+		'slug' => 'slug',
+		'scope' => array(),
+		'separator' => '-',
+		'length' => 255,
+		'onUpdate' => true,
+		'unique' => true
+	);
 
-    /**
-     * Generate a slug based on another field.
-     *
-     * @param Model $model
-     * @param array $options
-     * @return bool
-     */
-    public function beforeSave(Model $model, $options = array()) {
-        $settings = $this->settings[$model->alias];
+/**
+ * Merge settings.
+ *
+ * @param Model $model using this behavior of model
+ * @param array $settings array of configuration settings
+ * @return null
+ */
+	public function setup(Model $model, $settings = array()) {
+		$this->settings[$model->alias] = array_merge($this->_defaults, $settings);
+	}
 
-        if (empty($model->data[$model->alias]) ||
-            empty($model->data[$model->alias][$settings['field']]) ||
-            !empty($model->data[$model->alias][$settings['slug']])) {
-            return true;
+/**
+ * Generate a slug based on another field.
+ *
+ * @param Model $model using this behavior of model
+ * @param array $options Options passed from Model::save().
+ * @return bool True if the operation should continue, false if it should abort
+ */
+	public function beforeSave(Model $model, $options = array()) {
+		$settings = $this->settings[$model->alias];
 
-        } else if ($model->id && !$settings['onUpdate']) {
-            return true;
-        }
+		if (empty($model->data[$model->alias]) ||
+			empty($model->data[$model->alias][$settings['field']]) ||
+			!empty($model->data[$model->alias][$settings['slug']])) {
+			return true;
 
-        $slug = $model->data[$model->alias][$settings['field']];
+		} elseif ($model->id && !$settings['onUpdate']) {
+			return true;
+		}
 
-        if (method_exists($model, 'beforeSlug')) {
-            $slug = $model->beforeSlug($slug, $this);
-        }
+		$slug = $model->data[$model->alias][$settings['field']];
 
-        $slug = $this->slugify($model, $slug);
+		if (method_exists($model, 'beforeSlug')) {
+			$slug = $model->beforeSlug($slug, $this);
+		}
 
-        if (method_exists($model, 'afterSlug')) {
-            $slug = $model->afterSlug($slug, $this);
-        }
+		$slug = $this->slugify($model, $slug);
 
-        if (mb_strlen($slug) > ($settings['length'] - 3)) {
-            $slug = mb_substr($slug, 0, ($settings['length'] - 3));
-        }
+		if (method_exists($model, 'afterSlug')) {
+			$slug = $model->afterSlug($slug, $this);
+		}
 
-        if ($settings['unique']) {
-            $slug = $this->_makeUnique($model, $slug);
-        }
+		if (mb_strlen($slug) > ($settings['length'] - 3)) {
+			$slug = mb_substr($slug, 0, ($settings['length'] - 3));
+		}
 
-        $model->data[$model->alias][$settings['slug']] = $slug;
+		if ($settings['unique']) {
+			$slug = $this->_makeUnique($model, $slug);
+		}
 
-        return true;
-    }
+		$model->data[$model->alias][$settings['slug']] = $slug;
 
-    /**
-     * Return a slugged version of a string.
-     *
-     * @param Model $model
-     * @param string $string
-     * @return string
-     */
-    public function slugify(Model $model, $string) {
-        $string = strip_tags($string);
-        $string = str_replace('&amp;', 'and', $string);
-        $string = str_replace('&', 'and', $string);
-        $string = str_replace('@', 'at', $string);
+		return true;
+	}
 
-        return mb_strtolower(Inflector::slug($string, $this->settings[$model->alias]['separator']));
-    }
+/**
+ * Return a slugged version of a string.
+ *
+ * @param Model $model using this behavior of model
+ * @param string $string string to be turned into a slug
+ * @return string
+ */
+	public function slugify(Model $model, $string) {
+		$string = strip_tags($string);
+		$string = str_replace('&amp;', 'and', $string);
+		$string = str_replace('&', 'and', $string);
+		$string = str_replace('@', 'at', $string);
 
-    /**
-     * Helper function to check if a slug exists.
-     *
-     * @param Model $model
-     * @param string $slug
-     * @return bool
-     */
-    public function slugExists(Model $model, $slug) {
-        return (bool) $model->find('count', array(
-            'conditions' => array($this->settings[$model->alias]['slug'] => $slug),
-            'recursive' => -1,
-            'contain' => false
-        ));
-    }
+		return mb_strtolower(Inflector::slug($string, $this->settings[$model->alias]['separator']));
+	}
 
-    /**
-     * Validate the slug is unique by querying for other slugs.
-     *
-     * @param Model $model
-     * @param string $string
-     * @return string
-     */
-    protected function _makeUnique(Model $model, $string) {
-        $settings = $this->settings[$model->alias];
-        $conditions = array(
-            array($settings['slug'] => $string),
-            array($settings['slug'] . ' LIKE' => $string . $settings['separator'] . '%')
-        );
+/**
+ * Helper function to check if a slug exists.
+ *
+ * @param Model $model using this behavior of model
+ * @param string $slug slug to check against database
+ * @return bool
+ */
+	public function slugExists(Model $model, $slug) {
+		return (bool)$model->find('count', array(
+			'conditions' => array($this->settings[$model->alias]['slug'] => $slug),
+			'recursive' => -1,
+			'contain' => false
+		));
+	}
 
-        foreach ($conditions as $i => $where) {
-            $where = $where + $settings['scope'];
+/**
+ * Validate the slug is unique by querying for other slugs.
+ *
+ * @param Model $model using this behavior of model
+ * @param string $string string to make unique
+ * @return string
+ */
+	protected function _makeUnique(Model $model, $string) {
+		$settings = $this->settings[$model->alias];
+		$conditions = array(
+			array($settings['slug'] => $string),
+			array($settings['slug'] . ' LIKE' => $string . $settings['separator'] . '%')
+		);
 
-            if ($model->id) {
-                $where[$model->primaryKey . ' !='] = $model->id;
-            }
+		foreach ($conditions as $i => $where) {
+			$where = $where + $settings['scope'];
 
-            $count = $model->find('count', array(
-                'conditions' => $where,
-                'recursive' => -1,
-                'contain' => false
-            ));
+			if ($model->id) {
+				$where[$model->primaryKey . ' !='] = $model->id;
+			}
 
-            if ($i == 0) {
-                if ($count == 0) {
-                    return $string;
-                } else {
-                    continue;
-                }
-            }
+			$count = $model->find('count', array(
+				'conditions' => $where,
+				'recursive' => -1,
+				'contain' => false
+			));
 
-            $string .= $settings['separator'] . $count;
-        }
+			if ($i == 0) {
+				if ($count == 0) {
+					return $string;
+				} else {
+					continue;
+				}
+			}
 
-        return $string;
-    }
+			$string .= $settings['separator'] . $count;
+		}
+
+		return $string;
+	}
 
 }

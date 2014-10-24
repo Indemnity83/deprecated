@@ -28,7 +28,7 @@ script:
    - sh -c "if [ '$PHPCS' = '1' ]; then ./vendor/bin/phpcs -p --extensions=php --standard=CakePHP ./app; fi;"
 
 before_script:
-   - sh -c "if [ '$PHPCS' = '1' ]; then ./vendor/bin/phpcs --config-set installed_paths ./vendor/cakephp/cakephp-codesniffer; fi"
+   - sh -c "if [ '$PHPCS' = '1' ]; then ./vendor/bin/phpcs --config-set installed_paths vendor/cakephp/cakephp-codesniffer/; fi"
    - chmod -R 777 ./tmp
    - mysql -e 'create database caffeinated_test;'
    - echo "<?php 
