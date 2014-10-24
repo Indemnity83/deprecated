@@ -25,7 +25,7 @@ install:
 
 script: 
    - sh -c "if [ '$PHPCS' != '1' ]; then cd ./app && ../vendor/cakephp/cakephp/lib/Cake/Console/cake test app AllTests --stderr; fi"
-   - sh -c "if [ '$PHPCS' = '1' ]; then phpcs -p --extensions=php --standard=CakePHP ./app; fi;"
+   - sh -c "if [ '$PHPCS' = '1' ]; then ./vendor/bin/phpcs -p --extensions=php --standard=CakePHP ./app; fi;"
 
 before_script:
    - sh -c "if [ '$PHPCS' = '1' ]; then ./vendor/bin/phpcs --config-set installed_paths ./vendor/cakephp/cakephp-codesniffer; fi"
