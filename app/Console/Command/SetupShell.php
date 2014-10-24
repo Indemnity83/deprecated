@@ -157,7 +157,9 @@ class SetupShell extends AppShell {
 			$confirm = $this->in(__d('cake_console', 'Installation will overwrite the entire database, are you sure you want to continue?'), array('y', 'n'), 'n');
 		}
 
-		if ($confirm === 'n') return;
+		if ($confirm === 'n') {
+			return;
+		}
 		$this->out();
 
 		$this->dispatchShell('schema create -y -q');
@@ -209,10 +211,10 @@ class SetupShell extends AppShell {
 /**
  * Create a user role
  *
+ * @param array $params pre-populate method parameters
  * @return void
  */
 	public function role($params = array()) {
-
 		$title = '';
 		$superRole = '';
 		extract($params);
@@ -246,7 +248,9 @@ class SetupShell extends AppShell {
 		$this->hr();
 		$looksGood = $this->in(__d('cake_console', 'Look okay?'), array('y', 'n'), 'y');
 
-		if ($looksGood === 'n') return $this->_stop();
+		if ($looksGood === 'n') {
+			return $this->_stop();
+		}
 
 		// build the data
 		$data = array(
@@ -257,22 +261,23 @@ class SetupShell extends AppShell {
 		$this->Role->create();
 		if ($this->Role->save($data)) {
 			$this->dispatchShell('acl create aro root Role.' . $this->Role->id . ' -q');
-			if ($superRole === 'y') $this->dispatchShell('acl grant Role.'  . $this->Role->id . ' controllers -q');
+			if ($superRole === 'y') {
+				$this->dispatchShell('acl grant Role.' . $this->Role->id . ' controllers -q');
+			}
 			$this->out('<success>New Role</success> \'' . $title . '\' created');
 		} else {
 			$this->out('<error>New Role</error> failed');
 			return $this->_stop();
 		}
-
 	}
 
 /**
  * Create a user account
  *
+ * @param array $params pre-populate method parameters
  * @return void
  */
 	public function user($params = array()) {
-
 		$username = '';
 		$email = '';
 		$password = '';
@@ -323,7 +328,9 @@ class SetupShell extends AppShell {
 		$this->hr();
 		$looksGood = $this->in(__d('cake_console', 'Look okay?'), array('y', 'n'), 'y');
 
-		if ($looksGood === 'n') return $this->_stop();
+		if ($looksGood === 'n') {
+			return $this->_stop();
+		}
 
 		// build the data
 		$data = array(
@@ -331,14 +338,14 @@ class SetupShell extends AppShell {
 			'email' => $email,
 			'password' => $password,
 			'password_match' => $password,
-			'role_id' => $this->Role->field('id', array('title'=>$role))
+			'role_id' => $this->Role->field('id', array('title' => $role))
 		);
 
 		$this->out();
 		$this->User->create();
 		if ($this->User->save($data)) {
 			$this->dispatchShell('acl create aro root User.' . $this->User->id . ' -q');
-			$this->out('<success>New User</success> \'' . $username  . '\' created');
+			$this->out('<success>New User</success> \'' . $username . '\' created');
 		} else {
 			$this->out('<error>New User</error> failed');
 			return $this->_stop();

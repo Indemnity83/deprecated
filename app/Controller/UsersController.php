@@ -40,9 +40,9 @@ class UsersController extends AppController {
 /**
  * view method
  *
- * @throws NotFoundException
- * @param string $id
+ * @param string $id record id or slug
  * @return void
+ * @throws NotFoundException
  */
 	public function view($id = null) {
 		$this->User->recursive = 2;
@@ -56,8 +56,8 @@ class UsersController extends AppController {
 /**
  * profile method
  *
- * @throws NotFoundException
  * @return void
+ * @throws NotFoundException
  */
 	public function profile() {
 		$this->User->recursive = 2;
@@ -66,7 +66,7 @@ class UsersController extends AppController {
 			throw new NotFoundException(__('Invalid user'));
 		}
 		$this->set(compact('user'));
-	}	
+	}
 
 /**
  * add method
@@ -90,9 +90,9 @@ class UsersController extends AppController {
 /**
  * edit method
  *
- * @throws NotFoundException
- * @param string $id
+ * @param string $id record id or slug
  * @return void
+ * @throws NotFoundException
  */
 	public function edit($id = null) {
 		$options = array('conditions' => array('OR' => array('User.' . $this->User->primaryKey => $id, 'User.username' => $id)));
@@ -116,9 +116,9 @@ class UsersController extends AppController {
 /**
  * delete method
  *
- * @throws NotFoundException
- * @param string $id
+ * @param string $id record id
  * @return void
+ * @throws NotFoundException
  */
 	public function delete($id = null) {
 		$this->User->id = $id;

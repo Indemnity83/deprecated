@@ -59,9 +59,9 @@ class Good extends AppModel {
 			'conditions' => 'Log.model = "Good"',
 			'order' => 'Log.created DESC'
 		)
-	);	
+	);
 
-/*
+/**
  * Behaviors
  *
  * @var array
@@ -94,13 +94,13 @@ class Good extends AppModel {
  */
 	public $enum = array(
 		'unit' => array(
-			self::UNIT_FLOZ    => 'fl. oz',
-			self::UNIT_TABLET  => 'tablet',
-			self::UNIT_DOSE    => 'dose',
-			self::UNIT_PACK    => 'package',
-			self::UNIT_PIECE   => 'piece'
+			self::UNIT_FLOZ => 'fl. oz',
+			self::UNIT_TABLET => 'tablet',
+			self::UNIT_DOSE => 'dose',
+			self::UNIT_PACK => 'package',
+			self::UNIT_PIECE => 'piece'
 		)
-	);	
+	);
 
 
 }

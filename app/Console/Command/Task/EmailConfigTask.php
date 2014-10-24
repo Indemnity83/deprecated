@@ -104,12 +104,12 @@ class EmailConfigTask extends AppShell {
 
 			$transport = $this->in(__d('cake_console', 'Transport:'), array('Mail', 'Smtp', 'Debug'), 'Smtp');
 
-			$from_address = '';
-			while (!$from_address) {
-				$from_address = $this->in(__d('cake_console', 'From Address:'), null, 'site@localhost');
+			$fromAddress = '';
+			while (!$fromAddress) {
+				$fromAddress = $this->in(__d('cake_console', 'From Address:'), null, 'site@localhost');
 			}
 
-			$from_name = $this->in(__d('cake_console', 'From Name:'), null, 'My Site');
+			$fromName = $this->in(__d('cake_console', 'From Name:'), null, 'My Site');
 
 			$host = '';
 			while (!$host) {
@@ -144,7 +144,7 @@ class EmailConfigTask extends AppShell {
 				}
 			}
 
-			$config = compact('name', 'transport', 'from_address', 'from_name', 'host', 'login', 'password', 'port');
+			$config = compact('name', 'transport', 'fromAddress', 'fromName', 'host', 'login', 'password', 'port');
 
 			while (!$this->_verify($config)) {
 				$this->_interactive();
@@ -186,8 +186,8 @@ class EmailConfigTask extends AppShell {
 
 		$this->out(__d('cake_console', "User:         %s", $login));
 		$this->out(__d('cake_console', "Pass:         %s", str_repeat('*', strlen($password))));
-		$this->out(__d('cake_console', "From Address: %s", $from_address));
-		$this->out(__d('cake_console', "From Name:    %s", $from_name));
+		$this->out(__d('cake_console', "From Address: %s", $fromAddress));
+		$this->out(__d('cake_console', "From Name:    %s", $fromName));
 
 		$this->hr();
 		$looksGood = $this->in(__d('cake_console', 'Look okay?'), array('y', 'n'), 'y');
@@ -211,6 +211,6 @@ class EmailConfigTask extends AppShell {
 		);
 
 		return $parser;
-	}	
+	}
 
 }

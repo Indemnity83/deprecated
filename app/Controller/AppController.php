@@ -55,11 +55,10 @@ class AppController extends Controller {
  * @return void
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 
 		# configure the logable behavior
-		if (sizeof($this->uses) && $this->{$this->modelClass}->Behaviors->attached('Logable')) {
+		if (count($this->uses) && $this->{$this->modelClass}->Behaviors->attached('Logable')) {
 			$this->{$this->modelClass}->setUserData($this->activeUser);
 		}
 
@@ -76,7 +75,6 @@ class AppController extends Controller {
 		if ($this->Auth->loggedIn()) {
 			$this->Auth->allow();
 		}
-
 	}
 
 }

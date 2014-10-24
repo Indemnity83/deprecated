@@ -58,7 +58,7 @@ class User extends AppModel {
 		)
 	);
 
-/*
+/**
  * Behaviors
  *
  * @var array
@@ -114,7 +114,7 @@ class User extends AppModel {
 /**
  * beforeSave method
  *
- * @param array $options
+ * @param array $options Options passed from Model::save().
  * @return bolean
  */
 	public function beforeSave($options = array()) {
@@ -134,14 +134,14 @@ class User extends AppModel {
 /**
  * equaltofield method
  *
- * @param string $check
- * @param string $otherfield
+ * @param string $check first field to check
+ * @param string $otherfield second field to check
  * @return bolean
  */
-	public function equaltofield($check,$otherfield) {
+	public function equaltofield($check, $otherfield) {
 		//get name of field
 		$fname = '';
-		foreach ($check as $key => $value){
+		foreach ($check as $key => $value) {
 			$fname = $key;
 			break;
 		}

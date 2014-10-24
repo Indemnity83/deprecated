@@ -23,7 +23,7 @@ class Role extends AppModel {
 		),
 	);
 
-/*
+/**
  * Behaviors
  *
  * @var array

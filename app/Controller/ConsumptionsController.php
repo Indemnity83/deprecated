@@ -49,9 +49,9 @@ class ConsumptionsController extends AppController {
 /**
  * edit method
  *
- * @throws NotFoundException
- * @param string $id
+ * @param string $id record id
  * @return void
+ * @throws NotFoundException
  */
 	public function edit($id = null) {
 		if (!$this->Consumption->exists($id)) {
@@ -76,9 +76,9 @@ class ConsumptionsController extends AppController {
 /**
  * delete method
  *
- * @throws NotFoundException
- * @param string $id
+ * @param string $id record id
  * @return void
+ * @throws NotFoundException
  */
 	public function delete($id = null) {
 		$this->Consumption->id = $id;

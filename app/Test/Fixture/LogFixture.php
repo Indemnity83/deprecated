@@ -31,7 +31,7 @@ class LogFixture extends CakeTestFixture {
  * @var array
  */
 	public $records = array(
-		
+
 	);
 
 }
