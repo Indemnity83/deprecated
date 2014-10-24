@@ -45,6 +45,5 @@ class DATABASE_CONFIG {
 			$db = $_SERVER['DB'];
 		}
 		$this->test = array_merge($this->test, $this->identities[$db]);
-		Debugger::log($this->test);
 	}
 }
