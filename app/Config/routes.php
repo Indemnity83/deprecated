@@ -41,12 +41,6 @@
 	Router::connect('/profile', array('controller' => 'users', 'action' => 'profile'));
 	Router::connect('/users/*', array('controller' => 'users', 'action' => 'view'));
 
-	Router::connect('/roles', array('controller' => 'roles', 'action' => 'index'));
-	Router::connect('/roles/add/*', array('controller' => 'roles', 'action' => 'add'));
-	Router::connect('/roles/edit/*', array('controller' => 'roles', 'action' => 'edit'));
-	Router::connect('/roles/delete/*', array('controller' => 'roles', 'action' => 'delete'));
-	Router::connect('/roles/*', array('controller' => 'roles', 'action' => 'view'));
-
 /**
  * Load all plugin routes. See the CakePlugin documentation on
  * how to customize the loading of plugin routes.
